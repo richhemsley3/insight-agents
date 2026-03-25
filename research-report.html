@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insight Agents for Data Management — Research & Design Report</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+<style>
+  /* ============================================================
+     Design System Lab — Inline Tokens
+     ============================================================ */
+
+  /* @font-face — Proxima Nova */
+  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Reg.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Sbold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Xbold.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+
+  :root {
+    /* Font families */
+    --sds-font-sans: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --sds-font-mono: 'SF Mono', SFMono-Regular, Consolas, monospace;
+
+    /* Type scale */
+    --sds-type-display: 28px;
+    --sds-type-heading: 22px;
+    --sds-type-subheading: 16px;
+    --sds-type-title: 15px;
+    --sds-type-body: 14px;
+    --sds-type-label: 13px;
+    --sds-type-caption: 12px;
+    --sds-type-overline: 11px;
+
+    /* Weights */
+    --sds-weight-light: 300;
+    --sds-weight-regular: 400;
+    --sds-weight-medium: 500;
+    --sds-weight-semibold: 600;
+    --sds-weight-bold: 700;
+    --sds-weight-extrabold: 800;
+
+    /* Line heights */
+    --sds-leading-tight: 1.2;
+    --sds-leading-snug: 1.35;
+    --sds-leading-normal: 1.5;
+    --sds-leading-relaxed: 1.6;
+
+    /* Tracking */
+    --sds-tracking-tight: -0.01em;
+    --sds-tracking-normal: 0em;
+    --sds-tracking-wide: 0.5px;
+
+    /* Space scale */
+    --sds-space-0: 0px;
+    --sds-space-050: 2px;
+    --sds-space-100: 4px;
+    --sds-space-150: 6px;
+    --sds-space-200: 8px;
+    --sds-space-250: 10px;
+    --sds-space-300: 12px;
+    --sds-space-400: 16px;
+    --sds-space-500: 20px;
+    --sds-space-600: 24px;
+    --sds-space-800: 32px;
+    --sds-space-1000: 40px;
+    --sds-space-1200: 48px;
+    --sds-space-1600: 64px;
+
+    /* Color primitives */
+    --sds-color-warm-gray-025: #FAF8F5;
+    --sds-color-warm-gray-050: #F4F1EB;
+    --sds-color-warm-gray-100: #EBE6DD;
+    --sds-color-warm-gray-150: #E0DCD3;
+    --sds-color-warm-gray-200: #D0CBC3;
+    --sds-color-warm-gray-250: #BFBAB2;
+    --sds-color-warm-gray-300: #B0ABA2;
+    --sds-color-warm-gray-350: #A39E96;
+    --sds-color-warm-gray-400: #948E85;
+    --sds-color-warm-gray-450: #858079;
+    --sds-color-warm-gray-500: #7A756F;
+    --sds-color-warm-gray-550: #6B6760;
+    --sds-color-warm-gray-600: #615D55;
+    --sds-color-warm-gray-650: #54514D;
+    --sds-color-warm-gray-700: #47443F;
+    --sds-color-warm-gray-750: #3B3834;
+    --sds-color-warm-gray-800: #302D28;
+    --sds-color-warm-gray-900: #1C1A17;
+    --sds-color-blue-025: #F2F7F7;
+    --sds-color-blue-050: #EBF4F5;
+    --sds-color-blue-100: #D9EBED;
+    --sds-color-blue-150: #C1DDE3;
+    --sds-color-blue-200: #A6CBD6;
+    --sds-color-blue-450: #4F8AA0;
+    --sds-color-blue-700: #0C4A69;
+    --sds-color-blue-750: #013D5B;
+    --sds-color-blue-800: #05314D;
+    --sds-color-blue-850: #032740;
+    --sds-color-blue-900: #031E36;
+    --sds-color-blue-950: #00132B;
+    --sds-color-red-050: #FFEEEB;
+    --sds-color-red-500: #BF5547;
+    --sds-color-red-550: #AD4739;
+    --sds-color-red-650: #8F3629;
+    --sds-color-green-025: #F4FAEB;
+    --sds-color-green-400: #7A9A01;
+    --sds-color-green-500: #62800B;
+    --sds-color-green-700: #374A1E;
+    --sds-color-yellow-025: #FCF9D9;
+    --sds-color-yellow-200: #EBCE2D;
+    --sds-color-yellow-500: #8A7515;
+    --sds-color-yellow-550: #7A6710;
+    --sds-color-purple-550: #805AA1;
+    --sds-color-white: #FFFFFF;
+    --sds-color-brand-pacific: #A6CBD6;
+
+    /* Semantic tokens */
+    --sds-bg-page: var(--sds-color-white);
+    --sds-bg-surface: var(--sds-color-warm-gray-025);
+    --sds-bg-card: var(--sds-color-white);
+    --sds-bg-subtle: var(--sds-color-warm-gray-050);
+    --sds-text-primary: var(--sds-color-warm-gray-900);
+    --sds-text-secondary: var(--sds-color-warm-gray-650);
+    --sds-text-tertiary: var(--sds-color-warm-gray-550);
+    --sds-text-on-primary: var(--sds-color-white);
+    --sds-text-link: var(--sds-color-blue-750);
+    --sds-border-default: var(--sds-color-warm-gray-150);
+    --sds-border-subtle: var(--sds-color-warm-gray-100);
+    --sds-border-strong: var(--sds-color-warm-gray-200);
+    --sds-interactive-primary: var(--sds-color-blue-750);
+    --sds-interactive-primary-hover: var(--sds-color-blue-800);
+    --sds-nav-sidebar-bg: var(--sds-color-warm-gray-025);
+    --sds-nav-item-active-bg: var(--sds-color-blue-100);
+    --sds-nav-item-active-text: var(--sds-color-blue-750);
+    --sds-nav-item-text: var(--sds-color-warm-gray-650);
+
+    /* Status */
+    --sds-status-success-bg: var(--sds-color-green-025);
+    --sds-status-success-text: var(--sds-color-green-500);
+    --sds-status-warning-bg: var(--sds-color-yellow-025);
+    --sds-status-warning-text: var(--sds-color-yellow-500);
+    --sds-status-error-bg: var(--sds-color-red-050);
+    --sds-status-error-text: var(--sds-color-red-500);
+    --sds-status-info-bg: var(--sds-color-blue-050);
+    --sds-status-info-text: var(--sds-color-blue-700);
+    --sds-status-neutral-bg: var(--sds-color-warm-gray-100);
+    --sds-status-neutral-text: var(--sds-color-warm-gray-650);
+    --sds-status-purple-bg: #F7EEFF;
+    --sds-status-purple-text: var(--sds-color-purple-550);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sds-font-sans);
+    background: var(--sds-bg-page);
+    color: var(--sds-text-primary);
+    line-height: var(--sds-leading-normal);
+    font-size: var(--sds-type-body);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     Layout: Sidebar + Content
+     ============================================================ */
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+
+  /* Side Navigation */
+  .sds-sidenav {
+    width: 220px; min-width: 220px; background: var(--sds-nav-sidebar-bg);
+    border-right: 1px solid var(--sds-border-default); display: flex;
+    flex-direction: column; padding: var(--sds-space-400) var(--sds-space-300);
+    user-select: none; overflow-y: auto; flex-shrink: 0;
+  }
+  .sds-sidenav-item {
+    display: flex; align-items: center; gap: var(--sds-space-250);
+    padding: var(--sds-space-200) var(--sds-space-300); border-radius: 8px;
+    font-size: var(--sds-type-body); font-weight: var(--sds-weight-regular);
+    color: var(--sds-color-warm-gray-700); cursor: pointer; text-decoration: none;
+    margin: var(--sds-space-050) 0; line-height: 1.3;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+  .sds-sidenav-item:hover { background: var(--sds-bg-subtle); color: var(--sds-text-primary); }
+  .sds-sidenav-item.active { background: var(--sds-nav-item-active-bg); color: var(--sds-nav-item-active-text); font-weight: var(--sds-weight-medium); }
+  .sds-sidenav-item.active:hover { background: var(--sds-color-blue-150); color: var(--sds-nav-item-active-text); }
+  .sds-sidenav-icon {
+    width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .sds-sidenav-icon .material-symbols-outlined {
+    font-size: 20px; color: var(--sds-text-tertiary);
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    transition: color 0.12s;
+  }
+  .sds-sidenav-item:hover .sds-sidenav-icon .material-symbols-outlined { color: var(--sds-color-warm-gray-700); }
+  .sds-sidenav-item.active .sds-sidenav-icon .material-symbols-outlined { color: var(--sds-nav-item-active-text); }
+  .sds-sidenav-group-label {
+    font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-color-warm-gray-400); text-transform: uppercase;
+    letter-spacing: 0.4px; padding: var(--sds-space-500) var(--sds-space-300) var(--sds-space-150);
+  }
+  .sds-sidenav-group-label:first-child { padding-top: var(--sds-space-200); }
+
+  /* ============================================================
+     Main Content Area
+     ============================================================ */
+  .main-content {
+    flex: 1; overflow-y: auto; background: var(--sds-bg-page);
+    padding: var(--sds-space-800) var(--sds-space-1000) var(--sds-space-1600);
+    max-height: 100vh; position: relative;
+  }
+  .main-content > .section p,
+  .main-content > .section .callout,
+  .main-content > .section > ul,
+  .main-content > .section > ol { max-width: 860px; }
+
+  /* Scroll progress bar */
+  .scroll-progress {
+    position: sticky; top: calc(-1 * var(--sds-space-800)); left: 0; right: 0; z-index: 5;
+    padding-top: var(--sds-space-800);
+    margin: calc(-1 * var(--sds-space-800)) calc(-1 * var(--sds-space-1000)) var(--sds-space-800);
+    background: var(--sds-bg-page);
+  }
+  .scroll-progress-track {
+    height: 3px; background: var(--sds-border-subtle); border-radius: 2px;
+  }
+  .scroll-progress-bar {
+    height: 100%; width: 0%; background: var(--sds-color-blue-450);
+    border-radius: 2px; transition: width 0.1s ease;
+  }
+
+  /* Page header */
+  .page-header {
+    margin-bottom: var(--sds-space-800);
+    padding-bottom: var(--sds-space-600);
+    border-bottom: 1px solid var(--sds-border-default);
+  }
+  .page-header h1 {
+    font-size: var(--sds-type-display); font-weight: var(--sds-weight-semibold);
+    margin-bottom: var(--sds-space-100); letter-spacing: var(--sds-tracking-tight);
+    line-height: var(--sds-leading-tight);
+  }
+  .page-header .page-desc {
+    font-size: var(--sds-type-body); color: var(--sds-text-secondary);
+    line-height: var(--sds-leading-normal);
+  }
+
+  /* Section */
+  .section { margin-bottom: var(--sds-space-1200); }
+  .section h2 {
+    font-size: var(--sds-type-heading); font-weight: var(--sds-weight-semibold);
+    margin-bottom: var(--sds-space-150); line-height: var(--sds-leading-tight);
+  }
+  .section .section-desc {
+    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
+    margin-bottom: var(--sds-space-500); line-height: var(--sds-leading-normal);
+  }
+  .section h3 {
+    font-size: var(--sds-type-body); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-color-warm-gray-700); margin: var(--sds-space-600) 0 var(--sds-space-300);
+  }
+  .section-divider {
+    border: none; border-top: 1px solid var(--sds-border-default);
+    margin: var(--sds-space-1200) 0 var(--sds-space-1200);
+  }
+
+  /* ============================================================
+     Stat Cards
+     ============================================================ */
+  .stat-row { display: flex; gap: var(--sds-space-300); flex-wrap: wrap; margin-bottom: var(--sds-space-600); }
+  .sds-stat-card {
+    background: var(--sds-color-white); border: 1px solid var(--sds-color-warm-gray-150);
+    border-radius: 8px; padding: var(--sds-space-500) var(--sds-space-600);
+    display: flex; flex-direction: column; gap: var(--sds-space-050);
+    flex: 1; min-width: 120px; text-align: center;
+  }
+  .sds-stat-card__label {
+    font-size: var(--sds-type-caption); color: var(--sds-color-warm-gray-500);
+    font-weight: var(--sds-weight-medium); text-transform: uppercase;
+    letter-spacing: var(--sds-tracking-wide); margin: 0; line-height: 1;
+  }
+  .sds-stat-card__value {
+    font-size: var(--sds-type-display); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-interactive-primary); margin-top: var(--sds-space-150); line-height: 1.1;
+  }
+
+  /* ============================================================
+     Cards
+     ============================================================ */
+  .card {
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; padding: var(--sds-space-600); margin-bottom: var(--sds-space-400);
+  }
+  .card h3 {
+    font-size: var(--sds-type-subheading); font-weight: var(--sds-weight-semibold);
+    margin: 0 0 var(--sds-space-200); color: var(--sds-text-primary);
+  }
+  .card h4 {
+    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-color-warm-gray-400); text-transform: uppercase;
+    letter-spacing: 0.4px; margin: var(--sds-space-400) 0 var(--sds-space-150);
+  }
+  .card p, .card li {
+    color: var(--sds-text-secondary); font-size: var(--sds-type-label);
+    line-height: var(--sds-leading-relaxed);
+  }
+  .card ul { padding-left: 18px; margin-top: var(--sds-space-100); }
+  .card li { margin-bottom: var(--sds-space-100); }
+
+  /* Grids */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sds-space-400); }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sds-space-400); }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ============================================================
+     Tags
+     ============================================================ */
+  .sds-tag {
+    display: inline-flex; align-items: center; gap: var(--sds-space-100);
+    padding: var(--sds-space-050) var(--sds-space-200);
+    font-family: inherit; font-size: var(--sds-type-overline);
+    font-weight: var(--sds-weight-semibold); line-height: var(--sds-leading-normal);
+    border-radius: 4px; white-space: nowrap; vertical-align: middle;
+    margin-right: var(--sds-space-100); margin-bottom: var(--sds-space-100);
+  }
+  .sds-tag--info { background: var(--sds-status-info-bg); color: var(--sds-status-info-text); }
+  .sds-tag--success { background: var(--sds-status-success-bg); color: var(--sds-status-success-text); }
+  .sds-tag--warning { background: var(--sds-status-warning-bg); color: var(--sds-status-warning-text); }
+  .sds-tag--error { background: var(--sds-status-error-bg); color: var(--sds-status-error-text); }
+  .sds-tag--purple { background: var(--sds-status-purple-bg); color: var(--sds-status-purple-text); }
+  .sds-tag--neutral { background: var(--sds-status-neutral-bg); color: var(--sds-status-neutral-text); }
+
+  /* ============================================================
+     Callout
+     ============================================================ */
+  .callout {
+    border-left: 4px solid var(--sds-interactive-primary); background: var(--sds-status-info-bg);
+    padding: var(--sds-space-400) var(--sds-space-500); border-radius: 0 8px 8px 0;
+    margin: var(--sds-space-500) 0;
+  }
+  .callout.callout-green { border-left-color: var(--sds-color-green-400); background: var(--sds-status-success-bg); }
+  .callout.callout-yellow { border-left-color: var(--sds-color-yellow-200); background: var(--sds-status-warning-bg); }
+  .callout.callout-red { border-left-color: var(--sds-color-red-500); background: var(--sds-status-error-bg); }
+  .callout strong { color: var(--sds-text-primary); }
+  .callout p { color: var(--sds-text-secondary); font-size: var(--sds-type-label); margin: 0; line-height: var(--sds-leading-normal); }
+
+  /* ============================================================
+     Tables
+     ============================================================ */
+  .sds-table-container {
+    background: var(--sds-color-white); border: 1px solid var(--sds-color-warm-gray-150);
+    border-radius: 8px; overflow: hidden; overflow-x: auto; margin: var(--sds-space-300) 0;
+    position: relative;
+  }
+  .sds-table-container::after {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 32px;
+    background: linear-gradient(to right, transparent, var(--sds-color-warm-gray-025));
+    pointer-events: none; border-radius: 0 8px 8px 0;
+  }
+  .sds-table td:first-child, .sds-table th:first-child {
+    position: sticky; left: 0; background: inherit; z-index: 1;
+  }
+  .sds-table th:first-child { background: var(--sds-color-warm-gray-025); }
+  .sds-table { width: 100%; border-collapse: collapse; font-size: var(--sds-type-label); }
+  .sds-table th {
+    background: var(--sds-color-warm-gray-025); border-bottom: 1px solid var(--sds-color-warm-gray-150);
+    padding: var(--sds-space-250) var(--sds-space-400); text-align: left;
+    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-color-warm-gray-550); white-space: nowrap;
+  }
+  .sds-table td {
+    padding: var(--sds-space-250) var(--sds-space-400); color: var(--sds-color-warm-gray-700);
+    border-bottom: 1px solid var(--sds-color-warm-gray-100); vertical-align: top;
+  }
+  .sds-table tbody tr:last-child td { border-bottom: none; }
+  .sds-table td:first-child { font-weight: var(--sds-weight-medium); color: var(--sds-text-primary); }
+
+  /* Flow strip */
+  .flow-strip {
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    padding: var(--sds-space-300) 0; margin: var(--sds-space-300) 0;
+  }
+  .flow-step {
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; padding: var(--sds-space-300) var(--sds-space-400);
+    min-width: 140px; text-align: center; flex-shrink: 0;
+  }
+  .flow-step .step-num {
+    font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-interactive-primary); text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .flow-step .step-name { font-size: var(--sds-type-label); font-weight: var(--sds-weight-medium); margin-top: var(--sds-space-050); }
+  .flow-step .step-time { font-size: var(--sds-type-overline); color: var(--sds-color-warm-gray-400); margin-top: var(--sds-space-050); }
+  .flow-arrow { font-size: var(--sds-type-subheading); color: var(--sds-color-warm-gray-300); padding: 0 var(--sds-space-150); flex-shrink: 0; }
+
+  /* Persona */
+  .persona-card { display: flex; gap: var(--sds-space-500); align-items: flex-start; }
+  .persona-icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0; color: white;
+    font-weight: var(--sds-weight-bold);
+  }
+
+  /* Tree / code block */
+  .tree {
+    font-family: var(--sds-font-mono); font-size: var(--sds-type-caption);
+    line-height: 1.8; color: var(--sds-text-secondary);
+    background: var(--sds-bg-surface); padding: var(--sds-space-500) var(--sds-space-600);
+    border-radius: 8px; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+    margin: var(--sds-space-300) 0; border: 1px solid var(--sds-border-subtle);
+  }
+  .tree .hl { color: var(--sds-interactive-primary); font-weight: var(--sds-weight-semibold); }
+
+  /* Insight card pattern */
+  .insight-card-demo {
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; padding: var(--sds-space-500); margin: var(--sds-space-300) 0;
+    max-width: 480px;
+  }
+  .insight-card-demo .ic-header {
+    display: flex; align-items: center; gap: var(--sds-space-200); margin-bottom: var(--sds-space-300);
+  }
+  .insight-card-demo .ic-icon {
+    width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .insight-card-demo .ic-icon .material-symbols-outlined { font-size: 18px; color: white; }
+  .insight-card-demo .ic-title { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); }
+  .insight-card-demo .ic-body { font-size: var(--sds-type-caption); color: var(--sds-text-secondary); line-height: var(--sds-leading-relaxed); margin-bottom: var(--sds-space-300); }
+  .insight-card-demo .ic-meta { display: flex; gap: var(--sds-space-200); align-items: center; margin-bottom: var(--sds-space-300); }
+  .insight-card-demo .ic-actions { display: flex; gap: var(--sds-space-200); }
+  .insight-card-demo .ic-btn {
+    font-family: inherit; font-size: var(--sds-type-caption); font-weight: var(--sds-weight-medium);
+    padding: var(--sds-space-150) var(--sds-space-300); border-radius: 6px; cursor: pointer; border: none;
+  }
+  .insight-card-demo .ic-btn--primary { background: var(--sds-interactive-primary); color: white; }
+  .insight-card-demo .ic-btn--secondary { background: var(--sds-bg-subtle); color: var(--sds-text-secondary); border: 1px solid var(--sds-border-default); }
+
+  /* Confidence bar */
+  .confidence-bar { display: flex; align-items: center; gap: var(--sds-space-200); }
+  .confidence-track { flex: 1; height: 6px; background: var(--sds-color-warm-gray-100); border-radius: 3px; overflow: hidden; max-width: 80px; }
+  .confidence-fill { height: 100%; border-radius: 3px; }
+  .confidence-label { font-size: var(--sds-type-overline); color: var(--sds-color-warm-gray-500); font-weight: var(--sds-weight-medium); }
+
+  /* Autonomy dial */
+  .autonomy-dial {
+    display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--sds-border-default);
+    margin: var(--sds-space-300) 0; max-width: 480px;
+  }
+  .autonomy-level {
+    flex: 1; padding: var(--sds-space-300) var(--sds-space-400); text-align: center;
+    font-size: var(--sds-type-caption); border-right: 1px solid var(--sds-border-default);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .autonomy-level:last-child { border-right: none; }
+  .autonomy-level.active { background: var(--sds-interactive-primary); color: white; font-weight: var(--sds-weight-semibold); }
+  .autonomy-level:not(.active):hover { background: var(--sds-bg-subtle); }
+  .autonomy-level .al-label { font-weight: var(--sds-weight-semibold); display: block; }
+  .autonomy-level .al-desc { font-size: var(--sds-type-overline); opacity: 0.8; margin-top: 2px; display: block; }
+
+  /* Clickable flow tags */
+  a.sds-tag { text-decoration: none; cursor: pointer; transition: opacity 0.12s ease; }
+  a.sds-tag:hover { opacity: 0.8; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .app-body { flex-direction: column; }
+    .sds-sidenav {
+      width: 100%; min-width: 100%; flex-direction: row; overflow-x: auto;
+      padding: var(--sds-space-200) var(--sds-space-300); border-right: none;
+      border-bottom: 1px solid var(--sds-border-default); gap: var(--sds-space-100);
+    }
+    .sds-sidenav-group-label { display: none; }
+    .sds-sidenav-item { white-space: nowrap; padding: var(--sds-space-150) var(--sds-space-300); }
+    .main-content { max-height: none; padding: var(--sds-space-600) var(--sds-space-500) var(--sds-space-1200); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .stat-row { flex-wrap: wrap; }
+    .sds-stat-card { min-width: calc(50% - var(--sds-space-300)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ APP BODY ============ -->
+<div class="app-body">
+
+  <!-- ============ SIDE NAVIGATION ============ -->
+  <nav class="sds-sidenav" aria-label="Report navigation">
+    <a class="sds-sidenav-item active" href="#summary" onclick="scrollToSection(event, 'summary')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">dashboard</span></span>
+      <span>Summary</span>
+    </a>
+    <a class="sds-sidenav-item" href="#principles" onclick="scrollToSection(event, 'principles')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">description</span></span>
+      <span>Design Principles</span>
+    </a>
+
+    <div class="sds-sidenav-group-label">Research</div>
+    <a class="sds-sidenav-item" href="#landscape" onclick="scrollToSection(event, 'landscape')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">smart_toy</span></span>
+      <span>Agent Landscape</span>
+    </a>
+    <a class="sds-sidenav-item" href="#patterns" onclick="scrollToSection(event, 'patterns')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">pattern</span></span>
+      <span>Enterprise Patterns</span>
+    </a>
+    <a class="sds-sidenav-item" href="#competitors" onclick="scrollToSection(event, 'competitors')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">language</span></span>
+      <span>Competitors</span>
+    </a>
+    <a class="sds-sidenav-item" href="#market" onclick="scrollToSection(event, 'market')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">trending_up</span></span>
+      <span>Market Dynamics</span>
+    </a>
+    <a class="sds-sidenav-item" href="#personas" onclick="scrollToSection(event, 'personas')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">person</span></span>
+      <span>Personas</span>
+    </a>
+    <a class="sds-sidenav-item" href="#pain-points" onclick="scrollToSection(event, 'pain-points')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">warning</span></span>
+      <span>Pain Points</span>
+    </a>
+
+    <div class="sds-sidenav-group-label">Design</div>
+    <a class="sds-sidenav-item" href="#taxonomy" onclick="scrollToSection(event, 'taxonomy')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">account_tree</span></span>
+      <span>Agent Taxonomy</span>
+    </a>
+    <a class="sds-sidenav-item" href="#design-patterns" onclick="scrollToSection(event, 'design-patterns')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">psychology</span></span>
+      <span>Design Patterns</span>
+    </a>
+
+    <div class="sds-sidenav-group-label">Planning</div>
+    <a class="sds-sidenav-item" href="#opportunities" onclick="scrollToSection(event, 'opportunities')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">rocket_launch</span></span>
+      <span>Opportunities</span>
+    </a>
+    <a class="sds-sidenav-item" href="#risks" onclick="scrollToSection(event, 'risks')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">block</span></span>
+      <span>Risks &amp; Constraints</span>
+    </a>
+  </nav>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="main-content" id="main-content">
+
+    <!-- Scroll progress -->
+    <div class="scroll-progress"><div class="scroll-progress-track"><div class="scroll-progress-bar" id="progress-bar"></div></div></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Insight Agents for Data Management &mdash; Research &amp; Design Report</h1>
+      <p class="page-desc">Enterprise Agent Research, Taxonomy &amp; Design Patterns &middot; March 2026</p>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-row">
+      <div class="sds-stat-card"><div class="sds-stat-card__label">Enterprise Examples</div><div class="sds-stat-card__value">25+</div></div>
+      <div class="sds-stat-card"><div class="sds-stat-card__label">Agent Patterns</div><div class="sds-stat-card__value">3</div></div>
+      <div class="sds-stat-card"><div class="sds-stat-card__label">Personas</div><div class="sds-stat-card__value">5</div></div>
+      <div class="sds-stat-card"><div class="sds-stat-card__label">Competitor Categories</div><div class="sds-stat-card__value">6</div></div>
+      <div class="sds-stat-card"><div class="sds-stat-card__label">Success Rate</div><div class="sds-stat-card__value">23%</div></div>
+    </div>
+
+    <!-- ====== SUMMARY ====== -->
+    <section id="summary" class="section">
+      <h2>Executive Summary</h2>
+      <p class="section-desc">The strategic case for embedding insight agents in a data management platform.</p>
+
+      <p>The enterprise software market is rapidly embedding AI-powered insight agents that proactively surface relevant information, prioritize user attention, and suggest or automate actions. For a data management and data security platform, insight agents represent the next competitive frontier &mdash; moving beyond passive dashboards to intelligent systems that tell users where to focus, help them find what they need, and automate routine tasks.</p>
+
+      <p style="margin-top:var(--sds-space-300);">This report synthesizes research across 25+ enterprise platforms to understand how insight agents are implemented, what makes them succeed or fail, and how they should be designed for a data management context. Three core agent patterns emerge: <strong>Focus agents</strong> (anomaly detection, risk prioritization, attention routing), <strong>Find agents</strong> (natural language search, contextual recommendations, knowledge retrieval), and <strong>Automate agents</strong> (suggested actions, one-click remediation, workflow triggers).</p>
+
+      <div class="callout" style="margin-top:var(--sds-space-500);">
+        <p><strong>Key finding:</strong> 77% of enterprise AI agent implementations fail due to data quality issues. For a data management platform &mdash; whose core purpose is ensuring data quality and governance &mdash; this creates a unique positioning advantage: the platform that manages data quality is uniquely suited to power reliable insight agents.</p>
+      </div>
+
+      <h3>Three Core Agent Patterns</h3>
+      <div class="grid-3">
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-red-500);">crisis_alert</span>Focus</h3>
+          <p>"Where should I look?" &mdash; Anomaly detection, risk prioritization, and attention routing. Proactively surfaces what matters most.</p>
+          <p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Monte Carlo, Wiz, CrowdStrike, Tableau Pulse</p>
+        </div>
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-interactive-primary);">search</span>Find</h3>
+          <p>"Help me understand" &mdash; Natural language search, contextual recommendations, and knowledge retrieval across governed data.</p>
+          <p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Snowflake Cortex, Databricks Genie, ThoughtSpot</p>
+        </div>
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-green-500);">auto_fix_high</span>Automate</h3>
+          <p>"Handle this for me" &mdash; Suggested actions, one-click remediation, and workflow triggers that reduce manual toil.</p>
+          <p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Salesforce Agentforce, Wiz Workflows, Power BI</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== DESIGN PRINCIPLES ====== -->
+    <section id="principles" class="section">
+      <h2>Design Principles</h2>
+      <p class="section-desc">Guiding principles for building trustworthy, effective insight agents.</p>
+      <div class="grid-2">
+        <div class="card"><h3>1. Insight, Not Noise</h3><p>Surface only actionable intelligence. Every insight agent recommendation must include what happened, why it matters, and what to do about it. No alert without context.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: Monte Carlo's 60% acceptance rate on auto-generated monitors vs. Datadog alert fatigue</p></div>
+        <div class="card"><h3>2. Progressive Autonomy</h3><p>Start with suggestions, earn trust, then automate. Users control how proactive agents are via an autonomy dial. Trust is earned through accuracy, not assumed.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: CrowdStrike Charlotte's confidence-scored verdicts with human-in-the-loop</p></div>
+        <div class="card"><h3>3. Context Travels With the Insight</h3><p>Never surface an alert without blast radius, affected users, and upstream causes. Context transforms a notification into an actionable insight.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: Wiz Security Graph connecting data risk to identity and attack paths</p></div>
+        <div class="card"><h3>4. Meet Users Where They Work</h3><p>Embed agents in Slack, IDE, BI tools, and browser extensions &mdash; not behind a dedicated "AI" tab. Agents surface insights in existing workflows.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: Monte Carlo Slack-native troubleshooting, Databricks Genie in Teams/SharePoint</p></div>
+        <div class="card"><h3>5. Trust Through Transparency</h3><p>Every AI recommendation shows its reasoning, confidence level, and data sources. Users can always ask "why?" and get a traceable answer.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: Salesforce Einstein Trust Layer, Snowflake audit trails</p></div>
+        <div class="card"><h3>6. Data Quality is Agent Quality</h3><p>Agent reliability directly mirrors data foundation quality. Display data quality scores alongside agent confidence. Poor data in, poor insights out.</p><p style="font-size:var(--sds-type-overline);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-200);">Lesson from: 77% of Agentforce implementations fail due to data quality</p></div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== INSIGHT AGENT LANDSCAPE ====== -->
+    <section id="landscape" class="section">
+      <h2>Insight Agent Landscape</h2>
+      <p class="section-desc">The spectrum from AI assistants to insight agents to fully agentic AI in enterprise software.</p>
+
+      <h3>The Agent Maturity Spectrum</h3>
+      <div class="flow-strip">
+        <div class="flow-step">
+          <div class="step-num">Level 1</div>
+          <div class="step-name">AI Assistant</div>
+          <div class="step-time">Responds to queries</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="background:var(--sds-status-info-bg);border-color:var(--sds-color-blue-200);">
+          <div class="step-num">Level 2</div>
+          <div class="step-name">Insight Agent</div>
+          <div class="step-time">Proactively surfaces</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step" style="background:var(--sds-status-success-bg);border-color:var(--sds-color-green-400);">
+          <div class="step-num">Level 3</div>
+          <div class="step-name">Agentic AI</div>
+          <div class="step-time">Autonomous execution</div>
+        </div>
+      </div>
+
+      <h3>Market Adoption Stats</h3>
+      <div class="grid-3" style="margin-bottom:var(--sds-space-500);">
+        <div class="card" style="text-align:center;">
+          <p style="font-size:var(--sds-type-heading);font-weight:var(--sds-weight-bold);color:var(--sds-interactive-primary);margin-bottom:var(--sds-space-100);">57%</p>
+          <p>of companies have AI agents in production</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <p style="font-size:var(--sds-type-heading);font-weight:var(--sds-weight-bold);color:var(--sds-color-red-500);margin-bottom:var(--sds-space-100);">1 in 10</p>
+          <p>scaled beyond pilot stage</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <p style="font-size:var(--sds-type-heading);font-weight:var(--sds-weight-bold);color:var(--sds-color-purple-550);margin-bottom:var(--sds-space-100);">40%</p>
+          <p>of enterprise apps will have task-specific agents by end of 2026 (Gartner)</p>
+        </div>
+      </div>
+
+      <h3>Enterprise Agent Comparison</h3>
+      <div class="sds-table-container">
+        <table class="sds-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Agent Name</th>
+              <th>Focus</th>
+              <th>Find</th>
+              <th>Automate</th>
+              <th>Trust / Explainability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Snowflake</td>
+              <td>Cortex Agents</td>
+              <td>Anomaly detection</td>
+              <td>Natural language query</td>
+              <td>Pipeline generation</td>
+              <td>Role-based audit</td>
+            </tr>
+            <tr>
+              <td>Databricks</td>
+              <td>Genie</td>
+              <td>Deep Research</td>
+              <td>Governed NL search</td>
+              <td>Code generation</td>
+              <td>Benchmark testing</td>
+            </tr>
+            <tr>
+              <td>Monte Carlo</td>
+              <td>Monitoring Agent</td>
+              <td>Intelligent thresholds</td>
+              <td>Incident context</td>
+              <td>One-click troubleshoot</td>
+              <td>60% acceptance rate</td>
+            </tr>
+            <tr>
+              <td>Wiz</td>
+              <td>SecOps Agent</td>
+              <td>Risk prioritization</td>
+              <td>Security graph</td>
+              <td>Drag-drop workflows</td>
+              <td>Confidence verdicts</td>
+            </tr>
+            <tr>
+              <td>CrowdStrike</td>
+              <td>Charlotte AI</td>
+              <td>Threat ranking</td>
+              <td>Multi-source retrieval</td>
+              <td>Agentic SOAR</td>
+              <td>Traceable decisions</td>
+            </tr>
+            <tr>
+              <td>Tableau</td>
+              <td>Pulse + Q&amp;A</td>
+              <td>Metric alerts</td>
+              <td>Multi-metric analysis</td>
+              <td>Insight Briefs</td>
+              <td>Einstein Trust Layer</td>
+            </tr>
+            <tr>
+              <td>Power BI</td>
+              <td>Copilot</td>
+              <td>Proactive alerts</td>
+              <td>Chat with data</td>
+              <td>Write-back actions</td>
+              <td>Entra ID auth</td>
+            </tr>
+            <tr>
+              <td>ThoughtSpot</td>
+              <td>Spotter</td>
+              <td>Anomaly detection</td>
+              <td>Search-first analytics</td>
+              <td>Complex queries</td>
+              <td>Conversational context</td>
+            </tr>
+            <tr>
+              <td>Salesforce</td>
+              <td>Agentforce</td>
+              <td>Next-best-action</td>
+              <td>CRM search</td>
+              <td>Autonomous execution</td>
+              <td>Zero data retention</td>
+            </tr>
+            <tr>
+              <td>ServiceNow</td>
+              <td>Now Assist</td>
+              <td>Incident routing</td>
+              <td>Knowledge graph</td>
+              <td>Multi-step workflows</td>
+              <td>AI Agent Fabric</td>
+            </tr>
+            <tr>
+              <td>Datadog</td>
+              <td>Bits AI</td>
+              <td>Alert triage</td>
+              <td>Telemetry search</td>
+              <td>Agent Builder</td>
+              <td>Decision path viz</td>
+            </tr>
+            <tr>
+              <td>Splunk</td>
+              <td>AI Troubleshooting</td>
+              <td>Root cause ranking</td>
+              <td>Cross-product analysis</td>
+              <td>Remediation suggest</td>
+              <td>Impact analysis</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:var(--sds-space-400);">
+        <p><strong>Pattern:</strong> Every major enterprise platform has shipped or announced agent capabilities in the last 12 months. The differentiator is not whether you have agents, but how well they earn and maintain user trust.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== ENTERPRISE PATTERNS ====== -->
+    <section id="patterns" class="section">
+      <h2>Enterprise Patterns</h2>
+      <p class="section-desc">Three agent archetypes observed across 25+ enterprise platforms.</p>
+
+      <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-red-500);">crisis_alert</span>Focus Patterns &mdash; "Where should I look?"</h3>
+      <div class="grid-2" style="margin-bottom:var(--sds-space-400);">
+        <div class="card">
+          <h3>Anomaly Detection with Blast Radius</h3>
+          <p>Detect data quality anomalies and automatically compute downstream impact. Show how many dashboards, pipelines, and users are affected.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--info">Monte Carlo</span></p>
+        </div>
+        <div class="card">
+          <h3>Risk-Ranked Prioritization</h3>
+          <p>Score and rank risks so users address the highest-impact issues first. Combine severity, exposure, and blast radius into a single priority.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--error">Wiz</span><span class="sds-tag sds-tag--error">CrowdStrike</span></p>
+        </div>
+        <div class="card">
+          <h3>Proactive Metric Alerts</h3>
+          <p>Monitor key metrics and alert users only when meaningful changes occur. Filter noise by detecting statistical significance, not just threshold breaches.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--purple">Tableau Pulse</span></p>
+        </div>
+        <div class="card">
+          <h3>Smart Threshold Setting</h3>
+          <p>Auto-generate monitoring thresholds based on historical patterns. Adapt over time as data behavior evolves, reducing false positives.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--info">Monte Carlo Monitoring Agent</span></p>
+        </div>
+        <div class="card">
+          <h3>Attention-Aware Routing</h3>
+          <p>Route alerts to the right person based on ownership, expertise, and current workload. Reduce time-to-response by eliminating alert triage.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--neutral">ServiceNow</span><span class="sds-tag sds-tag--neutral">Datadog</span></p>
+        </div>
+      </div>
+
+      <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-interactive-primary);">search</span>Find Patterns &mdash; "Help me understand"</h3>
+      <div class="grid-2" style="margin-bottom:var(--sds-space-400);">
+        <div class="card">
+          <h3>Natural Language Query over Governed Data</h3>
+          <p>Allow users to ask questions in plain English and receive answers constrained by governance policies and role-based access.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--info">Snowflake</span><span class="sds-tag sds-tag--info">Databricks</span><span class="sds-tag sds-tag--info">ThoughtSpot</span></p>
+        </div>
+        <div class="card">
+          <h3>Cross-Source Knowledge Retrieval</h3>
+          <p>Search across multiple knowledge bases, documents, and tools from a single interface. Unify siloed information.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--purple">Slack AI</span><span class="sds-tag sds-tag--purple">Notion AI</span><span class="sds-tag sds-tag--purple">Microsoft Work IQ</span></p>
+        </div>
+        <div class="card">
+          <h3>Multi-Step Research</h3>
+          <p>Chain multiple queries and analyses together to answer complex questions that require reasoning across datasets.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--info">Databricks Genie Deep Research</span></p>
+        </div>
+        <div class="card">
+          <h3>Contextual Recommendations</h3>
+          <p>Proactively suggest related datasets, similar queries, and relevant policies based on what the user is currently viewing.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--success">Salesforce Agentforce</span></p>
+        </div>
+      </div>
+
+      <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-green-500);">auto_fix_high</span>Automate Patterns &mdash; "Handle this for me"</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h3>One-Click Remediation</h3>
+          <p>Present the fix alongside the finding. Users can resolve issues with a single click without context-switching to another tool.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--error">Wiz Workflows</span><span class="sds-tag sds-tag--info">Monte Carlo</span></p>
+        </div>
+        <div class="card">
+          <h3>Autonomous Investigation</h3>
+          <p>Agents independently gather evidence, correlate signals, and build investigation timelines before presenting findings to humans.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--error">CrowdStrike Charlotte</span><span class="sds-tag sds-tag--neutral">Splunk</span></p>
+        </div>
+        <div class="card">
+          <h3>Write-Back / Action Triggers</h3>
+          <p>Move beyond read-only insights: agents can write data back, trigger workflows, and execute actions in connected systems.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--info">Power BI translytical</span></p>
+        </div>
+        <div class="card">
+          <h3>Hybrid Reasoning</h3>
+          <p>Combine scripted business logic with AI-driven decisions. Deterministic rules handle known cases; AI handles novel situations.</p>
+          <h4>Seen In</h4>
+          <p><span class="sds-tag sds-tag--success">Salesforce Agentforce Script</span></p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== COMPETITORS ====== -->
+    <section id="competitors" class="section">
+      <h2>Competitive Landscape</h2>
+      <p class="section-desc">Existing data management competitors and their insight agent maturity.</p>
+
+      <h3>Catalog &amp; Metadata Competitors</h3>
+      <div class="sds-table-container">
+        <table class="sds-table">
+          <thead><tr><th>Capability</th><th>Alation</th><th>Collibra</th><th>Atlan</th><th>Informatica</th><th>dbt</th><th>DataHub</th><th>Select Star</th><th>Secoda</th><th>Monte Carlo</th></tr></thead>
+          <tbody>
+            <tr><td>Time to Value</td><td>6-12w</td><td>3-12mo</td><td>4-6w</td><td>Months</td><td>Instant</td><td>Weeks</td><td>Days</td><td>1-2w</td><td>Weeks</td></tr>
+            <tr><td>Connectors</td><td>120+</td><td>80+</td><td>100+</td><td>60+</td><td>N/A</td><td>80+</td><td>10+</td><td>30+</td><td>30+</td></tr>
+            <tr><td>Column Lineage</td><td>Partial</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Ent.</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>AI Docs</td><td>Yes</td><td>Partial</td><td>Yes</td><td>Partial</td><td>No</td><td>Partial</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Governance</td><td>High</td><td>Highest</td><td>Medium</td><td>High</td><td>None</td><td>Medium</td><td>Low</td><td>Low</td><td>None</td></tr>
+            <tr><td>Business UX</td><td>Medium</td><td>Low</td><td>High</td><td>Low</td><td>Low</td><td>Low</td><td>High</td><td>High</td><td>Low</td></tr>
+            <tr><td>Security Focus</td><td>Low</td><td>Medium</td><td>Low</td><td>Medium</td><td>None</td><td>Low</td><td>Low</td><td>Low</td><td>Obs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Data Security Posture Competitors</h3>
+      <div class="sds-table-container" style="margin-bottom:var(--sds-space-400);">
+        <table class="sds-table">
+          <thead><tr><th>Capability</th><th>Cyera</th><th>Sentra</th><th>Protegrity</th></tr></thead>
+          <tbody>
+            <tr><td>Data Discovery</td><td>Agentless, all environments</td><td>Cloud-native, agentless</td><td>Agent-based + proxy</td></tr>
+            <tr><td>Classification</td><td>AI-driven, 150+ classifiers</td><td>ML-based, contextual</td><td>Rule-based + ML</td></tr>
+            <tr><td>Posture / Risk</td><td>Risk scoring, remediation</td><td>Attack path analysis</td><td>Policy enforcement</td></tr>
+            <tr><td>Data Protection</td><td>Inline remediation</td><td>Alerts + workflow</td><td>Tokenization, masking, encryption</td></tr>
+            <tr><td>Catalog / Browse</td><td style="color:var(--sds-color-red-500);">Minimal</td><td style="color:var(--sds-color-red-500);">None</td><td style="color:var(--sds-color-red-500);">None</td></tr>
+            <tr><td>Lineage</td><td style="color:var(--sds-color-red-500);">Data flow only</td><td style="color:var(--sds-color-red-500);">None</td><td style="color:var(--sds-color-red-500);">None</td></tr>
+            <tr><td>Governance UX</td><td style="color:var(--sds-color-red-500);">None</td><td style="color:var(--sds-color-red-500);">None</td><td>Policy admin only</td></tr>
+            <tr><td>Business UX</td><td style="color:var(--sds-color-red-500);">Security team only</td><td style="color:var(--sds-color-red-500);">Security team only</td><td style="color:var(--sds-color-red-500);">Security team only</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Insight Agent Maturity</h3>
+      <p style="margin-bottom:var(--sds-space-300);">How each competitor category approaches AI agents today.</p>
+      <div class="sds-table-container">
+        <table class="sds-table">
+          <thead>
+            <tr><th>Competitor</th><th>Agent Maturity</th><th>Focus</th><th>Find</th><th>Automate</th><th>Key Limitation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Collibra</td><td><span class="sds-tag sds-tag--warning">Early</span></td><td>Policy alerts</td><td>Catalog search</td><td>Workflow triggers</td><td>Governance-heavy, slow to adopt AI</td></tr>
+            <tr><td>Atlan</td><td><span class="sds-tag sds-tag--info">Moderate</span></td><td>Freshness alerts</td><td>AI search + sidebar</td><td>AI documentation</td><td>No security posture agents</td></tr>
+            <tr><td>Informatica</td><td><span class="sds-tag sds-tag--warning">Early</span></td><td>Quality monitors</td><td>CLAIRE AI search</td><td>Mapping suggestions</td><td>Absorbed into Salesforce ecosystem</td></tr>
+            <tr><td>Monte Carlo</td><td><span class="sds-tag sds-tag--success">Advanced</span></td><td>Intelligent thresholds</td><td>Incident context</td><td>One-click fix</td><td>Observability only, no catalog</td></tr>
+            <tr><td>Secoda</td><td><span class="sds-tag sds-tag--info">Moderate</span></td><td>Freshness tracking</td><td>AI search</td><td>Auto-docs</td><td>Now Atlassian-only ecosystem</td></tr>
+            <tr><td>Cyera</td><td><span class="sds-tag sds-tag--warning">Early</span></td><td>Risk scoring</td><td>Classification search</td><td>Remediation suggest</td><td>Security team only, no data team UX</td></tr>
+            <tr><td>Wiz</td><td><span class="sds-tag sds-tag--success">Advanced</span></td><td>Risk prioritization</td><td>Security graph</td><td>Drag-drop workflows</td><td>Cloud security scope, no data catalog</td></tr>
+            <tr><td>Snowflake</td><td><span class="sds-tag sds-tag--success">Advanced</span></td><td>Cortex anomaly detect</td><td>NL query (Cortex)</td><td>Pipeline gen</td><td>Snowflake-only ecosystem</td></tr>
+            <tr><td>Databricks</td><td><span class="sds-tag sds-tag--success">Advanced</span></td><td>Deep research</td><td>Genie NL search</td><td>Code generation</td><td>Databricks-only ecosystem</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout" style="margin-top:var(--sds-space-400);">
+        <p><strong>The gap:</strong> Platform vendors (Snowflake, Databricks) have advanced agents but are ecosystem-locked. Catalog vendors (Atlan, Collibra) have moderate agent capabilities but no security posture. DSPM vendors (Cyera, Wiz) have strong focus agents but no data team UX. No one offers Focus + Find + Automate agents across both data management and security posture.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== MARKET DYNAMICS ====== -->
+    <section id="market" class="section">
+      <h2>Market Dynamics</h2>
+      <p class="section-desc">Key shifts reshaping the competitive landscape for data management and insight agents.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Consolidation &amp; Acquisitions</h3>
+          <ul>
+            <li><strong>Secoda &rarr; Atlassian</strong> &mdash; validates the adoption-first thesis. Creates a walled garden for engineering teams.</li>
+            <li><strong>Informatica &rarr; Salesforce</strong> &mdash; enterprise governance absorbed into the CRM ecosystem.</li>
+            <li><strong>Collibra</strong> &mdash; IPO trajectory. Doubling down on GRC and compliance.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>DSPM Convergence</h3>
+          <ul>
+            <li><strong>Cyera</strong> &mdash; $300M+ raised, strongest AI-driven classification (150+ classifiers). Moving toward remediation but no catalog UX.</li>
+            <li><strong>Sentra</strong> &mdash; cloud-native DSPM with attack path analysis. Purely a security team tool.</li>
+            <li><strong>Protegrity</strong> &mdash; legacy data protection. Deep enterprise presence but aging UX.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Agent Adoption Curve</h3>
+          <ul>
+            <li><strong>57%</strong> of companies have AI agents in production</li>
+            <li><strong>23%</strong> (roughly 1 in 4) have scaled beyond pilot</li>
+            <li><strong>77%</strong> of implementations fail due to data quality issues</li>
+            <li><strong>42%</strong> of enterprises abandoned AI initiatives in 2025</li>
+          </ul>
+          <div class="callout callout-yellow" style="margin-top:var(--sds-space-400);">
+            <p><strong>Implication:</strong> The #1 predictor of agent success is data quality &mdash; our core product.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Category Collision</h3>
+          <ul>
+            <li><strong>DSPM vendors adding metadata</strong> &mdash; Cyera now shows data context alongside classification, but building a real catalog is a multi-year effort.</li>
+            <li><strong>Catalog vendors adding security</strong> &mdash; Collibra added access governance, but it's bolted on.</li>
+            <li><strong>Platform vendors locking in</strong> &mdash; Snowflake Cortex and Databricks Genie are powerful but ecosystem-locked.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>MCP as Integration Standard</h3>
+          <ul>
+            <li><strong>Model Context Protocol</strong> is emerging as the standard for connecting AI agents to enterprise data sources.</li>
+            <li>Platforms with strong metadata APIs become preferred agent integration targets.</li>
+            <li>Data management platforms are becoming the knowledge layer for AI agents across the stack.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Agent-Generated UI</h3>
+          <ul>
+            <li>Emerging pattern: agents that generate custom views, dashboards, and reports on demand.</li>
+            <li>Databricks Genie generates analysis notebooks. Tableau creates Insight Briefs.</li>
+            <li>Shifts UX from "navigate to the right page" to "ask and receive a custom answer."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:var(--sds-space-200);">
+        <p><strong>Timing advantage:</strong> Catalog vendors are being absorbed into larger ecosystems. DSPM vendors remain narrow. Platform agents are ecosystem-locked. This creates a window for an independent platform that bridges discovery, governance, security, and intelligent agents in a single experience.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== PERSONAS ====== -->
+    <section id="personas" class="section">
+      <h2>Personas</h2>
+      <p class="section-desc">Five personas spanning the data team &mdash; with insight agent interaction models.</p>
+
+      <div class="card">
+        <div class="persona-card">
+          <div class="persona-icon" style="background:var(--sds-interactive-primary);">A</div>
+          <div>
+            <h3>Anika &mdash; Data Analyst / BI Developer</h3>
+            <p>Finds datasets, builds dashboards, traces upstream to validate values.</p>
+            <div class="grid-2" style="margin-top:var(--sds-space-300);">
+              <div><h4>Jobs to Be Done</h4><ul><li>Find the right dataset quickly</li><li>Assess if data is current and accurate</li><li>Determine who owns data</li><li>Trace upstream to validate values</li></ul></div>
+              <div><h4>Pain Points</h4><ul><li>Excessive time searching across silos</li><li>Cannot tell if data is trustworthy</li><li>Dashboards break from upstream changes</li><li>Multiple tools fragment the workflow</li></ul></div>
+            </div>
+            <h4>Agent Interaction Model</h4>
+            <ul>
+              <li><span class="sds-tag sds-tag--info">Find</span> Surfaces relevant datasets based on her current dashboard context</li>
+              <li><span class="sds-tag sds-tag--error">Focus</span> Alerts to upstream changes affecting her dashboards before they break</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="persona-card">
+          <div class="persona-icon" style="background:var(--sds-color-green-500);">J</div>
+          <div>
+            <h3>Jordan &mdash; Data Engineer / Platform Engineer</h3>
+            <p>Builds pipelines, manages infrastructure, ensures data flows reliably.</p>
+            <div class="grid-2" style="margin-top:var(--sds-space-300);">
+              <div><h4>Jobs to Be Done</h4><ul><li>Understand impact before changes</li><li>Debug pipeline failures</li><li>Onboard new team members</li><li>Ensure GDPR/CCPA compliance</li></ul></div>
+              <div><h4>Pain Points</h4><ul><li>Impact analysis is manual</li><li>Fielding ad-hoc requests from analysts</li><li>Pipeline failures span multiple systems</li><li>Documentation always out of date</li></ul></div>
+            </div>
+            <h4>Agent Interaction Model</h4>
+            <ul>
+              <li><span class="sds-tag sds-tag--error">Focus</span> Detects schema drift and pipeline anomalies with downstream impact analysis</li>
+              <li><span class="sds-tag sds-tag--success">Automate</span> Suggests remediation steps and auto-generates fix scripts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="persona-card">
+          <div class="persona-icon" style="background:var(--sds-color-purple-550);">P</div>
+          <div>
+            <h3>Priya &mdash; Data Steward / Governance Lead</h3>
+            <p>Ensures data quality, upholds governance policies, manages classification at scale.</p>
+            <div class="grid-2" style="margin-top:var(--sds-space-300);">
+              <div><h4>Jobs to Be Done</h4><ul><li>Define and enforce quality standards</li><li>Maintain business glossary</li><li>Manage access policies + classification</li><li>Audit usage for compliance</li></ul></div>
+              <div><h4>Pain Points</h4><ul><li>Governance feels like overhead</li><li>Manual classification doesn't scale</li><li>Tools assume maturity orgs don't have</li><li>Bridging business and technical language</li></ul></div>
+            </div>
+            <h4>Agent Interaction Model</h4>
+            <ul>
+              <li><span class="sds-tag sds-tag--error">Focus</span> Prioritizes classification review queue by risk and confidence score</li>
+              <li><span class="sds-tag sds-tag--success">Automate</span> Applies classification policies at scale with human-in-the-loop approval</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="persona-card">
+          <div class="persona-icon" style="background:var(--sds-color-warm-gray-700);">M</div>
+          <div>
+            <h3>Marcus &mdash; Data Product Owner / CDO</h3>
+            <p>Data strategy, AI-readiness, measuring value of data investments.</p>
+            <div class="grid-2" style="margin-top:var(--sds-space-300);">
+              <div><h4>Cares About</h4><ul><li>AI-readiness of data foundation</li><li>Time-to-value for initiatives</li><li>Cross-org adoption and literacy</li></ul></div>
+              <div><h4>Key Stat</h4><p style="font-size:var(--sds-type-heading);font-weight:var(--sds-weight-bold);color:var(--sds-color-red-500);margin-top:var(--sds-space-200);">50%+</p><p>of orgs report data is not AI-ready</p></div>
+            </div>
+            <h4>Agent Interaction Model</h4>
+            <ul>
+              <li><span class="sds-tag sds-tag--error">Focus</span> Surfaces executive insights on data health trends and risk changes</li>
+              <li><span class="sds-tag sds-tag--info">Find</span> Answers strategic questions about data landscape and readiness</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="persona-card">
+          <div class="persona-icon" style="background:var(--sds-color-yellow-500);">S</div>
+          <div>
+            <h3>Sam &mdash; Business User / Domain Expert</h3>
+            <p>Consumes data for decisions. Not technical but needs to find and trust data.</p>
+            <div class="grid-2" style="margin-top:var(--sds-space-300);">
+              <div><h4>Cares About</h4><ul><li>Simplicity: find data without tech knowledge</li><li>Trust: is this the right, current data?</li><li>Speed: question to answer quickly</li></ul></div>
+              <div><h4>Key Stat</h4><p style="font-size:var(--sds-type-heading);font-weight:var(--sds-weight-bold);color:var(--sds-color-red-500);margin-top:var(--sds-space-200);">75% vs 21%</p><p>Executives think staff are data-proficient, but only 21% of employees agree</p></div>
+            </div>
+            <h4>Agent Interaction Model</h4>
+            <ul>
+              <li><span class="sds-tag sds-tag--info">Find</span> Enables natural language data search without technical knowledge</li>
+              <li><span class="sds-tag sds-tag--error">Focus</span> Highlights trusted, certified datasets and warns about stale data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== PAIN POINTS ====== -->
+    <section id="pain-points" class="section">
+      <h2>Pain Points</h2>
+      <p class="section-desc">User complaints from market research and insight-agent-specific challenges.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Data Management Pain Points</h3>
+          <ul>
+            <li><strong>Setup complexity</strong> &mdash; implementations take months</li>
+            <li><strong>Stale metadata</strong> &mdash; manual docs are abandoned</li>
+            <li><strong>Lineage gaps</strong> &mdash; weak at system boundaries</li>
+            <li><strong>Business UX</strong> &mdash; built for technical users only</li>
+            <li><strong>Governance overhead</strong> &mdash; kills adoption</li>
+            <li><strong>Fragmented tooling</strong> &mdash; separate tools for everything</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Insight Agent Pain Points</h3>
+          <ul>
+            <li><strong>Alert fatigue</strong> &mdash; 75 mentions in Monte Carlo G2 reviews alone. Observability tools overwhelm users with noise.</li>
+            <li><strong>Agent trust deficit</strong> &mdash; 42% of enterprises abandoned AI initiatives in 2025. Users don't trust AI recommendations.</li>
+            <li><strong>Integration complexity</strong> &mdash; 42% of organizations need 8+ data sources connected for agents to be useful.</li>
+            <li><strong>Agentwashing</strong> &mdash; simple chatbot assistants marketed as "agents" set false expectations and erode trust when they fail.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:var(--sds-space-300);">
+        <div class="card" style="border-left:4px solid var(--sds-color-red-500);">
+          <h3>The 77% Problem</h3>
+          <p>77% of enterprise AI agent implementations fail due to data quality issues. This is the single largest risk to agent adoption &mdash; and the single largest opportunity for a data management platform.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--error">Critical</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-yellow-200);">
+          <h3>The Trust Gap</h3>
+          <p>Users want AI help but don't trust it. The solution is progressive autonomy: start with suggestions, show reasoning, earn trust through accuracy, then gradually increase automation.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--warning">High Impact</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== INSIGHT AGENT TAXONOMY ====== -->
+    <section id="taxonomy" class="section">
+      <h2>Insight Agent Taxonomy</h2>
+      <p class="section-desc">Three agent types designed for our data management and security platform.</p>
+
+      <div class="card" style="border-left:4px solid var(--sds-color-red-500);">
+        <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-red-500);">crisis_alert</span>Focus Agent &mdash; "Where should I look?"</h3>
+        <p style="margin-bottom:var(--sds-space-400);">Proactively surfaces anomalies, risks, and changes that require attention. Prioritizes what matters most.</p>
+        <div class="grid-2">
+          <div>
+            <h4>Capabilities</h4>
+            <ul>
+              <li>Data quality anomaly detection with blast radius</li>
+              <li>Security posture change alerts with affected assets</li>
+              <li>Classification confidence drops requiring human review</li>
+              <li>Schema drift detection with downstream impact</li>
+              <li>Risk score changes with root cause analysis</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Example Insight</h4>
+            <div class="insight-card-demo">
+              <div class="ic-header">
+                <div class="ic-icon" style="background:var(--sds-color-red-500);"><span class="material-symbols-outlined">crisis_alert</span></div>
+                <div class="ic-title">Schema Drift Detected</div>
+              </div>
+              <div class="ic-body">3 columns removed from <strong>orders.customer_email</strong>. 14 downstream dashboards affected including 2 executive reports.</div>
+              <div class="ic-meta">
+                <span class="sds-tag sds-tag--error">High Impact</span>
+                <div class="confidence-bar"><div class="confidence-track"><div class="confidence-fill" style="width:92%;background:var(--sds-color-green-400);"></div></div><span class="confidence-label">92% confidence</span></div>
+              </div>
+              <div class="ic-actions">
+                <button class="ic-btn ic-btn--primary">View Blast Radius</button>
+                <button class="ic-btn ic-btn--secondary">Dismiss</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--sds-interactive-primary);">
+        <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-interactive-primary);">search</span>Find Agent &mdash; "Help me understand"</h3>
+        <p style="margin-bottom:var(--sds-space-400);">Helps users discover, understand, and explore data assets through natural language and contextual recommendations.</p>
+        <div class="grid-2">
+          <div>
+            <h4>Capabilities</h4>
+            <ul>
+              <li>Natural language search across catalog, policies, lineage</li>
+              <li>"Explain this dataset" with context, quality, ownership</li>
+              <li>Cross-asset relationship discovery</li>
+              <li>Incident investigation assistance</li>
+              <li>Compliance question answering</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Example Interaction</h4>
+            <div class="insight-card-demo">
+              <div class="ic-header">
+                <div class="ic-icon" style="background:var(--sds-interactive-primary);"><span class="material-symbols-outlined">search</span></div>
+                <div class="ic-title">Find Agent</div>
+              </div>
+              <div class="ic-body" style="background:var(--sds-bg-subtle);padding:var(--sds-space-200) var(--sds-space-300);border-radius:6px;font-style:italic;">"Which datasets contain customer PII and are accessible by the marketing team?"</div>
+              <div class="ic-body" style="margin-top:var(--sds-space-200);">Found <strong>7 datasets</strong> across 3 sources. 4 contain email addresses, 2 contain phone numbers, 1 contains SSN. 3 are over-permissioned.</div>
+              <div class="ic-actions">
+                <button class="ic-btn ic-btn--primary">View Results</button>
+                <button class="ic-btn ic-btn--secondary">Refine Query</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:4px solid var(--sds-color-green-400);">
+        <h3><span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--sds-color-green-500);">auto_fix_high</span>Automate Agent &mdash; "Handle this for me"</h3>
+        <p style="margin-bottom:var(--sds-space-400);">Suggests and executes actions to reduce manual toil. Always shows what it will do before doing it.</p>
+        <div class="grid-2">
+          <div>
+            <h4>Capabilities</h4>
+            <ul>
+              <li>Auto-generate data quality monitors with intelligent thresholds</li>
+              <li>Suggest and apply classification policies</li>
+              <li>One-click remediation (tokenize, mask, revoke)</li>
+              <li>Auto-generate documentation from schema analysis</li>
+              <li>Scheduled scan optimization</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Example Action</h4>
+            <div class="insight-card-demo">
+              <div class="ic-header">
+                <div class="ic-icon" style="background:var(--sds-color-green-500);"><span class="material-symbols-outlined">auto_fix_high</span></div>
+                <div class="ic-title">Suggested Action</div>
+              </div>
+              <div class="ic-body">12 new columns detected matching PII patterns. Agent suggests applying <strong>"Restricted &mdash; PII"</strong> classification with tokenization policy.</div>
+              <div class="ic-meta">
+                <span class="sds-tag sds-tag--success">Auto-classify</span>
+                <div class="confidence-bar"><div class="confidence-track"><div class="confidence-fill" style="width:87%;background:var(--sds-color-green-400);"></div></div><span class="confidence-label">87% confidence</span></div>
+              </div>
+              <div class="ic-actions">
+                <button class="ic-btn ic-btn--primary">Apply All</button>
+                <button class="ic-btn ic-btn--secondary">Review Each</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== DESIGN PATTERNS ====== -->
+    <section id="design-patterns" class="section">
+      <h2>Design Patterns</h2>
+      <p class="section-desc">UX patterns for implementing trustworthy, effective insight agents.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">view_agenda</span>Insight Cards with Inline Actions</h3>
+          <p>Every insight surfaces as a card containing: what happened, why it matters, confidence level, and one-click actions. No context-switching required.</p>
+          <h4>Structure</h4>
+          <ul>
+            <li>Icon + title (agent type indicator)</li>
+            <li>Description (what happened + why it matters)</li>
+            <li>Metadata tags (severity, confidence, scope)</li>
+            <li>Primary + secondary actions</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">side_navigation</span>Sidebar Agent Panel</h3>
+          <p>Contextual agent panel that appears alongside the current view. The agent augments the user's workflow without dominating the interface.</p>
+          <h4>Key Principle</h4>
+          <ul>
+            <li>Agent is a companion, not the main character</li>
+            <li>Appears contextually based on current page</li>
+            <li>Can be collapsed or dismissed</li>
+            <li>Persists conversation context across pages</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">verified</span>Confidence Indicators</h3>
+          <p>Every AI-generated insight shows a confidence level. Users learn to calibrate trust based on the agent's track record.</p>
+          <h4>Trust Levels</h4>
+          <div style="margin-top:var(--sds-space-200);">
+            <div class="confidence-bar" style="margin-bottom:var(--sds-space-200);"><div class="confidence-track" style="max-width:120px;"><div class="confidence-fill" style="width:95%;background:var(--sds-color-green-400);"></div></div><span class="confidence-label">High (90-100%) &mdash; Auto-apply eligible</span></div>
+            <div class="confidence-bar" style="margin-bottom:var(--sds-space-200);"><div class="confidence-track" style="max-width:120px;"><div class="confidence-fill" style="width:70%;background:var(--sds-color-yellow-200);"></div></div><span class="confidence-label">Medium (60-89%) &mdash; Review suggested</span></div>
+            <div class="confidence-bar"><div class="confidence-track" style="max-width:120px;"><div class="confidence-fill" style="width:40%;background:var(--sds-color-red-500);"></div></div><span class="confidence-label">Low (&lt;60%) &mdash; Human review required</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">unfold_more</span>Progressive Disclosure</h3>
+          <p>Layer information from summary to detail. Users see the headline first, then can drill into reasoning and raw data.</p>
+          <h4>Layers</h4>
+          <div class="flow-strip" style="margin-top:var(--sds-space-200);">
+            <div class="flow-step"><div class="step-name">Summary</div><div class="step-time">What + severity</div></div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step"><div class="step-name">Reasoning</div><div class="step-time">Why + evidence</div></div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step"><div class="step-name">Data</div><div class="step-time">Raw signals + sources</div></div>
+          </div>
+        </div>
+      </div>
+
+      <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">tune</span>Autonomy Dial</h3>
+      <p style="margin-bottom:var(--sds-space-200);">Users control how proactive agents are. This builds trust by putting the user in control of the agent's behavior.</p>
+      <div class="autonomy-dial">
+        <div class="autonomy-level">
+          <span class="al-label">Observe</span>
+          <span class="al-desc">Log only</span>
+        </div>
+        <div class="autonomy-level">
+          <span class="al-label">Suggest</span>
+          <span class="al-desc">Recommend actions</span>
+        </div>
+        <div class="autonomy-level active">
+          <span class="al-label">Assist</span>
+          <span class="al-desc">Act with approval</span>
+        </div>
+        <div class="autonomy-level">
+          <span class="al-label">Automate</span>
+          <span class="al-desc">Act autonomously</span>
+        </div>
+      </div>
+      <p style="font-size:var(--sds-type-caption);color:var(--sds-color-warm-gray-400);margin-top:var(--sds-space-100);">Default: "Assist" &mdash; agents act only with user approval. Users can increase autonomy per agent type as trust builds.</p>
+
+      <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">record_voice_over</span>Agent Narration</h3>
+      <p style="margin-bottom:var(--sds-space-200);">Agents explain their reasoning in plain language. Every insight includes a narration of what was found and why it matters.</p>
+      <div class="tree"><span class="hl">Focus Agent:</span> "I detected a schema change in orders.customer_email at 2:14 AM.
+This matters because 14 downstream dashboards depend on this column,
+including 2 executive reports viewed by 23 users daily.
+
+<span class="hl">Evidence:</span> Column 'email_verified' was removed. Column 'email_hash' type
+changed from VARCHAR to INT. Last successful pipeline run was 6h ago.
+
+<span class="hl">Recommended action:</span> Pause dependent pipelines and notify data owners."</div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== OPPORTUNITIES ====== -->
+    <section id="opportunities" class="section">
+      <h2>Opportunities</h2>
+      <p class="section-desc">Strategic advantages for embedding insight agents in our platform.</p>
+
+      <div class="grid-2">
+        <div class="card" style="border-left:4px solid var(--sds-color-green-400);">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">verified</span>Data Quality = Agent Quality</h3>
+          <p>Our platform manages data quality &mdash; the #1 predictor of agent success. 77% of agent implementations fail due to data quality. We are uniquely positioned to deliver reliable agents because we control the foundation they depend on.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-green-400);">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">link</span>Bridge Security + Data Agents</h3>
+          <p>Security agents (Wiz, CrowdStrike) and data agents (Snowflake, Databricks) operate in silos. We bridge both worlds: data quality insights meet security posture insights in a single agent experience.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-green-400);">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">category</span>Focus + Find + Automate</h3>
+          <p>First platform to offer all three agent types across both data management AND security posture. No competitor covers the full spectrum today.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-green-400);">
+          <h3><span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">speed</span>Agent Confidence = Trust Signal</h3>
+          <p>Agent reliability directly reflects data quality. Low agent confidence becomes a motivation to improve data quality &mdash; creating a virtuous cycle that drives platform adoption.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-green" style="margin-top:var(--sds-space-300);">
+        <p><strong>Core thesis:</strong> The platform that manages data quality is uniquely suited to power reliable insight agents. Agent confidence becomes a trust signal that reflects data foundation health &mdash; and a natural driver of data quality improvement.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== RISKS & CONSTRAINTS ====== -->
+    <section id="risks" class="section">
+      <h2>Risks &amp; Constraints</h2>
+      <p class="section-desc">Challenges to navigate when building and shipping insight agents.</p>
+
+      <div class="grid-2">
+        <div class="card" style="border-left:4px solid var(--sds-color-red-500);">
+          <h3>Alert Fatigue</h3>
+          <p>If agents are too noisy, users disable them. Monte Carlo's G2 reviews show 75 mentions of alert overload. Intelligent thresholds and progressive autonomy are critical to avoid this trap.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--error">High Risk</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-red-500);">
+          <h3>Trust Erosion from False Positives</h3>
+          <p>A single high-confidence false positive can destroy user trust in the entire agent system. Conservative confidence scoring and human-in-the-loop for early deployments are essential.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--error">High Risk</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-yellow-200);">
+          <h3>Integration Complexity</h3>
+          <p>42% of organizations need 8+ data sources connected for agents to be useful. Each integration point is a potential failure mode that degrades agent reliability.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--warning">Medium Risk</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-yellow-200);">
+          <h3>Performance Impact</h3>
+          <p>Real-time agent processing adds latency and compute cost. Agents that slow down the core product experience will be turned off. Asynchronous processing and smart caching are required.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--warning">Medium Risk</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-yellow-200);">
+          <h3>Agentwashing Risk</h3>
+          <p>If we market agents that are really just chatbots, we join the growing list of vendors eroding market trust. Honest capability communication and clear labeling are non-negotiable.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--warning">Medium Risk</span></div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--sds-color-yellow-200);">
+          <h3>User Expectations vs. Reality</h3>
+          <p>Users expect AI agents to be magical. When they encounter limitations, disappointment sets in fast. Progressive disclosure of capabilities and clear scope communication help manage expectations.</p>
+          <div style="margin-top:var(--sds-space-200);"><span class="sds-tag sds-tag--warning">Medium Risk</span></div>
+        </div>
+      </div>
+
+      <div class="callout callout-yellow" style="margin-top:var(--sds-space-300);">
+        <p><strong>Mitigation strategy:</strong> Launch agents in "Assist" mode (act with approval). Measure acceptance rates. Only graduate to higher autonomy when acceptance exceeds 80% for a given agent type. This mirrors the progressive autonomy principle and protects user trust.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function scrollToSection(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  const main = document.getElementById('main-content');
+  if (el && main) {
+    main.scrollTo({ top: el.offsetTop - main.offsetTop - 32, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.sds-sidenav-item').forEach(item => item.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+}
+
+const main = document.getElementById('main-content');
+const navItems = document.querySelectorAll('.sds-sidenav-item[href]');
+const progressBar = document.getElementById('progress-bar');
+
+main.addEventListener('scroll', () => {
+  // Update active nav
+  let current = '';
+  document.querySelectorAll('[id]').forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top <= 120) current = section.id;
+  });
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (item.getAttribute('href') === '#' + current) item.classList.add('active');
+  });
+
+  // Update scroll progress
+  const scrollTop = main.scrollTop;
+  const scrollHeight = main.scrollHeight - main.clientHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  progressBar.style.width = progress + '%';
+});
+</script>
+
+</body>
+</html>

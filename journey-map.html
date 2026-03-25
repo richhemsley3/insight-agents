@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Insight Agent Experience — Customer Journey Map</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    /* ─── Reset & Canvas ─── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #FAF8F5;
+      color: #1C1A17;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── CSS Custom Properties ─── */
+    :root {
+      --bg-canvas: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --bg-header: #F4F1EB;
+      --bg-elevated: #FFFFFF;
+      --border-subtle: #EBE6DD;
+      --border-default: #E0DCD3;
+      --border-strong: #D0CBC3;
+      --border-focus: #013D5B;
+      --text-primary: #1C1A17;
+      --text-secondary: #54514D;
+      --text-tertiary: #6B6760;
+      --text-disabled: #B0ABA2;
+      --text-on-primary: #FFFFFF;
+      --interactive-primary: #013D5B;
+      --interactive-primary-hover: #05314D;
+      --interactive-primary-subtle: #D9EBED;
+      --phase-header-bg: #F4F1EB;
+      --phase-1: #805AA1;
+      --phase-2: #013D5B;
+      --phase-3: #0C4A69;
+      --phase-4: #7A9A01;
+      --phase-5: #8A7515;
+      --phase-6: #CF6253;
+      --emotion-positive: #7A9A01;
+      --emotion-neutral: #0C4A69;
+      --emotion-negative: #CF6253;
+      --accent-pain: #BF5547;
+      --accent-pain-bg: #FFEEEB;
+      --accent-opportunity: #62800B;
+      --accent-opportunity-bg: #F4FAEB;
+      --accent-need: #8A7515;
+      --accent-need-bg: #FCF9D9;
+      --role-1: #013D5B;
+      --role-2: #4A6E82;
+      --role-3: #5C7A3D;
+      --role-4: #805AA1;
+      --role-5: #8A7515;
+    }
+
+    /* ─── Title Bar ─── */
+    .title-bar {
+      padding: 28px 40px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      max-width: 100%;
+    }
+    .title-bar h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .title-bar h1 span.separator {
+      color: var(--text-disabled);
+      font-weight: 300;
+      margin: 0 8px;
+    }
+    .title-bar h1 span.subtitle {
+      color: var(--text-tertiary);
+      font-weight: 400;
+    }
+    .title-bar .title-meta {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+    }
+
+    /* ─── Role Legend ─── */
+    .role-legend {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-shrink: 0;
+      padding-top: 6px;
+    }
+    .role-legend-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .role-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .role-legend-item.dimmed { opacity: 0.3; }
+    .role-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .role-legend-name {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    /* ─── Grid Container ─── */
+    .journey-grid-wrapper {
+      padding: 0 40px 40px;
+      overflow-x: auto;
+      overflow-y: visible;
+      position: relative;
+    }
+    .journey-grid {
+      display: grid;
+      position: relative;
+      min-width: fit-content;
+    }
+
+    /* ─── Phase Header Band ─── */
+    .phase-header {
+      background: var(--phase-header-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      border-bottom: 1px solid var(--border-default);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .phase-header-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .phase-header-accent {
+      width: 3px;
+      height: 18px;
+      border-radius: 2px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Step Header ─── */
+    .step-header {
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 44px;
+      z-index: 4;
+    }
+    .step-header-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-tertiary);
+      text-align: center;
+      padding: 0 8px;
+      line-height: 1.3;
+    }
+
+    /* ─── Row Labels ─── */
+    .row-label {
+      position: sticky;
+      left: 0;
+      z-index: 3;
+      background: var(--bg-card);
+      width: 140px;
+      min-width: 140px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border-default);
+      border-bottom: 1px solid rgba(208, 203, 195, 0.4);
+    }
+    .row-label-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+    .row-label-subtitle {
+      font-size: 9px;
+      color: var(--text-disabled);
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    /* ─── Corner Cells ─── */
+    .corner-cell {
+      position: sticky;
+      left: 0;
+      z-index: 6;
+      background: var(--phase-header-bg);
+      width: 140px;
+      min-width: 140px;
+      border-right: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .corner-cell-step {
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      background: #FFFFFF;
+      width: 140px;
+      min-width: 140px;
+      border-right: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* ─── Content Cells ─── */
+    .cell {
+      padding: 12px 16px;
+      min-height: 72px;
+      border-bottom: 1px solid rgba(208, 203, 195, 0.4);
+      border-right: 1px solid rgba(208, 203, 195, 0.4);
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .cell:hover {
+      background: rgba(244, 241, 235, 0.6) !important;
+    }
+    .cell.phase-border {
+      border-right: 1px solid var(--border-default);
+    }
+    .cell-empty {
+      color: var(--text-disabled);
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ─── Role Badge Pills ─── */
+    .role-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+    }
+    .primary-badge {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      max-width: 100%;
+    }
+    .primary-badge.dimmed { opacity: 0.3; }
+    .primary-badge.active-role { box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor; }
+
+    .secondary-badges {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .secondary-badge {
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 11px;
+      color: white;
+      font-size: 10px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .secondary-badge.dimmed { opacity: 0.3; }
+    .secondary-badge.active-role { box-shadow: 0 0 0 2px white, 0 0 0 3px currentColor; }
+
+    /* ─── Emotion Row ─── */
+    .emotion-row-container {
+      position: relative;
+      overflow: visible;
+      z-index: 1;
+      min-height: 150px;
+    }
+    .emotion-row-container svg {
+      overflow: visible;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Pain Points ─── */
+    .pain-item {
+      color: var(--accent-pain);
+      margin-bottom: 4px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .pain-cell {
+      background: var(--accent-pain-bg) !important;
+    }
+
+    /* ─── Opportunities ─── */
+    .opp-item {
+      color: var(--accent-opportunity);
+      margin-bottom: 4px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .opp-cell {
+      background: var(--accent-opportunity-bg) !important;
+    }
+
+    /* ─── Needs ─── */
+    .need-item {
+      color: var(--accent-need);
+      font-style: italic;
+      margin-bottom: 4px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .need-cell {
+      background: var(--accent-need-bg) !important;
+    }
+
+    /* ─── Per-role dot prefix ─── */
+    .role-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 5px;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .role-content-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .role-content-item .role-dot {
+      margin-top: 4px;
+    }
+
+    /* ─── Touchpoints ─── */
+    .touchpoint-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: var(--bg-header);
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin: 2px 3px 2px 0;
+      white-space: nowrap;
+    }
+
+    /* ─── Metric Cards ─── */
+    .metric-card {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .metric-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .metric-name {
+      font-size: 10px;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── Support Reliance Bar ─── */
+    .support-bar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+    .support-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .support-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── Tooltip ─── */
+    .tooltip {
+      position: fixed;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      font-size: 12px;
+      color: var(--text-secondary);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 100;
+      max-width: 280px;
+      line-height: 1.5;
+    }
+    .tooltip.visible { opacity: 1; }
+    .tooltip-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .tooltip-score {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .tooltip-role {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* ─── Curve Legend ─── */
+    .curve-legend {
+      position: absolute;
+      bottom: 8px;
+      right: 16px;
+      display: flex;
+      gap: 16px;
+      font-size: 9px;
+      color: var(--text-tertiary);
+      z-index: 2;
+    }
+    .curve-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .curve-legend-line {
+      width: 20px;
+      height: 2px;
+    }
+
+    /* ─── Zebra Striping ─── */
+    .row-even .cell, .row-even .row-label {
+      background-color: #FAFAF8;
+    }
+    .row-odd .cell, .row-odd .row-label {
+      background-color: #FFFFFF;
+    }
+
+    /* ─── Print ─── */
+    @media print {
+      body { background: white; }
+      .journey-grid-wrapper { overflow: visible; padding: 0 20px 20px; }
+      .journey-grid { min-width: unset; }
+      .row-label { position: static; }
+      .phase-header, .step-header { position: static; }
+      .corner-cell, .corner-cell-step { position: static; }
+      .tooltip { display: none; }
+      .title-bar { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title-bar">
+    <div>
+      <h1>AI Insight Agent Experience<span class="separator">│</span><span class="subtitle">Trust Journey Map</span></h1>
+      <div class="title-meta">Data Management Platform — Focus · Find · Automate</div>
+    </div>
+    <div class="role-legend" id="roleLegend"></div>
+  </div>
+
+  <div class="journey-grid-wrapper">
+    <div class="journey-grid" id="journeyGrid"></div>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════
+    // JOURNEY DATA
+    // ═══════════════════════════════════════════════════════
+    const journeyData = {
+      title: "AI Insight Agent Experience",
+      roles: [
+        { name: "Anika", abbrev: "Anika", role: "Data Analyst", color: "#013D5B" },
+        { name: "Jordan", abbrev: "Jordan", role: "Data Engineer", color: "#4A6E82" },
+        { name: "Priya", abbrev: "Priya", role: "Data Steward", color: "#5C7A3D" },
+        { name: "Marcus", abbrev: "Marcus", role: "CDO / Product Owner", color: "#805AA1" },
+        { name: "Sam", abbrev: "Sam", role: "Business User", color: "#8A7515" }
+      ],
+      phases: [
+        {
+          id: "first-contact",
+          label: "First Contact",
+          color: "#805AA1",
+          steps: [
+            {
+              id: "step-1",
+              label: "Insight card appears on dashboard",
+              primaryUser: { name: "Anika", color: "#013D5B" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Priya", color: "#5C7A3D" },
+                { name: "Marcus", color: "#805AA1" },
+                { name: "Sam", color: "#8A7515" }
+              ],
+              emotion: { score: 0.45, label: "Curious but skeptical", annotation: "First time seeing an AI insight card — 'Is this another noisy alert?'" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.4, label: "Wary", annotation: "Concerned about yet another alerting tool" },
+                { role: "Priya", score: 0.5, label: "Interested", annotation: "Hoping for help with classification backlog" }
+              ],
+              needs: {
+                "Anika": "Understand what the agent is and why it's relevant to my work",
+                "Jordan": "Know if this will create more noise or reduce it",
+                "Priya": "See if it helps with classification and compliance gaps",
+                "Marcus": "Understand adoption potential and ROI signal",
+                "Sam": "Simple explanation — not technical jargon"
+              },
+              touchpoints: ["Dashboard", "Insight Cards"],
+              painPoints: {
+                "Anika": ["Alert fatigue from too many notifications across tools"],
+                "Jordan": ["Fragmented tooling — context-switching between 5+ tools"],
+                "Priya": ["Classification bottleneck — manual review queue is overwhelming"],
+                "Marcus": ["No operational visibility — dashboards show risk, not actions"],
+                "Sam": ["Doesn't understand what dashboards are telling them"]
+              },
+              opportunities: {
+                "Anika": ["Personalized first insight based on their recent query patterns"],
+                "Jordan": ["Show pipeline-specific insight to prove relevance"],
+                "Priya": ["Surface compliance gap as the first card to show immediate value"],
+                "Marcus": ["Aggregate adoption metrics from first interactions"],
+                "Sam": ["Plain-language insight card with no technical jargon"]
+              },
+              metrics: { name: "Card View Rate", value: "72%" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-2",
+              label: "Agent surfaces role-relevant priority issue",
+              primaryUser: { name: "Jordan", color: "#4A6E82" },
+              secondaryUsers: [
+                { name: "Anika", color: "#013D5B" },
+                { name: "Priya", color: "#5C7A3D" }
+              ],
+              emotion: { score: 0.5, label: "Intrigued", annotation: "'3 tables with schema drift affecting your pipeline' — that's actually useful" },
+              secondaryEmotions: [
+                { role: "Anika", score: 0.55, label: "Curious", annotation: "Sees a data quality insight about a dataset they use" },
+                { role: "Priya", score: 0.5, label: "Cautious", annotation: "Sees PII classification suggestions but needs to verify" }
+              ],
+              needs: {
+                "Anika": "Quick understanding of which datasets are affected",
+                "Jordan": "See blast radius of schema drift on pipeline dependencies",
+                "Priya": "Know which assets have classification gaps"
+              },
+              touchpoints: ["Dashboard", "Insight Cards", "Email"],
+              painPoints: {
+                "Anika": ["No way to see blast radius of upstream changes"],
+                "Jordan": ["Schema drift goes unnoticed until pipelines break"],
+                "Priya": ["No clear view of what's covered vs. what's exposed"]
+              },
+              opportunities: {
+                "Anika": ["Link insight to specific dashboards and queries they've run"],
+                "Jordan": ["Show schema diff with pipeline impact graph"],
+                "Priya": ["Show coverage gap with compliance framework mapping"]
+              },
+              metrics: { name: "Click-Through Rate", value: "38%" },
+              supportReliance: "light"
+            }
+          ]
+        },
+        {
+          id: "understanding",
+          label: "Understanding",
+          color: "#013D5B",
+          steps: [
+            {
+              id: "step-3",
+              label: "Reads insight card — what, why, blast radius",
+              primaryUser: { name: "Anika", color: "#013D5B" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Marcus", color: "#805AA1" }
+              ],
+              emotion: { score: 0.55, label: "Growing interest", annotation: "Agent explains context clearly — 'This table changed schema, affecting 12 downstream assets'" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.6, label: "Impressed", annotation: "Blast radius view saves hours of manual impact analysis" },
+                { role: "Priya", score: 0.5, label: "Cautious", annotation: "Wants to verify the agent's reasoning before trusting it" }
+              ],
+              needs: {
+                "Anika": "Clear explanation of what changed and why it matters",
+                "Jordan": "Technical detail — which columns, what type of drift",
+                "Priya": "Understand confidence level of the agent's assessment",
+                "Marcus": "High-level summary for executive communication"
+              },
+              touchpoints: ["Insight Cards", "Agent Panel"],
+              painPoints: {
+                "Anika": ["Impact analysis is manual — no automated blast radius"],
+                "Jordan": ["Has to manually trace lineage to understand change impact"],
+                "Priya": ["Stale metadata — documentation always out of date"],
+                "Marcus": ["No operational visibility into what needs attention"]
+              },
+              opportunities: {
+                "Anika": ["Interactive impact graph showing upstream/downstream dependencies"],
+                "Jordan": ["Auto-generated schema diff with column-level detail"],
+                "Priya": ["Confidence scoring with explainable reasoning"],
+                "Marcus": ["Executive summary card with key metrics"]
+              },
+              metrics: { name: "Avg. Time on Card", value: "45s" },
+              supportReliance: "medium"
+            },
+            {
+              id: "step-4",
+              label: "Expands reasoning — sources, confidence, affected assets",
+              primaryUser: { name: "Jordan", color: "#4A6E82" },
+              secondaryUsers: [
+                { name: "Anika", color: "#013D5B" },
+                { name: "Priya", color: "#5C7A3D" }
+              ],
+              emotion: { score: 0.6, label: "Cautiously optimistic", annotation: "Agent shows its work — data sources, confidence %, and full asset lineage" },
+              secondaryEmotions: [
+                { role: "Anika", score: 0.6, label: "Engaged", annotation: "Appreciates seeing lineage graph" },
+                { role: "Priya", score: 0.55, label: "Warming up", annotation: "Confidence scores help prioritize review queue" }
+              ],
+              needs: {
+                "Anika": "See which specific datasets and dashboards are downstream",
+                "Jordan": "Understand the data sources and logic behind the insight",
+                "Priya": "Validate the classification recommendations against policy"
+              },
+              touchpoints: ["Agent Panel", "Insight Cards"],
+              painPoints: {
+                "Anika": ["Fragmented tooling — needs to check 3 tools to verify one insight"],
+                "Jordan": ["No single place to see the full picture of a change"],
+                "Priya": ["Manual classification doesn't scale — can't verify everything"]
+              },
+              opportunities: {
+                "Anika": ["One-click lineage view from insight card"],
+                "Jordan": ["Deep-link to pipeline config with suggested fix"],
+                "Priya": ["Side-by-side policy comparison with agent recommendation"]
+              },
+              metrics: { name: "Expand Rate", value: "61%" },
+              supportReliance: "medium"
+            }
+          ]
+        },
+        {
+          id: "first-action",
+          label: "First Action",
+          color: "#0C4A69",
+          steps: [
+            {
+              id: "step-5",
+              label: "Agent suggests a specific action",
+              primaryUser: { name: "Priya", color: "#5C7A3D" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Anika", color: "#013D5B" }
+              ],
+              emotion: { score: 0.55, label: "Cautious", annotation: "'Apply classification policy to 47 columns matching PII pattern' — useful but needs review" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.6, label: "Hopeful", annotation: "Agent suggests pipeline remediation steps" },
+                { role: "Anika", score: 0.5, label: "Uncertain", annotation: "Unsure if they should act on agent suggestions" }
+              ],
+              needs: {
+                "Priya": "Preview exactly what will change before approving",
+                "Jordan": "Understand if the fix will cause downstream issues",
+                "Anika": "Know that acting on this won't break their dashboards"
+              },
+              touchpoints: ["Agent Panel", "Insight Cards"],
+              painPoints: {
+                "Priya": ["Classification bottleneck — 47 columns is a day's manual work"],
+                "Jordan": ["No way to preview remediation impact before executing"],
+                "Anika": ["Afraid to take action without understanding consequences"]
+              },
+              opportunities: {
+                "Priya": ["Batch classification with per-column confidence scores"],
+                "Jordan": ["Dry-run mode showing what the action would change"],
+                "Anika": ["Simple approve/reject with plain-language impact summary"]
+              },
+              metrics: { name: "Suggestion Rate", value: "4.2/day" },
+              supportReliance: "medium"
+            },
+            {
+              id: "step-6",
+              label: "Previews action impact and reviews suggestion",
+              primaryUser: { name: "Priya", color: "#5C7A3D" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" }
+              ],
+              emotion: { score: 0.65, label: "Trust building", annotation: "Preview shows exactly which columns, what tags, and affected policies — transparent and verifiable" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.65, label: "Confident", annotation: "Dry-run view shows no breaking changes downstream" },
+                { role: "Priya", score: 0.65, label: "Trust building", annotation: "Can see agent's reasoning matches their expert judgment" }
+              ],
+              needs: {
+                "Priya": "Line-by-line review of classification changes",
+                "Jordan": "Confirmation that pipeline won't be disrupted"
+              },
+              touchpoints: ["Agent Panel"],
+              painPoints: {
+                "Priya": ["Reviewing 47 columns one-by-one is still tedious"],
+                "Jordan": ["No rollback if something goes wrong"]
+              },
+              opportunities: {
+                "Priya": ["Bulk approve with exceptions — review only low-confidence items"],
+                "Jordan": ["Auto-rollback if downstream tests fail after action"]
+              },
+              metrics: { name: "Preview Completion", value: "84%" },
+              supportReliance: "medium"
+            },
+            {
+              id: "step-7",
+              label: "Approves and agent executes",
+              primaryUser: { name: "Priya", color: "#5C7A3D" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Marcus", color: "#805AA1" }
+              ],
+              emotion: { score: 0.72, label: "Satisfied", annotation: "Action completed successfully — 47 columns classified, 3 policies updated, zero errors" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.7, label: "Relieved", annotation: "Pipeline remediation applied cleanly" },
+                { role: "Priya", score: 0.72, label: "Satisfied", annotation: "Hours of manual work completed in seconds" }
+              ],
+              needs: {
+                "Priya": "Confirmation that the action completed correctly",
+                "Jordan": "Audit trail of what changed and when",
+                "Marcus": "Visibility into agent actions for governance reporting"
+              },
+              touchpoints: ["Agent Panel", "Slack", "Email"],
+              painPoints: {
+                "Priya": ["No audit trail for manual classification decisions"],
+                "Jordan": ["Manual remediation is error-prone"],
+                "Marcus": ["Can't track which actions were human vs. automated"]
+              },
+              opportunities: {
+                "Priya": ["Auto-generated audit log with before/after state"],
+                "Jordan": ["Post-action health check confirming pipeline stability"],
+                "Marcus": ["Dashboard showing agent actions, accuracy, and time saved"]
+              },
+              metrics: { name: "Action Acceptance", value: "67%" },
+              supportReliance: "light"
+            }
+          ]
+        },
+        {
+          id: "finding",
+          label: "Finding",
+          color: "#7A9A01",
+          steps: [
+            {
+              id: "step-8",
+              label: "Asks natural language question",
+              primaryUser: { name: "Anika", color: "#013D5B" },
+              secondaryUsers: [
+                { name: "Sam", color: "#8A7515" }
+              ],
+              emotion: { score: 0.6, label: "Hopeful", annotation: "'Which datasets contain customer PII?' — easier than writing SQL or navigating the catalog" },
+              secondaryEmotions: [
+                { role: "Anika", score: 0.6, label: "Hopeful", annotation: "Finally a search that understands intent, not just keywords" },
+                { role: "Priya", score: 0.55, label: "Monitoring", annotation: "Wants to ensure search respects access policies" }
+              ],
+              needs: {
+                "Anika": "Natural language search that understands data domain concepts",
+                "Sam": "Simple interface — no SQL, no catalog navigation"
+              },
+              touchpoints: ["Agent Panel", "Dashboard"],
+              painPoints: {
+                "Anika": ["Fragmented tooling — different search in every tool"],
+                "Sam": ["Can't find the right dataset without asking a data team member"]
+              },
+              opportunities: {
+                "Anika": ["Conversational search with context from their past queries"],
+                "Sam": ["Guided search with auto-suggestions and plain-language results"]
+              },
+              metrics: { name: "Query Volume", value: "12/day" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-9",
+              label: "Agent returns results with context and quality",
+              primaryUser: { name: "Anika", color: "#013D5B" },
+              secondaryUsers: [
+                { name: "Sam", color: "#8A7515" },
+                { name: "Priya", color: "#5C7A3D" }
+              ],
+              emotion: { score: 0.72, label: "Empowered", annotation: "Results include quality scores, ownership, freshness, lineage — everything needed to evaluate" },
+              secondaryEmotions: [
+                { role: "Anika", score: 0.72, label: "Empowered", annotation: "Rich context eliminates the need for follow-up research" },
+                { role: "Priya", score: 0.6, label: "Pleased", annotation: "Results show classification status alongside search results" }
+              ],
+              needs: {
+                "Anika": "See data quality, ownership, and freshness alongside results",
+                "Sam": "Understand which dataset to use without technical background",
+                "Priya": "Confirm results respect governance policies"
+              },
+              touchpoints: ["Agent Panel"],
+              painPoints: {
+                "Anika": ["Stale metadata — catalog results often outdated"],
+                "Sam": ["Search results lack context — which one should I use?"],
+                "Priya": ["Can't see governance status in search results"]
+              },
+              opportunities: {
+                "Anika": ["Quality-ranked results with freshness indicators"],
+                "Sam": ["Recommended dataset with plain-language explanation"],
+                "Priya": ["Compliance status badges on search results"]
+              },
+              metrics: { name: "Result Relevance", value: "89%" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-10",
+              label: "Explores a recommended dataset they didn't know about",
+              primaryUser: { name: "Sam", color: "#8A7515" },
+              secondaryUsers: [
+                { name: "Anika", color: "#013D5B" }
+              ],
+              emotion: { score: 0.78, label: "Delighted", annotation: "Agent recommends a curated dataset they didn't know existed — saves days of manual searching" },
+              secondaryEmotions: [
+                { role: "Anika", score: 0.75, label: "Productive", annotation: "Discovers a better upstream source for their dashboard" },
+                { role: "Priya", score: 0.6, label: "Satisfied", annotation: "Users finding governed datasets without steward intervention" }
+              ],
+              needs: {
+                "Sam": "Trust that the recommended dataset is reliable and up-to-date",
+                "Anika": "Preview sample data before committing to use it"
+              },
+              touchpoints: ["Agent Panel", "Dashboard"],
+              painPoints: {
+                "Sam": ["Doesn't know what datasets exist — relies on tribal knowledge"],
+                "Anika": ["Spends hours evaluating candidate datasets"]
+              },
+              opportunities: {
+                "Sam": ["Personalized recommendations based on role and recent questions"],
+                "Anika": ["Inline data preview with sample rows and quality metrics"]
+              },
+              metrics: { name: "Discovery Rate", value: "3.1/wk" },
+              supportReliance: "light"
+            }
+          ]
+        },
+        {
+          id: "building-trust",
+          label: "Building Trust",
+          color: "#8A7515",
+          steps: [
+            {
+              id: "step-11",
+              label: "Adjusts autonomy settings",
+              primaryUser: { name: "Jordan", color: "#4A6E82" },
+              secondaryUsers: [
+                { name: "Priya", color: "#5C7A3D" },
+                { name: "Marcus", color: "#805AA1" }
+              ],
+              emotion: { score: 0.7, label: "In control", annotation: "'Auto-apply high-confidence classifications' — I set the rules, the agent follows them" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.7, label: "In control", annotation: "Sets auto-remediate threshold for known pipeline patterns" },
+                { role: "Priya", score: 0.72, label: "Confident", annotation: "Configures autonomy levels per classification category" }
+              ],
+              needs: {
+                "Jordan": "Granular control over what the agent can do autonomously",
+                "Priya": "Ability to set different autonomy levels per data domain",
+                "Marcus": "Visibility into autonomy settings across the organization"
+              },
+              touchpoints: ["Agent Panel", "Dashboard"],
+              painPoints: {
+                "Jordan": ["All-or-nothing automation — no middle ground"],
+                "Priya": ["Can't delegate routine classifications without losing oversight"],
+                "Marcus": ["No way to set org-wide guardrails for agent behavior"]
+              },
+              opportunities: {
+                "Jordan": ["Confidence-based autonomy slider per action type"],
+                "Priya": ["Domain-specific autonomy profiles (PII strict, metadata loose)"],
+                "Marcus": ["Org-wide autonomy dashboard with override capability"]
+              },
+              metrics: { name: "Autonomy Adoption", value: "41%" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-12",
+              label: "Agent proactively prevents an issue",
+              primaryUser: { name: "Jordan", color: "#4A6E82" },
+              secondaryUsers: [
+                { name: "Anika", color: "#013D5B" },
+                { name: "Priya", color: "#5C7A3D" }
+              ],
+              emotion: { score: 0.82, label: "Impressed", annotation: "Agent catches a schema change before the nightly pipeline run — would have caused a 4-hour outage" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.82, label: "Impressed", annotation: "This alone justifies the agent — prevented a production incident" },
+                { role: "Priya", score: 0.75, label: "Relieved", annotation: "Agent flagged a compliance gap before the audit window" }
+              ],
+              needs: {
+                "Jordan": "Real-time schema change detection with pipeline correlation",
+                "Anika": "Notification when upstream data changes affect their work",
+                "Priya": "Proactive compliance monitoring, not reactive audits"
+              },
+              touchpoints: ["Slack", "Email", "Dashboard", "Agent Panel"],
+              painPoints: {
+                "Jordan": ["Schema drift goes unnoticed until pipelines break at 2am"],
+                "Anika": ["Finds out about data issues only when dashboards show wrong numbers"],
+                "Priya": ["Compliance gaps discovered during audits, not before"]
+              },
+              opportunities: {
+                "Jordan": ["Pre-run validation that blocks pipelines if schema has drifted"],
+                "Anika": ["Proactive alert when upstream changes affect their dashboards"],
+                "Priya": ["Continuous compliance monitoring with remediation suggestions"]
+              },
+              metrics: { name: "Issues Prevented", value: "2.3/wk" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-13",
+              label: "Recommends agent to a colleague",
+              primaryUser: { name: "Priya", color: "#5C7A3D" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Marcus", color: "#805AA1" }
+              ],
+              emotion: { score: 0.8, label: "Advocate", annotation: "Tells team: 'The agent saved me 6 hours this week on classification review'" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.78, label: "Champion", annotation: "Recommends to other engineers after prevented outage" },
+                { role: "Priya", score: 0.8, label: "Advocate", annotation: "Organic advocacy — the strongest adoption signal" }
+              ],
+              needs: {
+                "Priya": "Easy way to share their experience and invite colleagues",
+                "Jordan": "Proof points to justify the tool to skeptical teammates",
+                "Marcus": "Organic adoption signals to track in executive reporting"
+              },
+              touchpoints: ["Slack", "Email"],
+              painPoints: {
+                "Priya": ["No easy way to share agent value with team"],
+                "Jordan": ["Hard to quantify time saved to justify tooling"],
+                "Marcus": ["Adoption is invisible — no way to measure organic growth"]
+              },
+              opportunities: {
+                "Priya": ["One-click invite with personalized value summary"],
+                "Jordan": ["Shareable incident prevention report"],
+                "Marcus": ["Viral adoption tracking and referral analytics"]
+              },
+              metrics: { name: "Referral Rate", value: "34%" },
+              supportReliance: "light"
+            }
+          ]
+        },
+        {
+          id: "mastery",
+          label: "Mastery",
+          color: "#CF6253",
+          steps: [
+            {
+              id: "step-14",
+              label: "Configures custom agent rules for their domain",
+              primaryUser: { name: "Priya", color: "#5C7A3D" },
+              secondaryUsers: [
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Marcus", color: "#805AA1" }
+              ],
+              emotion: { score: 0.82, label: "Empowered", annotation: "Creates custom rules: 'For healthcare data, always flag PHI columns and require manual review'" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.78, label: "Efficient", annotation: "Sets up pipeline-specific monitoring rules" },
+                { role: "Priya", score: 0.82, label: "Empowered", annotation: "Agent now enforces their domain expertise at scale" }
+              ],
+              needs: {
+                "Priya": "Rule builder that encodes governance expertise into agent behavior",
+                "Jordan": "Pipeline-specific agent configurations",
+                "Marcus": "Visibility into custom rules across teams"
+              },
+              touchpoints: ["Agent Panel", "Dashboard"],
+              painPoints: {
+                "Priya": ["Governance rules exist in docs but aren't enforced automatically"],
+                "Jordan": ["Each pipeline has unique monitoring needs — no customization"],
+                "Marcus": ["No visibility into how teams are configuring automation"]
+              },
+              opportunities: {
+                "Priya": ["Visual rule builder with natural language conditions"],
+                "Jordan": ["Pipeline template library with pre-built agent rules"],
+                "Marcus": ["Cross-team rule governance dashboard"]
+              },
+              metrics: { name: "Custom Rules", value: "8.4 avg" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-15",
+              label: "Agent handles classification, monitoring, alerts autonomously",
+              primaryUser: { name: "Marcus", color: "#805AA1" },
+              secondaryUsers: [
+                { name: "Priya", color: "#5C7A3D" },
+                { name: "Jordan", color: "#4A6E82" }
+              ],
+              emotion: { score: 0.85, label: "Confident", annotation: "Agent running autonomously — classification accuracy at 96%, false positive rate below 2%" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.82, label: "Liberated", annotation: "No more 2am pipeline alerts — agent handles routine issues" },
+                { role: "Priya", score: 0.85, label: "Strategic", annotation: "Freed from manual classification — focusing on policy design" }
+              ],
+              needs: {
+                "Marcus": "Confidence that autonomous agent actions are accurate and compliant",
+                "Priya": "Ongoing accuracy monitoring with drift detection on agent performance",
+                "Jordan": "Assurance that autonomous actions won't cause outages"
+              },
+              touchpoints: ["Dashboard", "Email", "Slack"],
+              painPoints: {
+                "Marcus": ["Can't demonstrate AI-readiness to the board without metrics"],
+                "Priya": ["Still manually reviewing everything even when agent is right 96% of the time"],
+                "Jordan": ["Alert fatigue from monitoring tools that don't self-resolve"]
+              },
+              opportunities: {
+                "Marcus": ["AI-readiness scorecard for board reporting"],
+                "Priya": ["Agent performance dashboard with accuracy trends"],
+                "Jordan": ["Self-healing pipelines with human escalation only for novel issues"]
+              },
+              metrics: { name: "Automation Rate", value: "78%" },
+              supportReliance: "light"
+            },
+            {
+              id: "step-16",
+              label: "Reviews weekly summary instead of daily manual work",
+              primaryUser: { name: "Marcus", color: "#805AA1" },
+              secondaryUsers: [
+                { name: "Priya", color: "#5C7A3D" },
+                { name: "Jordan", color: "#4A6E82" },
+                { name: "Anika", color: "#013D5B" }
+              ],
+              emotion: { score: 0.88, label: "Liberated", annotation: "Weekly agent report: 142 classifications, 23 schema changes handled, 4 incidents prevented, 31 hrs saved" },
+              secondaryEmotions: [
+                { role: "Jordan", score: 0.85, label: "Strategic", annotation: "Now spending time on architecture, not firefighting" },
+                { role: "Priya", score: 0.88, label: "Liberated", annotation: "Weekly review replaced daily 3-hour classification grind" }
+              ],
+              needs: {
+                "Marcus": "Executive-level summary of agent value and ROI",
+                "Priya": "Confidence that weekly review cadence is sufficient",
+                "Jordan": "Assurance that nothing critical was missed between reviews"
+              },
+              touchpoints: ["Email", "Dashboard"],
+              painPoints: {
+                "Marcus": ["Reporting is manual — cobbling together metrics from multiple sources"],
+                "Priya": ["Fear of missing something critical if not reviewing daily"],
+                "Jordan": ["Post-mortems still manual even when agent could summarize"]
+              },
+              opportunities: {
+                "Marcus": ["Auto-generated executive report with ROI metrics"],
+                "Priya": ["Smart escalation — agent surfaces only items needing human judgment"],
+                "Jordan": ["Automated post-mortem summaries for resolved incidents"]
+              },
+              metrics: { name: "Hours Saved / Week", value: "31 hrs" },
+              supportReliance: "light"
+            }
+          ]
+        }
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════
+    let activeRole = null;
+    const tooltip = document.getElementById('tooltip');
+
+    // ═══════════════════════════════════════════════════════
+    // ROLE LEGEND
+    // ═══════════════════════════════════════════════════════
+    const legendContainer = document.getElementById('roleLegend');
+    const legendLabel = document.createElement('span');
+    legendLabel.className = 'role-legend-label';
+    legendLabel.textContent = 'Roles:';
+    legendContainer.appendChild(legendLabel);
+
+    journeyData.roles.forEach(role => {
+      const item = document.createElement('div');
+      item.className = 'role-legend-item';
+      item.dataset.role = role.name;
+      item.innerHTML = `<span class="role-legend-dot" style="background:${role.color}"></span><span class="role-legend-name">${role.abbrev} — ${role.role}</span>`;
+      item.addEventListener('click', () => toggleRoleFilter(role.name));
+      legendContainer.appendChild(item);
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // BUILD GRID
+    // ═══════════════════════════════════════════════════════
+    const allSteps = journeyData.phases.flatMap(p => p.steps);
+    const totalSteps = allSteps.length;
+    const grid = document.getElementById('journeyGrid');
+
+    // Grid template: 140px row-label + step columns
+    grid.style.gridTemplateColumns = `140px repeat(${totalSteps}, minmax(180px, 220px))`;
+
+    // ─── Row definitions ───
+    const rows = [
+      { key: 'phase', label: 'Phase', subtitle: null },
+      { key: 'steps', label: 'Steps', subtitle: null },
+      { key: 'primaryUser', label: 'Primary User', subtitle: null },
+      { key: 'secondaryUsers', label: 'Secondary Users', subtitle: null },
+      { key: 'emotion', label: 'UX Score', subtitle: 'AI Agent Trust Curve' },
+      { key: 'needs', label: 'Critical Unmet Needs', subtitle: null },
+      { key: 'touchpoints', label: 'Touchpoints', subtitle: null },
+      { key: 'painPoints', label: 'Pain Points', subtitle: null },
+      { key: 'opportunities', label: 'Opportunities', subtitle: null },
+      { key: 'metrics', label: 'Metrics / KPIs', subtitle: null },
+      { key: 'supportReliance', label: 'Reliance on Support', subtitle: null }
+    ];
+
+    // ─── Phase Header Row ───
+    const phaseCorner = document.createElement('div');
+    phaseCorner.className = 'corner-cell';
+    grid.appendChild(phaseCorner);
+
+    let stepIndex = 0;
+    journeyData.phases.forEach(phase => {
+      const numSteps = phase.steps.length;
+      const header = document.createElement('div');
+      header.className = 'phase-header';
+      header.style.gridColumn = `span ${numSteps}`;
+      if (stepIndex + numSteps === totalSteps) {
+        // last phase
+      }
+      header.innerHTML = `<span class="phase-header-accent" style="background:${phase.color}"></span><span class="phase-header-text">${phase.label}</span>`;
+      grid.appendChild(header);
+      stepIndex += numSteps;
+    });
+
+    // ─── Step Header Row ───
+    const stepCorner = document.createElement('div');
+    stepCorner.className = 'corner-cell-step';
+    grid.appendChild(stepCorner);
+
+    allSteps.forEach((step, i) => {
+      const stepH = document.createElement('div');
+      stepH.className = 'step-header';
+      stepH.innerHTML = `<span class="step-header-text">${step.label}</span>`;
+      grid.appendChild(stepH);
+    });
+
+    // ─── Content Rows ───
+    let rowIndex = 0;
+    rows.forEach(row => {
+      if (row.key === 'phase' || row.key === 'steps') return; // already rendered
+
+      const isEven = rowIndex % 2 === 0;
+      const rowClass = isEven ? 'row-even' : 'row-odd';
+
+      // Row label
+      const label = document.createElement('div');
+      label.className = `row-label ${rowClass}`;
+      label.innerHTML = `<span class="row-label-text">${row.label}</span>${row.subtitle ? `<span class="row-label-subtitle">${row.subtitle}</span>` : ''}`;
+      grid.appendChild(label);
+
+      if (row.key === 'emotion') {
+        // Emotion row spans all step columns
+        const emotionContainer = document.createElement('div');
+        emotionContainer.id = 'emotion-row';
+        emotionContainer.className = `emotion-row-container cell ${rowClass}`;
+        emotionContainer.style.gridColumn = `span ${totalSteps}`;
+        emotionContainer.style.padding = '8px 0';
+        emotionContainer.style.minHeight = '150px';
+        emotionContainer.style.position = 'relative';
+        emotionContainer.innerHTML = `<svg id="emotion-svg"></svg>`;
+        grid.appendChild(emotionContainer);
+      } else {
+        // Regular cells
+        let colIdx = 0;
+        journeyData.phases.forEach((phase, pIdx) => {
+          phase.steps.forEach((step, sIdx) => {
+            const cell = document.createElement('div');
+            const isLastStepInPhase = sIdx === phase.steps.length - 1;
+            cell.className = `cell ${rowClass}${isLastStepInPhase ? ' phase-border' : ''}`;
+            // Set background based on row type and zebra striping
+            const baseBg = isEven ? '#FAFAF8' : '#FFFFFF';
+            const phaseTint = `rgba(${hexToRgb(phase.color)}, 0.03)`;
+            if (row.key === 'painPoints') {
+              cell.style.background = '#FFEEEB';
+            } else if (row.key === 'opportunities') {
+              cell.style.background = '#F4FAEB';
+            } else if (row.key === 'needs') {
+              cell.style.background = '#FCF9D9';
+            } else {
+              cell.style.background = isEven ? phaseTint : baseBg;
+            }
+            cell.dataset.step = step.id;
+            cell.dataset.row = row.key;
+
+            cell.innerHTML = renderCellContent(row.key, step, phase);
+            grid.appendChild(cell);
+            colIdx++;
+          });
+        });
+      }
+      rowIndex++;
+    });
+
+    // ═══════════════════════════════════════════════════════
+    // CELL CONTENT RENDERERS
+    // ═══════════════════════════════════════════════════════
+    function renderCellContent(key, step, phase) {
+      switch (key) {
+        case 'primaryUser':
+          return `<div class="role-cell"><span class="primary-badge" data-role="${step.primaryUser.name}" style="background:${step.primaryUser.color};color:white;cursor:pointer;" onclick="toggleRoleFilter('${step.primaryUser.name}')">${step.primaryUser.name}</span></div>`;
+
+        case 'secondaryUsers':
+          if (!step.secondaryUsers || step.secondaryUsers.length === 0) return '<span class="cell-empty">—</span>';
+          return `<div class="role-cell"><div class="secondary-badges">${step.secondaryUsers.map(u => `<span class="secondary-badge" data-role="${u.name}" style="background:${u.color};color:white;cursor:pointer;" onclick="toggleRoleFilter('${u.name}')">${u.name}</span>`).join('')}</div></div>`;
+
+        case 'needs':
+          return renderRoleScoped(step.needs, 'need');
+
+        case 'painPoints':
+          return renderRoleScoped(step.painPoints, 'pain');
+
+        case 'opportunities':
+          return renderRoleScoped(step.opportunities, 'opp');
+
+        case 'touchpoints':
+          if (!step.touchpoints || step.touchpoints.length === 0) return '<span class="cell-empty">—</span>';
+          const icons = { 'Dashboard': '📊', 'Insight Cards': '💡', 'Agent Panel': '🤖', 'Slack': '💬', 'Email': '📧' };
+          return `<div style="display:flex;flex-wrap:wrap;gap:2px;">${step.touchpoints.map(t => `<span class="touchpoint-tag">${icons[t] || '📌'} ${t}</span>`).join('')}</div>`;
+
+        case 'metrics':
+          if (!step.metrics) return '<span class="cell-empty">—</span>';
+          const phaseColor = phase.color;
+          return `<div class="metric-card"><span class="metric-value" style="color:${phaseColor}">${step.metrics.value}</span><span class="metric-name">${step.metrics.name}</span></div>`;
+
+        case 'supportReliance':
+          return renderSupportBar(step.supportReliance);
+
+        default:
+          return '<span class="cell-empty">—</span>';
+      }
+    }
+
+    function renderRoleScoped(data, type) {
+      if (!data) return '<span class="cell-empty">—</span>';
+      const cssClass = type === 'pain' ? 'pain-item' : type === 'opp' ? 'opp-item' : 'need-item';
+
+      if (typeof data === 'string') {
+        return `<div class="${cssClass}">${data}</div>`;
+      }
+      if (Array.isArray(data)) {
+        return data.map(d => `<div class="${cssClass}">${d}</div>`).join('');
+      }
+
+      // Object keyed by role
+      let html = '';
+      Object.keys(data).forEach(roleName => {
+        const role = journeyData.roles.find(r => r.name === roleName);
+        const color = role ? role.color : '#6B6760';
+        const items = Array.isArray(data[roleName]) ? data[roleName] : [data[roleName]];
+        items.forEach(item => {
+          html += `<div class="role-content-item" data-content-role="${roleName}"><span class="role-dot" style="background:${color}"></span><span class="${cssClass}">${item}</span></div>`;
+        });
+      });
+      return html || '<span class="cell-empty">—</span>';
+    }
+
+    function renderSupportBar(level) {
+      if (!level) return '<span class="cell-empty">—</span>';
+      const levels = {
+        heavy: { width: '100%', color: '#1C1A17', label: 'Heavy' },
+        medium: { width: '60%', color: '#54514D', label: 'Medium' },
+        light: { width: '25%', color: '#B0ABA2', label: 'Light' }
+      };
+      const l = levels[level] || levels.light;
+      return `<div class="support-bar-container"><div class="support-bar" style="background:#EBE6DD"><div style="width:${l.width};height:100%;background:${l.color};border-radius:4px;"></div></div><span class="support-label">${l.label}</span></div>`;
+    }
+
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `${r},${g},${b}`;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // EMOTION CURVE (D3)
+    // ═══════════════════════════════════════════════════════
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const container = document.getElementById('emotion-row');
+        const totalContentWidth = container.scrollWidth || container.clientWidth;
+        const chartHeight = 130;
+        const margin = { top: 20, bottom: 30, left: 20, right: 20 };
+
+        const svg = d3.select('#emotion-svg')
+          .attr('width', totalContentWidth)
+          .attr('height', chartHeight)
+          .style('overflow', 'visible')
+          .style('position', 'relative')
+          .style('z-index', '1');
+
+        const colWidth = totalContentWidth / totalSteps;
+
+        // X scale: center of each column
+        const xScale = (i) => colWidth * i + colWidth / 2;
+
+        // Y scale
+        const yScale = d3.scaleLinear()
+          .domain([0, 1])
+          .range([chartHeight - margin.bottom, margin.top]);
+
+        // Background bands
+        svg.append('rect').attr('x', 0).attr('y', yScale(1)).attr('width', totalContentWidth).attr('height', yScale(0.6) - yScale(1)).attr('fill', 'rgba(122,154,1,0.04)');
+        svg.append('rect').attr('x', 0).attr('y', yScale(0.6)).attr('width', totalContentWidth).attr('height', yScale(0.3) - yScale(0.6)).attr('fill', 'rgba(12,74,105,0.04)');
+        svg.append('rect').attr('x', 0).attr('y', yScale(0.3)).attr('width', totalContentWidth).attr('height', yScale(0) - yScale(0.3)).attr('fill', 'rgba(207,98,83,0.04)');
+
+        // Band labels
+        svg.append('text').attr('x', 6).attr('y', yScale(0.85)).attr('font-size', '8px').attr('fill', '#7A9A01').attr('opacity', 0.6).text('Positive');
+        svg.append('text').attr('x', 6).attr('y', yScale(0.45)).attr('font-size', '8px').attr('fill', '#0C4A69').attr('opacity', 0.6).text('Neutral');
+        svg.append('text').attr('x', 6).attr('y', yScale(0.15)).attr('font-size', '8px').attr('fill', '#CF6253').attr('opacity', 0.6).text('Negative');
+
+        // Phase separators
+        let cumSteps = 0;
+        journeyData.phases.forEach((phase, pIdx) => {
+          cumSteps += phase.steps.length;
+          if (pIdx < journeyData.phases.length - 1) {
+            svg.append('line')
+              .attr('x1', colWidth * cumSteps)
+              .attr('y1', margin.top - 5)
+              .attr('x2', colWidth * cumSteps)
+              .attr('y2', chartHeight - margin.bottom + 5)
+              .attr('stroke', '#E0DCD3')
+              .attr('stroke-width', 1)
+              .attr('stroke-dasharray', '4,2');
+          }
+        });
+
+        // Primary emotion line
+        const lineGen = d3.line()
+          .x((d, i) => xScale(i))
+          .y(d => yScale(d.emotion.score))
+          .curve(d3.curveMonotoneX);
+
+        svg.append('path')
+          .datum(allSteps)
+          .attr('d', lineGen)
+          .attr('fill', 'none')
+          .attr('stroke', '#0C4A69')
+          .attr('stroke-width', 2.5)
+          .attr('stroke-linecap', 'round')
+          .attr('class', 'emotion-line-primary');
+
+        // Secondary emotion lines
+        const secondaryRoles = [...new Set(allSteps.flatMap(s => (s.secondaryEmotions || []).map(e => e.role)))];
+
+        secondaryRoles.forEach(role => {
+          const roleColor = journeyData.roles.find(r => r.name === role)?.color || '#CF6253';
+          const secLine = d3.line()
+            .x((d, i) => xScale(i))
+            .y(d => {
+              const se = (d.secondaryEmotions || []).find(e => e.role === role);
+              return yScale(se ? se.score : 0.5);
+            })
+            .curve(d3.curveMonotoneX);
+
+          svg.append('path')
+            .datum(allSteps)
+            .attr('d', secLine)
+            .attr('fill', 'none')
+            .attr('stroke', roleColor)
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '6,3')
+            .attr('stroke-linecap', 'round')
+            .attr('class', `emotion-line-secondary emotion-line-${role}`);
+
+          // Secondary data points
+          svg.selectAll(`.emotion-dot-${role.replace(/\s/g, '-')}`)
+            .data(allSteps)
+            .join('circle')
+            .attr('cx', (d, i) => xScale(i))
+            .attr('cy', d => {
+              const se = (d.secondaryEmotions || []).find(e => e.role === role);
+              return yScale(se ? se.score : 0.5);
+            })
+            .attr('r', 4)
+            .attr('fill', roleColor)
+            .attr('opacity', 0.7)
+            .attr('class', `emotion-dot-secondary emotion-dot-${role.replace(/\s/g, '-')}`)
+            .attr('data-role', role)
+            .style('cursor', 'pointer')
+            .on('mouseover', function(event, d) {
+              d3.select(this).attr('r', 8);
+              const se = (d.secondaryEmotions || []).find(e => e.role === role);
+              if (se) showTooltip(event, `<div class="tooltip-role" style="color:${roleColor}">${role}</div><div class="tooltip-title">${d.label}</div><div class="tooltip-score" style="color:${scoreColor(se.score)}">${se.label} (${(se.score * 100).toFixed(0)}%)</div><div>${se.annotation}</div>`);
+            })
+            .on('mouseout', function() {
+              d3.select(this).attr('r', 4);
+              hideTooltip();
+            });
+        });
+
+        // Primary data points (on top)
+        svg.selectAll('.emotion-dot-primary')
+          .data(allSteps)
+          .join('circle')
+          .attr('cx', (d, i) => xScale(i))
+          .attr('cy', d => yScale(d.emotion.score))
+          .attr('r', 5)
+          .attr('fill', d => scoreColor(d.emotion.score))
+          .attr('class', 'emotion-dot-primary')
+          .style('cursor', 'pointer')
+          .on('mouseover', function(event, d) {
+            d3.select(this).attr('r', 10);
+            showTooltip(event, `<div class="tooltip-role" style="color:#0C4A69">Primary (${d.primaryUser.name})</div><div class="tooltip-title">${d.label}</div><div class="tooltip-score" style="color:${scoreColor(d.emotion.score)}">${d.emotion.label} (${(d.emotion.score * 100).toFixed(0)}%)</div><div>${d.emotion.annotation}</div>`);
+          })
+          .on('mouseout', function() {
+            d3.select(this).attr('r', 5);
+            hideTooltip();
+          });
+
+        // Emoji markers on primary dots
+        svg.selectAll('.emotion-emoji')
+          .data(allSteps)
+          .join('text')
+          .attr('x', (d, i) => xScale(i))
+          .attr('y', d => yScale(d.emotion.score) - 12)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '12px')
+          .text(d => d.emotion.score > 0.6 ? '😊' : d.emotion.score > 0.3 ? '😐' : '😞')
+          .attr('class', 'emotion-emoji')
+          .style('pointer-events', 'none');
+
+        // Curve legend
+        const legendDiv = document.createElement('div');
+        legendDiv.className = 'curve-legend';
+        legendDiv.innerHTML = `
+          <div class="curve-legend-item"><svg width="20" height="3"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke="#0C4A69" stroke-width="2.5"/></svg><span>Primary user</span></div>
+          ${secondaryRoles.map(role => {
+            const c = journeyData.roles.find(r => r.name === role)?.color || '#888';
+            return `<div class="curve-legend-item"><svg width="20" height="3"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke="${c}" stroke-width="2" stroke-dasharray="4,2"/></svg><span>${role}</span></div>`;
+          }).join('')}
+        `;
+        container.appendChild(legendDiv);
+
+      }, 50);
+    });
+
+    function scoreColor(score) {
+      return score > 0.6 ? '#7A9A01' : score > 0.3 ? '#0C4A69' : '#CF6253';
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // ROLE FILTERING
+    // ═══════════════════════════════════════════════════════
+    function toggleRoleFilter(roleName) {
+      if (activeRole === roleName) {
+        activeRole = null;
+      } else {
+        activeRole = roleName;
+      }
+      applyRoleFilter();
+    }
+
+    function applyRoleFilter() {
+      // Role badges — dim non-active
+      document.querySelectorAll('.primary-badge, .secondary-badge').forEach(badge => {
+        if (activeRole && badge.dataset.role !== activeRole) {
+          badge.classList.add('dimmed');
+          badge.classList.remove('active-role');
+        } else if (activeRole && badge.dataset.role === activeRole) {
+          badge.classList.remove('dimmed');
+          badge.classList.add('active-role');
+        } else {
+          badge.classList.remove('dimmed');
+          badge.classList.remove('active-role');
+        }
+      });
+
+      // Role legend
+      document.querySelectorAll('.role-legend-item').forEach(item => {
+        if (activeRole && item.dataset.role !== activeRole) {
+          item.classList.add('dimmed');
+        } else {
+          item.classList.remove('dimmed');
+        }
+      });
+
+      // Per-role content items
+      document.querySelectorAll('.role-content-item').forEach(item => {
+        if (activeRole) {
+          item.style.display = item.dataset.contentRole === activeRole ? 'flex' : 'none';
+        } else {
+          item.style.display = 'flex';
+        }
+      });
+
+      // Emotion curves
+      const svgEl = d3.select('#emotion-svg');
+      if (activeRole) {
+        // Dim all secondary lines
+        svgEl.selectAll('.emotion-line-secondary').attr('opacity', 0.15);
+        svgEl.selectAll('.emotion-dot-secondary').attr('opacity', 0.15);
+        // Highlight the active role's line
+        svgEl.selectAll(`.emotion-line-${activeRole}`).attr('opacity', 1);
+        svgEl.selectAll(`.emotion-dot-${activeRole.replace(/\s/g, '-')}`).attr('opacity', 0.9);
+
+        // If primary user matches, keep primary bright; else dim
+        const isPrimaryInAnyStep = allSteps.some(s => s.primaryUser.name === activeRole);
+        svgEl.selectAll('.emotion-line-primary').attr('opacity', isPrimaryInAnyStep ? 1 : 0.15);
+        svgEl.selectAll('.emotion-dot-primary').attr('opacity', isPrimaryInAnyStep ? 1 : 0.15);
+        svgEl.selectAll('.emotion-emoji').attr('opacity', isPrimaryInAnyStep ? 1 : 0.15);
+      } else {
+        svgEl.selectAll('.emotion-line-secondary').attr('opacity', 1);
+        svgEl.selectAll('.emotion-dot-secondary').attr('opacity', 0.7);
+        svgEl.selectAll('.emotion-line-primary').attr('opacity', 1);
+        svgEl.selectAll('.emotion-dot-primary').attr('opacity', 1);
+        svgEl.selectAll('.emotion-emoji').attr('opacity', 1);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // TOOLTIP
+    // ═══════════════════════════════════════════════════════
+    function showTooltip(event, html) {
+      tooltip.innerHTML = html;
+      tooltip.classList.add('visible');
+      const x = event.clientX + 16;
+      const y = event.clientY - 10;
+      tooltip.style.left = Math.min(x, window.innerWidth - 300) + 'px';
+      tooltip.style.top = Math.min(y, window.innerHeight - 150) + 'px';
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // COLUMN HOVER HIGHLIGHT
+    // ═══════════════════════════════════════════════════════
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.addEventListener('mouseenter', function() {
+        const stepId = this.dataset.step;
+        if (stepId) {
+          document.querySelectorAll(`.cell[data-step="${stepId}"]`).forEach(c => {
+            c.style.boxShadow = 'inset 0 0 0 1000px rgba(0,0,0,0.015)';
+          });
+        }
+      });
+      cell.addEventListener('mouseleave', function() {
+        const stepId = this.dataset.step;
+        if (stepId) {
+          document.querySelectorAll(`.cell[data-step="${stepId}"]`).forEach(c => {
+            c.style.boxShadow = '';
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
