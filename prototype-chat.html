@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strata — AI Data Assistant</title>
-<meta name="description" content="Strata AI Data Assistant — Chat-based agent for data management">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
 <style>
   /* ============================================================
@@ -12,7 +11,6 @@
      ============================================================ */
   @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
   @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Reg.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Reg.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
   @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Sbold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
   @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
   @font-face { font-family: 'Proxima Nova'; src: url('../../design-system-labs/fonts/ProximaNova-Xbold.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
@@ -86,7 +84,6 @@
     --sds-color-blue-900: #031E36;
     --sds-color-blue-950: #00132B;
     --sds-color-red-050: #FFEEEB;
-    --sds-color-red-100: #FFD5CF;
     --sds-color-red-500: #BF5547;
     --sds-color-red-550: #AD4739;
     --sds-color-red-650: #8F3629;
@@ -108,8 +105,6 @@
     --sds-text-primary: var(--sds-color-warm-gray-900);
     --sds-text-secondary: var(--sds-color-warm-gray-650);
     --sds-text-tertiary: var(--sds-color-warm-gray-550);
-    --sds-text-disabled: var(--sds-color-warm-gray-300);
-    --sds-border-focus: var(--sds-color-blue-750);
     --sds-text-on-primary: var(--sds-color-white);
     --sds-text-link: var(--sds-color-blue-750);
     --sds-border-default: var(--sds-color-warm-gray-150);
@@ -133,140 +128,6 @@
     --sds-status-neutral-text: var(--sds-color-warm-gray-650);
     --sds-status-purple-bg: #F7EEFF;
     --sds-status-purple-text: var(--sds-color-purple-550);
-  }
-
-  /* Skip-to-content link */
-  .skip-link {
-    position: absolute; top: -40px; left: 0; background: var(--sds-interactive-primary);
-    color: var(--sds-text-on-primary); padding: var(--sds-space-200) var(--sds-space-400);
-    z-index: 1000; font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold);
-    text-decoration: none; border-radius: 0 0 8px 0;
-    transition: top 0.2s ease;
-  }
-  .skip-link:focus { top: 0; }
-
-  /* Focus-visible styles for keyboard navigation */
-  :focus-visible {
-    outline: 2px solid var(--sds-border-focus);
-    outline-offset: 2px;
-  }
-  :focus:not(:focus-visible) { outline: none; }
-
-  /* Screen-reader-only utility */
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-  }
-
-  /* Reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  }
-
-  /* ============================================================
-     Active/pressed states for all interactive elements
-     ============================================================ */
-  button:active:not(:disabled), .sds-sidenav-item:active,
-  .agent-suggestion-chip:active, .empty-quick-prompt:active,
-  .quick-action-item:active, .recent-conv-item:active {
-    transform: scale(0.97);
-    transition: transform 0.06s ease;
-  }
-  .btn-primary-sm:active { background: var(--sds-color-blue-850); }
-  .btn-secondary-sm:active { background: var(--sds-color-warm-gray-100); }
-  .agent-input-btn.send:active:not(.disabled) { background: var(--sds-color-blue-850); }
-  .agent-toggle-btn:active { transform: scale(0.97); }
-  .sds-header-icon-btn:active { background: var(--sds-color-warm-gray-100); }
-  .response-footer-btn:active { background: var(--sds-color-warm-gray-100); }
-  .context-menu-item:active { background: var(--sds-color-warm-gray-100); }
-  .error-retry-btn:active { background: var(--sds-color-warm-gray-100); transform: scale(0.97); }
-
-  /* ============================================================
-     Message entrance animations
-     ============================================================ */
-  @keyframes msgSlideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .agent-msg {
-    animation: msgSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .agent-msg:nth-child(2) { animation-delay: 0.05s; }
-  .agent-msg:nth-child(3) { animation-delay: 0.1s; }
-  .agent-msg:nth-child(4) { animation-delay: 0.15s; }
-  .agent-msg:nth-child(5) { animation-delay: 0.2s; }
-  .agent-msg:nth-child(6) { animation-delay: 0.25s; }
-  .agent-msg:nth-child(7) { animation-delay: 0.3s; }
-
-  /* Smooth toast entrance */
-  @keyframes toastSlideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(16px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-
-  /* Disabled state consistency */
-  button:disabled, button[aria-disabled="true"] {
-    cursor: not-allowed;
-  }
-
-  /* Focus ring on suggestion chips */
-  .agent-suggestion-chip:focus-visible,
-  .empty-quick-prompt:focus-visible,
-  .recent-conv-item:focus-visible,
-  .quick-action-item:focus-visible {
-    outline: 2px solid var(--sds-border-focus);
-    outline-offset: 2px;
-  }
-
-  /* Catalog action button consistent sizing */
-  .catalog-action-btn {
-    width: 28px; height: 28px; border-radius: 6px; border: none;
-    background: transparent; display: flex; align-items: center;
-    justify-content: center; cursor: pointer; transition: background 0.12s ease;
-  }
-  .catalog-action-btn:hover { background: var(--sds-bg-subtle); }
-  .catalog-action-btn .material-symbols-outlined {
-    font-size: 16px; color: var(--sds-text-tertiary);
-    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-
-  /* Result item detail text — reusable class replacing inline styles */
-  .result-item-detail-text {
-    font-size: var(--sds-type-caption); color: var(--sds-text-secondary);
-    margin-bottom: var(--sds-space-200);
-  }
-  .result-item-pii-cols {
-    font-size: var(--sds-type-caption); color: var(--sds-text-secondary);
-  }
-  .result-item-pii-cols code {
-    font-family: var(--sds-font-mono); color: var(--sds-text-primary);
-    font-size: var(--sds-type-caption);
-  }
-
-  /* Action result header text */
-  .action-completed-header {
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    margin-bottom: var(--sds-space-300); display: flex;
-    align-items: center; gap: var(--sds-space-150);
-  }
-  .action-completed-header .material-symbols-outlined {
-    font-size: 16px; color: var(--sds-status-success-text);
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-
-  /* Classification actions row */
-  .classification-actions {
-    display: flex; gap: var(--sds-space-200); margin-top: var(--sds-space-300);
-  }
-
-  /* User message meta row */
-  .agent-msg-meta {
-    display: flex; align-items: center; gap: var(--sds-space-100);
-  }
-
-  /* Confidence inline — class replaces inline margin */
-  .confidence-inline {
-    margin-top: var(--sds-space-400);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -360,7 +221,7 @@
     font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
     letter-spacing: 0.3px; flex-shrink: 0;
   }
-  .sds-header-username { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); }
+  .sds-header-username { font-size: var(--sds-type-label); font-weight: var(--sds-weight-medium); color: var(--sds-text-primary); }
   .sds-header-chevron .material-symbols-outlined {
     font-size: 18px; color: var(--sds-text-tertiary);
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
@@ -410,7 +271,7 @@
     transition: background 0.12s ease, color 0.12s ease;
   }
   .sds-sidenav-item:hover { background: var(--sds-bg-subtle); color: var(--sds-text-primary); }
-  .sds-sidenav-item.active { background: var(--sds-nav-item-active-bg); color: var(--sds-nav-item-active-text); font-weight: var(--sds-weight-semibold); }
+  .sds-sidenav-item.active { background: var(--sds-nav-item-active-bg); color: var(--sds-nav-item-active-text); font-weight: var(--sds-weight-medium); }
   .sds-sidenav-item.active:hover { background: var(--sds-color-blue-150); color: var(--sds-nav-item-active-text); }
   .sds-sidenav-icon {
     width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
@@ -465,7 +326,7 @@
   /* Activity Feed */
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sds-space-400); }
   .section-header h2 { font-size: var(--sds-type-subheading); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); }
-  .section-header a { font-size: var(--sds-type-label); color: var(--sds-text-link); text-decoration: none; font-weight: var(--sds-weight-semibold); }
+  .section-header a { font-size: var(--sds-type-label); color: var(--sds-text-link); text-decoration: none; font-weight: var(--sds-weight-medium); }
   .section-header a:hover { text-decoration: underline; }
 
   .activity-feed { display: flex; flex-direction: column; gap: var(--sds-space-300); }
@@ -490,7 +351,7 @@
   .activity-feed-icon.purple { background: var(--sds-status-purple-bg); color: var(--sds-status-purple-text); }
   .activity-feed-icon.purple .material-symbols-outlined { color: var(--sds-status-purple-text); }
   .activity-feed-body { flex: 1; min-width: 0; }
-  .activity-feed-body h3 { font-size: var(--sds-type-body); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); margin-bottom: var(--sds-space-050); }
+  .activity-feed-body h4 { font-size: var(--sds-type-body); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); margin-bottom: var(--sds-space-050); }
   .activity-feed-body p { font-size: var(--sds-type-label); color: var(--sds-text-secondary); line-height: var(--sds-leading-normal); }
   .activity-feed-time { font-size: var(--sds-type-caption); color: var(--sds-text-tertiary); white-space: nowrap; flex-shrink: 0; }
 
@@ -665,7 +526,7 @@
     background: var(--sds-bg-surface); overflow-y: auto;
   }
 
-  /* Panel header — increased touch targets to 36px (R1 recommendation) */
+  /* Panel header */
   .agent-panel-header {
     display: flex; align-items: center; justify-content: space-between;
     padding: var(--sds-space-300) var(--sds-space-400);
@@ -688,7 +549,7 @@
   }
   .agent-panel-actions { display: flex; align-items: center; gap: var(--sds-space-100); }
   .agent-panel-btn {
-    width: 36px; height: 36px; border-radius: 6px; border: none;
+    width: 28px; height: 28px; border-radius: 6px; border: none;
     background: transparent; display: flex; align-items: center;
     justify-content: center; cursor: pointer; transition: background 0.12s ease;
   }
@@ -789,7 +650,7 @@
   .result-item-actions button {
     font-size: var(--sds-type-caption); color: var(--sds-text-link); background: none;
     border: none; cursor: pointer; font-family: var(--sds-font-sans); padding: var(--sds-space-100) 0;
-    font-weight: var(--sds-weight-semibold); display: flex; align-items: center; gap: var(--sds-space-100);
+    font-weight: var(--sds-weight-medium); display: flex; align-items: center; gap: var(--sds-space-100);
   }
   .result-item-actions button:hover { text-decoration: underline; }
   .result-item-actions button .material-symbols-outlined {
@@ -804,33 +665,6 @@
   }
   .response-attribution .material-symbols-outlined {
     font-size: 14px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-
-  /* Response card footer actions (copy, feedback) */
-  .response-card-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: var(--sds-space-150) var(--sds-space-400);
-    border-top: 1px solid var(--sds-border-subtle);
-    background: var(--sds-bg-surface);
-  }
-  .response-card-footer-left {
-    display: flex; align-items: center; gap: var(--sds-space-100);
-  }
-  .response-card-footer-right {
-    display: flex; align-items: center; gap: var(--sds-space-100);
-  }
-  .response-footer-btn {
-    width: 32px; height: 32px; border-radius: 6px; border: none;
-    background: transparent; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: all 0.12s ease; color: var(--sds-text-tertiary);
-  }
-  .response-footer-btn:hover { background: var(--sds-bg-subtle); color: var(--sds-text-secondary); }
-  .response-footer-btn.active { color: var(--sds-interactive-primary); }
-  .response-footer-btn .material-symbols-outlined {
-    font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-  .response-footer-btn.active .material-symbols-outlined {
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
 
   /* Access matrix */
@@ -873,39 +707,6 @@
   }
   .warning-callout p { font-size: var(--sds-type-label); color: var(--sds-color-warm-gray-700); line-height: var(--sds-leading-normal); }
 
-  /* Error callout */
-  .error-callout {
-    display: flex; align-items: flex-start; gap: var(--sds-space-250);
-    padding: var(--sds-space-300); background: var(--sds-status-error-bg);
-    border-radius: 8px; border-left: 3px solid var(--sds-color-red-500);
-    margin-top: var(--sds-space-200);
-  }
-  .error-callout .material-symbols-outlined {
-    font-size: 18px; color: var(--sds-status-error-text); flex-shrink: 0;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .error-callout-body { flex: 1; }
-  .error-callout-body p { font-size: var(--sds-type-label); color: var(--sds-color-warm-gray-700); line-height: var(--sds-leading-normal); }
-  .error-callout-body .error-actions { display: flex; gap: var(--sds-space-200); margin-top: var(--sds-space-200); }
-  .error-callout-body .error-actions button {
-    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
-    font-family: var(--sds-font-sans); cursor: pointer; border-radius: 6px;
-    padding: var(--sds-space-100) var(--sds-space-300); transition: all 0.12s ease;
-  }
-  .error-retry-btn {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
-    color: var(--sds-text-primary);
-  }
-  .error-retry-btn:hover { background: var(--sds-bg-subtle); border-color: var(--sds-border-strong); }
-  .error-retry-btn .material-symbols-outlined {
-    font-size: 14px; vertical-align: middle; margin-right: 4px;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .error-dismiss-btn {
-    background: transparent; border: none; color: var(--sds-text-tertiary);
-  }
-  .error-dismiss-btn:hover { color: var(--sds-text-secondary); }
-
   /* Action results */
   .action-result-list { display: flex; flex-direction: column; gap: var(--sds-space-250); }
   .action-result-item {
@@ -917,7 +718,7 @@
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
   .action-result-item .material-symbols-outlined.success { color: var(--sds-status-success-text); }
-  .action-result-item .material-symbols-outlined.pending { color: var(--sds-color-yellow-500); }
+  .action-result-item .material-symbols-outlined.pending { color: var(--sds-color-yellow-200); }
   .action-result-item .material-symbols-outlined.info { color: var(--sds-status-info-text); }
   .action-result-item span { color: var(--sds-text-secondary); }
   .action-result-item span strong { color: var(--sds-text-primary); font-weight: var(--sds-weight-semibold); }
@@ -929,7 +730,6 @@
   }
   .confidence-bar-sm { width: 60px; height: 4px; background: var(--sds-color-warm-gray-100); border-radius: 2px; overflow: hidden; }
   .confidence-bar-sm-fill { height: 100%; border-radius: 2px; background: var(--sds-interactive-primary); }
-  .confidence-inline strong { color: var(--sds-text-primary); font-weight: var(--sds-weight-semibold); }
 
   .action-btn-inline {
     display: inline-flex; align-items: center; gap: var(--sds-space-150);
@@ -944,67 +744,19 @@
     font-size: 14px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
 
-  /* Undo toast */
-  .undo-toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: var(--sds-color-warm-gray-800); color: var(--sds-color-warm-gray-100);
-    padding: var(--sds-space-300) var(--sds-space-500); border-radius: 10px;
-    font-size: var(--sds-type-label); display: flex; align-items: center;
-    gap: var(--sds-space-400); z-index: 400; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none; opacity: 0;
-  }
-  .undo-toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
-  .undo-toast-msg { display: flex; align-items: center; gap: var(--sds-space-200); }
-  .undo-toast-msg .material-symbols-outlined {
-    font-size: 18px; color: var(--sds-color-green-400);
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .undo-toast-btn {
-    font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-color-blue-200); background: transparent; border: none;
-    cursor: pointer; font-family: var(--sds-font-sans); padding: var(--sds-space-100) var(--sds-space-200);
-    border-radius: 4px; transition: all 0.12s ease;
-  }
-  .undo-toast-btn:hover { background: rgba(255,255,255,0.1); color: var(--sds-color-white); }
-  .undo-toast-timer {
-    width: 100%; height: 3px; background: rgba(255,255,255,0.15);
-    position: absolute; bottom: 0; left: 0; border-radius: 0 0 10px 10px; overflow: hidden;
-  }
-  .undo-toast-timer-fill {
-    height: 100%; background: var(--sds-color-blue-200); border-radius: 0 0 10px 10px;
-    animation: undoTimer 8s linear forwards;
-  }
-  @keyframes undoTimer { from { width: 100%; } to { width: 0%; } }
-
   /* Proactive insight card */
   .proactive-insight {
     border-left: 3px solid var(--sds-color-blue-450);
     background: var(--sds-color-blue-025); border-radius: 10px;
     padding: var(--sds-space-400); margin-top: var(--sds-space-200);
-    position: relative;
   }
   .proactive-insight-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sds-space-200);
-  }
-  .proactive-insight-header-left {
-    display: flex; align-items: center; gap: var(--sds-space-200);
+    display: flex; align-items: center; gap: var(--sds-space-200); margin-bottom: var(--sds-space-200);
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
     color: var(--sds-color-blue-700); text-transform: uppercase; letter-spacing: var(--sds-tracking-wide);
   }
-  .proactive-insight-header-left .material-symbols-outlined {
+  .proactive-insight-header .material-symbols-outlined {
     font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .proactive-insight-mute {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    padding: var(--sds-space-100) var(--sds-space-200); border-radius: 4px;
-    transition: all 0.12s ease;
-  }
-  .proactive-insight-mute:hover { background: rgba(0,0,0,0.04); color: var(--sds-text-secondary); }
-  .proactive-insight-mute .material-symbols-outlined {
-    font-size: 14px; vertical-align: middle;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
   .proactive-insight p {
     font-size: var(--sds-type-body); color: var(--sds-text-primary);
@@ -1025,7 +777,7 @@
     display: inline-flex; align-items: center; gap: var(--sds-space-150);
     padding: var(--sds-space-150) var(--sds-space-300); border-radius: 6px;
     background: var(--sds-bg-card); color: var(--sds-text-secondary);
-    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
+    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-medium);
     font-family: var(--sds-font-sans); border: 1px solid var(--sds-border-default);
     cursor: pointer; transition: all 0.15s ease;
   }
@@ -1037,12 +789,6 @@
     background: var(--sds-bg-surface); border-radius: 8px;
     font-size: var(--sds-type-label); color: var(--sds-text-secondary);
     font-style: italic; line-height: var(--sds-leading-normal);
-  }
-  .suggested-follow-label {
-    display: block; font-style: normal; font-size: var(--sds-type-overline);
-    color: var(--sds-text-tertiary); text-transform: uppercase;
-    letter-spacing: var(--sds-tracking-wide); font-weight: var(--sds-weight-semibold);
-    margin-bottom: var(--sds-space-150);
   }
 
   /* Input area */
@@ -1106,64 +852,27 @@
     text-align: center;
   }
   .agent-empty-icon {
-    width: 56px; height: 56px; border-radius: 14px;
+    width: 48px; height: 48px; border-radius: 12px;
     background: linear-gradient(135deg, var(--sds-color-blue-050), var(--sds-color-blue-100));
     display: flex; align-items: center; justify-content: center; margin-bottom: var(--sds-space-400);
   }
   .agent-empty-icon .material-symbols-outlined {
-    font-size: 28px; color: var(--sds-interactive-primary);
+    font-size: 24px; color: var(--sds-interactive-primary);
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   }
   .agent-empty-state h3 {
-    font-size: var(--sds-type-subheading); font-weight: var(--sds-weight-semibold);
+    font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);
     color: var(--sds-text-primary); margin-bottom: var(--sds-space-200);
   }
   .agent-empty-state p {
     font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    max-width: 300px; margin-bottom: var(--sds-space-600); line-height: var(--sds-leading-normal);
+    max-width: 280px; margin-bottom: var(--sds-space-600);
   }
-  /* Quick start prompts in empty state */
-  .empty-quick-prompts {
-    display: flex; flex-direction: column; gap: var(--sds-space-200); width: 100%; margin-bottom: var(--sds-space-600);
-  }
-  .empty-quick-prompt {
-    display: flex; align-items: center; gap: var(--sds-space-250);
-    padding: var(--sds-space-250) var(--sds-space-300); border-radius: 10px;
-    border: 1px solid var(--sds-border-default); background: var(--sds-bg-card);
-    cursor: pointer; transition: all 0.12s ease; font-family: var(--sds-font-sans);
-    text-align: left; width: 100%;
-  }
-  .empty-quick-prompt:hover { background: var(--sds-bg-subtle); border-color: var(--sds-border-strong); }
-  .empty-quick-prompt .material-symbols-outlined {
-    font-size: 18px; color: var(--sds-interactive-primary);
-    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-  .empty-quick-prompt-text {
-    font-size: var(--sds-type-label); color: var(--sds-text-primary);
-  }
-
-  /* Conversation history section in empty state */
   .recent-conversations { width: 100%; text-align: left; }
-  .recent-conv-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 var(--sds-space-200); margin-bottom: var(--sds-space-300);
-  }
-  .recent-conv-header h4 {
+  .recent-conversations h4 {
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
     color: var(--sds-text-tertiary); text-transform: uppercase; letter-spacing: var(--sds-tracking-wide);
-  }
-  .recent-conv-actions {
-    display: flex; gap: var(--sds-space-100);
-  }
-  .recent-conv-action-btn {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    padding: var(--sds-space-050) var(--sds-space-150); border-radius: 4px;
-    transition: all 0.12s ease; display: flex; align-items: center; gap: var(--sds-space-100);
-  }
-  .recent-conv-action-btn:hover { color: var(--sds-text-secondary); background: var(--sds-bg-subtle); }
-  .recent-conv-action-btn .material-symbols-outlined {
-    font-size: 14px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    margin-bottom: var(--sds-space-300); padding: 0 var(--sds-space-200);
   }
   .recent-conv-item {
     display: flex; align-items: center; gap: var(--sds-space-250);
@@ -1200,7 +909,7 @@
   }
   .detail-panel-tab {
     padding: var(--sds-space-250) var(--sds-space-400); font-size: var(--sds-type-label);
-    font-weight: var(--sds-weight-semibold); color: var(--sds-text-tertiary);
+    font-weight: var(--sds-weight-medium); color: var(--sds-text-tertiary);
     cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s ease;
     font-family: var(--sds-font-sans); background: none; border-top: none; border-left: none; border-right: none;
   }
@@ -1270,7 +979,7 @@
     0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; }
   }
 
-  /* Keyboard shortcut hint — visible in agent panel header */
+  /* Keyboard shortcut hint */
   .kbd-hint {
     position: fixed; bottom: 24px; right: 24px; z-index: 50;
     background: var(--sds-color-warm-gray-800); color: var(--sds-color-warm-gray-100);
@@ -1285,288 +994,44 @@
     padding: 1px 6px; font-family: var(--sds-font-sans);
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
   }
-
-  /* Keyboard shortcut badge in panel header */
-  .agent-panel-kbd {
-    font-size: var(--sds-type-overline); color: var(--sds-text-tertiary);
-    display: flex; align-items: center; gap: var(--sds-space-100); margin-left: var(--sds-space-200);
-  }
-  .agent-panel-kbd kbd {
-    font-family: var(--sds-font-sans); font-size: 10px; font-weight: var(--sds-weight-semibold);
-    background: var(--sds-bg-subtle); border: 1px solid var(--sds-border-default);
-    border-radius: 3px; padding: 0px 4px; line-height: 1.4; color: var(--sds-text-tertiary);
-  }
-
-  /* ============================================================
-     Typing indicator (skeleton loader)
-     ============================================================ */
-  .typing-indicator {
-    display: flex; align-items: center; gap: var(--sds-space-200);
-    padding: var(--sds-space-200) var(--sds-space-300);
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-  }
-  .typing-dots { display: flex; gap: 4px; align-items: center; }
-  .typing-dots span {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--sds-color-warm-gray-300);
-    animation: typingBounce 1.4s ease-in-out infinite;
-  }
-  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typingBounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-    30% { transform: translateY(-4px); opacity: 1; }
-  }
-
-  /* Skeleton loader for response cards */
-  .skeleton-card {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-400); overflow: hidden;
-  }
-  .skeleton-line {
-    height: 12px; border-radius: 6px; background: var(--sds-color-warm-gray-100);
-    margin-bottom: var(--sds-space-200); animation: shimmer 1.5s ease-in-out infinite;
-  }
-  .skeleton-line:nth-child(1) { width: 80%; }
-  .skeleton-line:nth-child(2) { width: 65%; }
-  .skeleton-line:nth-child(3) { width: 90%; }
-  .skeleton-line:nth-child(4) { width: 40%; margin-bottom: var(--sds-space-400); }
-  .skeleton-block {
-    height: 60px; border-radius: 8px; background: var(--sds-color-warm-gray-100);
-    animation: shimmer 1.5s ease-in-out infinite; animation-delay: 0.2s;
-  }
-  @keyframes shimmer {
-    0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; }
-  }
-
-  /* ============================================================
-     Confirmation dialog
-     ============================================================ */
-  .confirm-dialog-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(28, 26, 23, 0.5); z-index: 300;
-    display: none; align-items: center; justify-content: center;
-    animation: fadeIn 0.15s ease;
-  }
-  .confirm-dialog-overlay.visible { display: flex; }
-  .confirm-dialog {
-    background: var(--sds-bg-card); border-radius: 12px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.08);
-    padding: var(--sds-space-600); max-width: 420px; width: 90%;
-  }
-  .confirm-dialog h3 {
-    font-size: var(--sds-type-subheading); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); margin-bottom: var(--sds-space-200);
-    display: flex; align-items: center; gap: var(--sds-space-200);
-  }
-  .confirm-dialog h3 .material-symbols-outlined {
-    font-size: 20px; color: var(--sds-status-warning-text);
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .confirm-dialog p {
-    font-size: var(--sds-type-body); color: var(--sds-text-secondary);
-    line-height: var(--sds-leading-normal); margin-bottom: var(--sds-space-600);
-  }
-  .confirm-dialog-actions {
-    display: flex; justify-content: flex-end; gap: var(--sds-space-200);
-  }
-  .confirm-dialog-actions .btn-cancel {
-    padding: var(--sds-space-200) var(--sds-space-400); border-radius: 8px;
-    border: 1px solid var(--sds-border-default); background: var(--sds-bg-card);
-    font-size: var(--sds-type-body); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); cursor: pointer; font-family: var(--sds-font-sans);
-    transition: all 0.15s ease;
-  }
-  .confirm-dialog-actions .btn-cancel:hover { background: var(--sds-bg-subtle); }
-  .confirm-dialog-actions .btn-confirm-action {
-    padding: var(--sds-space-200) var(--sds-space-400); border-radius: 8px;
-    border: none; background: var(--sds-interactive-primary);
-    font-size: var(--sds-type-body); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-on-primary); cursor: pointer; font-family: var(--sds-font-sans);
-    transition: all 0.15s ease;
-  }
-  .confirm-dialog-actions .btn-confirm-action:hover { background: var(--sds-interactive-primary-hover); }
-
-  /* ============================================================
-     Agent panel resize handle
-     ============================================================ */
-  .agent-resize-handle {
-    position: absolute; left: -3px; top: 0; bottom: 0; width: 6px;
-    cursor: col-resize; z-index: 91;
-    transition: background 0.15s ease;
-  }
-  .agent-resize-handle:hover, .agent-resize-handle.dragging {
-    background: var(--sds-interactive-primary);
-    opacity: 0.3;
-  }
-
-  /* ============================================================
-     Timestamp on messages
-     ============================================================ */
-  .agent-msg-time {
-    font-size: var(--sds-type-overline); color: var(--sds-text-tertiary);
-    padding: 0 var(--sds-space-100);
-  }
-
-  /* ============================================================
-     Agent panel status bar
-     ============================================================ */
-  .agent-status-bar {
-    display: flex; align-items: center; gap: var(--sds-space-150);
-    padding: var(--sds-space-150) var(--sds-space-400);
-    border-bottom: 1px solid var(--sds-border-subtle);
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    background: var(--sds-bg-surface);
-  }
-  .agent-status-dot {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--sds-color-green-400);
-    flex-shrink: 0;
-  }
-  .agent-status-dot.error { background: var(--sds-color-red-500); }
-  .agent-status-dot.warning { background: var(--sds-color-yellow-500); }
-
-  /* ============================================================
-     Context menu keyboard focus
-     ============================================================ */
-  .context-menu-item:focus-visible {
-    background: var(--sds-bg-subtle);
-    outline: 2px solid var(--sds-border-focus);
-    outline-offset: -2px;
-  }
-
-  /* ============================================================
-     Send button disabled state
-     ============================================================ */
-  .agent-input-btn.send.disabled {
-    background: var(--sds-color-warm-gray-200);
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  /* ============================================================
-     Copied tooltip
-     ============================================================ */
-  .copied-tooltip {
-    position: absolute; background: var(--sds-color-warm-gray-800);
-    color: var(--sds-color-warm-gray-100); padding: 2px 8px; border-radius: 4px;
-    font-size: 10px; pointer-events: none; white-space: nowrap; z-index: 500;
-    animation: tooltipFade 1.5s ease forwards;
-  }
-  @keyframes tooltipFade { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-8px); } }
-
-  /* ============================================================
-     User message edit indicator
-     ============================================================ */
-  .agent-msg.user .msg-edit-btn {
-    display: none; font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    padding: var(--sds-space-050) var(--sds-space-150); border-radius: 4px;
-    transition: all 0.12s ease;
-  }
-  .agent-msg.user:hover .msg-edit-btn { display: inline-flex; align-items: center; gap: 3px; }
-  .agent-msg.user .msg-edit-btn:hover { color: var(--sds-text-secondary); background: var(--sds-bg-subtle); }
-  .agent-msg.user .msg-edit-btn .material-symbols-outlined {
-    font-size: 12px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-
-  /* ============================================================
-     Classification list (reusable classes, replacing inline styles)
-     ============================================================ */
-  .classification-list { display: flex; flex-direction: column; gap: var(--sds-space-150); margin-top: var(--sds-space-300); margin-left: var(--sds-space-800); }
-  .classification-row { display: flex; align-items: center; gap: var(--sds-space-200); font-size: var(--sds-type-caption); }
-  .classification-col-name { font-family: var(--sds-font-mono); color: var(--sds-text-primary); font-weight: var(--sds-weight-semibold); min-width: 120px; }
-  .classification-tag-sm { font-size: 10px; }
-  .classification-confidence { color: var(--sds-text-tertiary); }
-  .classification-confidence.low { color: var(--sds-color-yellow-500); }
-
-  /* ============================================================
-     Mobile responsive behavior
-     ============================================================ */
-  @media (max-width: 768px) {
-    .sds-sidenav { display: none; }
-    .sds-header-center { display: none; }
-    .sds-header-username { display: none; }
-    .sds-header-chevron { display: none; }
-    .main-content { padding: var(--sds-space-400) var(--sds-space-500); }
-    .stat-row { grid-template-columns: repeat(2, 1fr); }
-    .home-layout { grid-template-columns: 1fr; }
-
-    .agent-panel {
-      width: 100% !important; left: 0; top: 56px;
-      border-left: none;
-    }
-    .agent-panel.fullscreen {
-      left: 0;
-    }
-    .agent-resize-handle { display: none; }
-  }
-
-  @media (max-width: 480px) {
-    .stat-row { grid-template-columns: 1fr; }
-    .agent-suggestions { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .agent-suggestion-chip { flex-shrink: 0; }
-  }
-
-  /* ============================================================
-     Proactive insight settings popover
-     ============================================================ */
-  .insight-settings-popover {
-    position: absolute; right: 0; top: 100%; margin-top: var(--sds-space-100);
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
-    border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    padding: var(--sds-space-300); min-width: 200px; z-index: 200;
-    display: none;
-  }
-  .insight-settings-popover.visible { display: block; }
-  .insight-settings-popover label {
-    display: flex; align-items: center; gap: var(--sds-space-200);
-    font-size: var(--sds-type-caption); color: var(--sds-text-secondary);
-    cursor: pointer; padding: var(--sds-space-100) 0;
-  }
-  .insight-settings-popover label:hover { color: var(--sds-text-primary); }
-  .insight-settings-popover input[type="checkbox"] {
-    width: 14px; height: 14px; accent-color: var(--sds-interactive-primary);
-  }
 </style>
 </head>
 <body>
 
-<!-- Skip-to-content link for keyboard navigation -->
-<a href="#mainContent" class="skip-link">Skip to main content</a>
-
 <!-- ============================================================
      Header
      ============================================================ -->
-<header class="sds-header" role="banner">
+<header class="sds-header">
   <div class="sds-header-left">
     <div class="sds-header-logo-mark">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zm1 3v2h3V5H4zm5 0v2h3V5H9zM4 9v2h3V9H4zm5 0v2h3V9H9z"/></svg>
+      <svg viewBox="0 0 16 16"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zm1 3v2h3V5H4zm5 0v2h3V5H9zM4 9v2h3V9H4zm5 0v2h3V9H9z"/></svg>
     </div>
     <span class="sds-header-logo-text">Strata</span>
   </div>
 
   <div class="sds-header-center">
-    <div class="sds-header-search" onclick="openAgent()" role="search" aria-label="Strata AI search">
-      <span class="material-symbols-outlined" aria-hidden="true">search</span>
-      <input type="text" placeholder="Ask Strata AI anything..." readonly aria-label="Ask Strata AI anything" tabindex="0" onkeydown="if(event.key==='Enter'){event.preventDefault();openAgent()}" onfocus="openAgent()">
-      <kbd aria-hidden="true">&#8984;K</kbd>
+    <div class="sds-header-search" onclick="openAgent()">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Ask Strata AI anything..." readonly>
+      <kbd>&#8984;K</kbd>
     </div>
   </div>
 
   <div class="sds-header-actions">
-    <button class="agent-toggle-btn" id="agentToggleBtn" onclick="toggleAgent()" title="Toggle AI assistant (&#8984;K)" aria-expanded="false" aria-controls="agentPanel">
-      <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+    <button class="agent-toggle-btn" id="agentToggleBtn" onclick="toggleAgent()" title="Toggle AI assistant">
+      <span class="material-symbols-outlined">auto_awesome</span>
       <span>AI</span>
     </button>
-    <button class="sds-header-icon-btn" title="Notifications" aria-label="Notifications, 1 unread">
-      <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
-      <span class="notif-dot" aria-hidden="true"></span>
+    <button class="sds-header-icon-btn" title="Notifications">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="notif-dot"></span>
     </button>
-    <button class="sds-header-help" title="Help" aria-label="Help">?</button>
+    <button class="sds-header-help" title="Help">?</button>
     <div class="sds-header-divider"></div>
-    <button class="sds-header-profile" aria-label="User menu for Jordan R.">
+    <button class="sds-header-profile">
       <div class="sds-header-avatar">JR</div>
       <span class="sds-header-username">Jordan R.</span>
-      <span class="sds-header-chevron"><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></span>
+      <span class="sds-header-chevron"><span class="material-symbols-outlined">expand_more</span></span>
     </button>
   </div>
 </header>
@@ -1577,53 +1042,53 @@
 <div class="app-body">
 
   <!-- Sidebar Navigation -->
-  <nav class="sds-sidenav" aria-label="Main navigation">
-    <a class="sds-sidenav-item active" href="#home" data-nav="home" onclick="event.preventDefault();navigateTo('home')" aria-current="page">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">home</span></span>
+  <nav class="sds-sidenav">
+    <a class="sds-sidenav-item active" data-nav="home" onclick="navigateTo('home')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">home</span></span>
       Home
     </a>
-    <div class="sds-sidenav-section" role="presentation">Data</div>
-    <a class="sds-sidenav-item" href="#catalog" data-nav="catalog" onclick="event.preventDefault();navigateTo('catalog')">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span></span>
+    <div class="sds-sidenav-section">Data</div>
+    <a class="sds-sidenav-item" data-nav="catalog" onclick="navigateTo('catalog')">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">menu_book</span></span>
       Catalog
     </a>
-    <a class="sds-sidenav-item" href="#sources" data-nav="sources" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">database</span></span>
+    <a class="sds-sidenav-item" data-nav="sources">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">database</span></span>
       Sources
     </a>
-    <a class="sds-sidenav-item" href="#lineage" data-nav="lineage" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">account_tree</span></span>
+    <a class="sds-sidenav-item" data-nav="lineage">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">account_tree</span></span>
       Lineage
     </a>
-    <div class="sds-sidenav-section" role="presentation">Security</div>
-    <a class="sds-sidenav-item" href="#classification" data-nav="classification" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">label</span></span>
+    <div class="sds-sidenav-section">Security</div>
+    <a class="sds-sidenav-item" data-nav="classification">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">label</span></span>
       Classification
     </a>
-    <a class="sds-sidenav-item" href="#risk" data-nav="risk" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">shield</span></span>
+    <a class="sds-sidenav-item" data-nav="risk">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">shield</span></span>
       Risk posture
     </a>
-    <div class="sds-sidenav-section" role="presentation">Governance</div>
-    <a class="sds-sidenav-item" href="#policies" data-nav="policies" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">gavel</span></span>
+    <div class="sds-sidenav-section">Governance</div>
+    <a class="sds-sidenav-item" data-nav="policies">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">gavel</span></span>
       Policies
     </a>
-    <a class="sds-sidenav-item" href="#quality" data-nav="quality" onclick="event.preventDefault()">
-      <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">verified</span></span>
+    <a class="sds-sidenav-item" data-nav="quality">
+      <span class="sds-sidenav-icon"><span class="material-symbols-outlined">verified</span></span>
       Quality
     </a>
     <div class="sds-sidenav-spacer"></div>
     <div class="sds-sidenav-footer">
-      <a class="sds-sidenav-item" href="#settings" data-nav="settings" onclick="event.preventDefault()">
-        <span class="sds-sidenav-icon"><span class="material-symbols-outlined" aria-hidden="true">settings</span></span>
+      <a class="sds-sidenav-item" data-nav="settings">
+        <span class="sds-sidenav-icon"><span class="material-symbols-outlined">settings</span></span>
         Settings
       </a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="main-content" id="mainContent" aria-label="Main content">
+  <main class="main-content" id="mainContent">
 
     <!-- ======== Screen: Home ======== -->
     <div class="screen active" id="screen-home">
@@ -1659,45 +1124,45 @@
         <div class="home-main">
           <div class="section-header">
             <h2>Recent activity</h2>
-            <a href="#" onclick="event.preventDefault()">View all</a>
+            <a href="#">View all</a>
           </div>
           <div class="activity-feed">
             <div class="activity-feed-item">
-              <div class="activity-feed-icon success"><span class="material-symbols-outlined" aria-hidden="true">check_circle</span></div>
+              <div class="activity-feed-icon success"><span class="material-symbols-outlined">check_circle</span></div>
               <div class="activity-feed-body">
-                <h3>Classification scan completed</h3>
+                <h4>Classification scan completed</h4>
                 <p>Scanned 412 columns across analytics_warehouse. Found 38 new PII columns, 5 need review.</p>
               </div>
               <div class="activity-feed-time">12 min ago</div>
             </div>
             <div class="activity-feed-item">
-              <div class="activity-feed-icon info"><span class="material-symbols-outlined" aria-hidden="true">sync</span></div>
+              <div class="activity-feed-icon info"><span class="material-symbols-outlined">sync</span></div>
               <div class="activity-feed-body">
-                <h3>Schema change detected</h3>
+                <h4>Schema change detected</h4>
                 <p>3 tables in prod_snowflake.analytics had schema changes. 2 downstream dashboards may be affected.</p>
               </div>
               <div class="activity-feed-time">1 hr ago</div>
             </div>
             <div class="activity-feed-item">
-              <div class="activity-feed-icon warning"><span class="material-symbols-outlined" aria-hidden="true">warning</span></div>
+              <div class="activity-feed-icon warning"><span class="material-symbols-outlined">warning</span></div>
               <div class="activity-feed-body">
-                <h3>Stale access flagged</h3>
+                <h4>Stale access flagged</h4>
                 <p>SERVICE_ETL has write access to 4 tables but hasn't queried them in 90+ days. Review recommended.</p>
               </div>
               <div class="activity-feed-time">3 hrs ago</div>
             </div>
             <div class="activity-feed-item">
-              <div class="activity-feed-icon purple"><span class="material-symbols-outlined" aria-hidden="true">policy</span></div>
+              <div class="activity-feed-icon purple"><span class="material-symbols-outlined">policy</span></div>
               <div class="activity-feed-body">
-                <h3>Policy updated</h3>
+                <h4>Policy updated</h4>
                 <p>GDPR data retention policy v2.3 applied to 12 tables in the customer domain.</p>
               </div>
               <div class="activity-feed-time">Yesterday</div>
             </div>
             <div class="activity-feed-item">
-              <div class="activity-feed-icon success"><span class="material-symbols-outlined" aria-hidden="true">add_circle</span></div>
+              <div class="activity-feed-icon success"><span class="material-symbols-outlined">add_circle</span></div>
               <div class="activity-feed-body">
-                <h3>New source connected</h3>
+                <h4>New source connected</h4>
                 <p>Databricks workspace "ml-features" connected. Cataloging 248 tables and 1,204 columns.</p>
               </div>
               <div class="activity-feed-time">Yesterday</div>
@@ -1708,12 +1173,12 @@
         <div class="home-sidebar">
           <div class="sidebar-card">
             <h3>
-              <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+              <span class="material-symbols-outlined">shield</span>
               Risk overview
             </h3>
             <div class="risk-gauge">
               <div class="risk-gauge-circle">
-                <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+                <svg width="64" height="64" viewBox="0 0 64 64">
                   <circle cx="32" cy="32" r="28" fill="none" stroke="#EBE6DD" stroke-width="6"/>
                   <circle cx="32" cy="32" r="28" fill="none" stroke="#013D5B" stroke-width="6"
                     stroke-dasharray="176" stroke-dashoffset="30" stroke-linecap="round"/>
@@ -1723,7 +1188,7 @@
               <div class="risk-gauge-meta">
                 <div class="risk-gauge-label">Overall health</div>
                 <div class="risk-gauge-change">
-                  <span class="material-symbols-outlined" aria-hidden="true">trending_up</span>
+                  <span class="material-symbols-outlined">trending_up</span>
                   +5 pts this week
                 </div>
               </div>
@@ -1750,24 +1215,24 @@
 
           <div class="sidebar-card">
             <h3>
-              <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+              <span class="material-symbols-outlined">bolt</span>
               Quick actions
             </h3>
             <div class="quick-actions">
               <button class="quick-action-item" onclick="openAgentWith('Show risk summary')">
-                <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+                <span class="material-symbols-outlined">shield</span>
                 <span>View risk summary</span>
               </button>
               <button class="quick-action-item" onclick="openAgentWith('Find undocumented tables')">
-                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                <span class="material-symbols-outlined">search</span>
                 <span>Find undocumented tables</span>
               </button>
               <button class="quick-action-item" onclick="openAgentWith('What changed today?')">
-                <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+                <span class="material-symbols-outlined">schedule</span>
                 <span>What changed today?</span>
               </button>
               <button class="quick-action-item" onclick="openAgentWith('Run classification scan')">
-                <span class="material-symbols-outlined" aria-hidden="true">label</span>
+                <span class="material-symbols-outlined">label</span>
                 <span>Run classification scan</span>
               </button>
             </div>
@@ -1781,22 +1246,22 @@
       <div class="catalog-header">
         <h1>Data catalog</h1>
         <div class="catalog-search">
-          <span class="material-symbols-outlined" aria-hidden="true">search</span>
-          <input type="text" placeholder="Search assets..." aria-label="Search data catalog assets">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" placeholder="Search assets...">
         </div>
       </div>
       <div class="catalog-table-wrapper">
-        <table class="catalog-table" id="catalogTable" aria-label="Data catalog assets">
+        <table class="catalog-table" id="catalogTable">
           <thead>
             <tr>
-              <th scope="col">Asset name</th>
-              <th scope="col">Source</th>
-              <th scope="col">Type</th>
-              <th scope="col">Classification</th>
-              <th scope="col">Quality</th>
-              <th scope="col">Owner</th>
-              <th scope="col">Last updated</th>
-              <th scope="col"><span class="sr-only">Actions</span></th>
+              <th>Asset name</th>
+              <th>Source</th>
+              <th>Type</th>
+              <th>Classification</th>
+              <th>Quality</th>
+              <th>Owner</th>
+              <th>Last updated</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -1808,7 +1273,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill high" style="width:96%"></div></div> 96</div></td>
               <td>Data Engineering</td>
               <td>2 hrs ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'analytics_warehouse.customers')" aria-label="Actions for analytics_warehouse.customers"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'analytics_warehouse.customers')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'raw_signups.user_profiles')">
               <td><span class="asset-name">raw_signups.user_profiles</span></td>
@@ -1818,7 +1283,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill high" style="width:91%"></div></div> 91</div></td>
               <td>Growth Team</td>
               <td>6 hrs ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'raw_signups.user_profiles')" aria-label="Actions for raw_signups.user_profiles"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'raw_signups.user_profiles')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'marketing.email_events')">
               <td><span class="asset-name">marketing.email_events</span></td>
@@ -1828,7 +1293,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill medium" style="width:78%"></div></div> 78</div></td>
               <td>Marketing Ops</td>
               <td>1 day ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'marketing.email_events')" aria-label="Actions for marketing.email_events"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'marketing.email_events')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'prod_snowflake.order_items')">
               <td><span class="asset-name">prod_snowflake.order_items</span></td>
@@ -1838,7 +1303,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill high" style="width:99%"></div></div> 99</div></td>
               <td>Data Engineering</td>
               <td>30 min ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'prod_snowflake.order_items')" aria-label="Actions for prod_snowflake.order_items"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'prod_snowflake.order_items')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'ml_features.user_embeddings')">
               <td><span class="asset-name">ml_features.user_embeddings</span></td>
@@ -1848,7 +1313,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill medium" style="width:72%"></div></div> 72</div></td>
               <td>ML Platform</td>
               <td>3 days ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'ml_features.user_embeddings')" aria-label="Actions for ml_features.user_embeddings"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'ml_features.user_embeddings')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'reporting.monthly_revenue')">
               <td><span class="asset-name">reporting.monthly_revenue</span></td>
@@ -1858,7 +1323,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill high" style="width:94%"></div></div> 94</div></td>
               <td>Finance</td>
               <td>1 hr ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'reporting.monthly_revenue')" aria-label="Actions for reporting.monthly_revenue"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'reporting.monthly_revenue')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
             <tr oncontextmenu="showContextMenu(event, 'staging.product_catalog')">
               <td><span class="asset-name">staging.product_catalog</span></td>
@@ -1868,7 +1333,7 @@
               <td><div class="quality-score"><div class="quality-bar"><div class="quality-fill high" style="width:88%"></div></div> 88</div></td>
               <td>Product</td>
               <td>5 hrs ago</td>
-              <td><button class="catalog-action-btn" onclick="showContextMenu(event, 'staging.product_catalog')" aria-label="Actions for staging.product_catalog"><span class="material-symbols-outlined" aria-hidden="true">more_vert</span></button></td>
+              <td><button class="sds-header-icon-btn" onclick="showContextMenu(event, 'staging.product_catalog')" style="width:24px;height:24px;"><span class="material-symbols-outlined" style="font-size:16px;">more_vert</span></button></td>
             </tr>
           </tbody>
         </table>
@@ -1885,91 +1350,52 @@
   <!-- ============================================================
        Agent Panel (Right Sidebar)
        ============================================================ -->
-  <aside class="agent-panel" id="agentPanel" role="complementary" aria-label="AI Assistant" aria-hidden="true">
-    <div class="agent-resize-handle" id="agentResizeHandle" title="Drag to resize panel" aria-hidden="true"></div>
+  <aside class="agent-panel" id="agentPanel">
     <div class="agent-panel-header">
       <div class="agent-panel-title">
-        <div class="ai-icon"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></div>
+        <div class="ai-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
         Strata AI
-        <span class="agent-panel-kbd" aria-hidden="true"><kbd>&#8984;</kbd><kbd>K</kbd></span>
       </div>
       <div class="agent-panel-actions">
-        <button class="agent-panel-btn" title="New conversation" onclick="showEmptyState()" aria-label="Start new conversation">
-          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+        <button class="agent-panel-btn" title="New conversation" onclick="showEmptyState()">
+          <span class="material-symbols-outlined">add</span>
         </button>
-        <button class="agent-panel-btn" title="Toggle full screen" id="fullscreenBtn" onclick="toggleFullscreen()" aria-label="Toggle full screen view">
-          <span class="material-symbols-outlined" aria-hidden="true">open_in_full</span>
+        <button class="agent-panel-btn" title="Toggle full screen" id="fullscreenBtn" onclick="toggleFullscreen()">
+          <span class="material-symbols-outlined">open_in_full</span>
         </button>
-        <button class="agent-panel-btn" title="Close panel (Esc)" onclick="closeAgent()" aria-label="Close AI assistant panel">
-          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        <button class="agent-panel-btn" title="Close" onclick="closeAgent()">
+          <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-    </div>
-    <div class="agent-status-bar" aria-live="polite" id="agentStatusBar">
-      <span class="agent-status-dot" id="agentStatusDot" aria-hidden="true"></span>
-      <span id="agentStatusText">Connected &middot; Strata AI v3.2</span>
     </div>
 
     <div class="agent-conversation-area">
 
-      <!-- Empty state (new conversation) -->
+      <!-- Empty state (recent conversations) -->
       <div class="agent-empty-state" id="agentEmptyState" style="display:none;">
         <div class="agent-empty-icon">
-          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+          <span class="material-symbols-outlined">auto_awesome</span>
         </div>
         <h3>How can I help?</h3>
         <p>Ask me anything about your data, access, policies, or quality across all connected sources.</p>
-
-        <!-- Contextual quick-start prompts -->
-        <div class="empty-quick-prompts" id="emptyQuickPrompts">
-          <button class="empty-quick-prompt" onclick="openAgentWith('Where is customer PII stored?')">
-            <span class="material-symbols-outlined" aria-hidden="true">search</span>
-            <span class="empty-quick-prompt-text">Where is customer PII stored?</span>
-          </button>
-          <button class="empty-quick-prompt" onclick="openAgentWith('Show me stale access grants')">
-            <span class="material-symbols-outlined" aria-hidden="true">lock_open</span>
-            <span class="empty-quick-prompt-text">Show me stale access grants</span>
-          </button>
-          <button class="empty-quick-prompt" onclick="openAgentWith('What changed in the last 24 hours?')">
-            <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-            <span class="empty-quick-prompt-text">What changed in the last 24 hours?</span>
-          </button>
-          <button class="empty-quick-prompt" onclick="openAgentWith('Run a classification scan on untagged columns')">
-            <span class="material-symbols-outlined" aria-hidden="true">label</span>
-            <span class="empty-quick-prompt-text">Run classification on untagged columns</span>
-          </button>
-        </div>
-
         <div class="recent-conversations">
-          <div class="recent-conv-header">
-            <h4>Recent conversations</h4>
-            <div class="recent-conv-actions">
-              <button class="recent-conv-action-btn" title="Export conversations" aria-label="Export conversations">
-                <span class="material-symbols-outlined" aria-hidden="true">download</span>
-                Export
-              </button>
-              <button class="recent-conv-action-btn" title="Clear history" aria-label="Clear conversation history">
-                <span class="material-symbols-outlined" aria-hidden="true">delete_outline</span>
-                Clear
-              </button>
-            </div>
-          </div>
+          <h4>Recent conversations</h4>
           <button class="recent-conv-item" onclick="loadConversation()">
-            <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span>
+            <span class="material-symbols-outlined">chat_bubble_outline</span>
             <div class="recent-conv-text">
               <span>Where is customer PII stored?</span>
               <small>Today, 9:14 AM</small>
             </div>
           </button>
           <button class="recent-conv-item">
-            <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span>
+            <span class="material-symbols-outlined">chat_bubble_outline</span>
             <div class="recent-conv-text">
               <span>Show tables with quality below 80</span>
               <small>Yesterday</small>
             </div>
           </button>
           <button class="recent-conv-item">
-            <span class="material-symbols-outlined" aria-hidden="true">chat_bubble_outline</span>
+            <span class="material-symbols-outlined">chat_bubble_outline</span>
             <div class="recent-conv-text">
               <span>Who owns the revenue reporting pipeline?</span>
               <small>Mar 24</small>
@@ -1979,21 +1405,13 @@
       </div>
 
       <!-- Active conversation -->
-      <div class="agent-messages" id="agentMessages" role="log" aria-label="Conversation messages">
+      <div class="agent-messages" id="agentMessages">
 
         <!-- Turn 1: Finding -->
-        <div class="agent-msg user" role="listitem">
+        <div class="agent-msg user">
           <div class="agent-msg-bubble">Where is customer PII stored?</div>
-          <div class="agent-msg-meta">
-            <span class="agent-msg-time">9:14 AM</span>
-            <button class="msg-edit-btn" title="Edit message" aria-label="Edit this message">
-              <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-              Edit
-            </button>
-          </div>
         </div>
-        <div class="agent-msg assistant" role="listitem">
-          <span class="agent-msg-time">9:14 AM</span>
+        <div class="agent-msg assistant">
           <div class="agent-msg-bubble">
             <div class="response-card">
               <div class="response-card-body">
@@ -2003,27 +1421,27 @@
                 <div class="result-item expanded" id="result1">
                   <div class="result-item-header" onclick="toggleResult('result1')">
                     <div class="result-item-left">
-                      <span class="result-item-icon"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span></span>
+                      <span class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></span>
                       <span class="result-item-name">analytics_warehouse.customers</span>
                     </div>
                     <div class="result-item-meta">
-                      <span class="result-item-tag classification-tag pii">PII</span>
+                      <span class="result-item-tag" style="background:var(--sds-status-error-bg);color:var(--sds-status-error-text);">PII</span>
                       <span class="result-item-detail">12 PII cols</span>
                       <span class="result-item-detail">Quality: 96</span>
-                      <span class="result-item-expand"><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></span>
+                      <span class="result-item-expand"><span class="material-symbols-outlined">expand_more</span></span>
                     </div>
                   </div>
                   <div class="result-item-body">
-                    <div class="result-item-detail-text">
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);margin-bottom:var(--sds-space-200);">
                       Source: Snowflake &middot; Owner: Data Engineering &middot; 2.4M rows &middot; Updated 2 hrs ago
                     </div>
-                    <div class="result-item-pii-cols">
-                      PII columns: <code>email, first_name, last_name, phone, address_line1, address_line2, city, state, zip, ssn_hash, dob, ip_address</code>
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);">
+                      PII columns: <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);">email, first_name, last_name, phone, address_line1, address_line2, city, state, zip, ssn_hash, dob, ip_address</span>
                     </div>
                     <div class="result-item-actions">
-                      <button onclick="navigateTo('catalog')"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span> View in catalog</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">account_tree</span> See lineage</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">lock</span> Check access</button>
+                      <button onclick="navigateTo('catalog')"><span class="material-symbols-outlined">menu_book</span> View in catalog</button>
+                      <button><span class="material-symbols-outlined">account_tree</span> See lineage</button>
+                      <button><span class="material-symbols-outlined">lock</span> Check access</button>
                     </div>
                   </div>
                 </div>
@@ -2032,27 +1450,27 @@
                 <div class="result-item" id="result2">
                   <div class="result-item-header" onclick="toggleResult('result2')">
                     <div class="result-item-left">
-                      <span class="result-item-icon"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span></span>
+                      <span class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></span>
                       <span class="result-item-name">raw_signups.user_profiles</span>
                     </div>
                     <div class="result-item-meta">
-                      <span class="result-item-tag classification-tag pii">PII</span>
+                      <span class="result-item-tag" style="background:var(--sds-status-error-bg);color:var(--sds-status-error-text);">PII</span>
                       <span class="result-item-detail">8 PII cols</span>
                       <span class="result-item-detail">Quality: 91</span>
-                      <span class="result-item-expand"><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></span>
+                      <span class="result-item-expand"><span class="material-symbols-outlined">expand_more</span></span>
                     </div>
                   </div>
                   <div class="result-item-body">
-                    <div class="result-item-detail-text">
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);margin-bottom:var(--sds-space-200);">
                       Source: S3 &middot; Owner: Growth Team &middot; 890K rows &middot; Updated 6 hrs ago
                     </div>
-                    <div class="result-item-pii-cols">
-                      PII columns: <code>email, full_name, phone, country, signup_ip, referrer_email, company_name, job_title</code>
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);">
+                      PII columns: <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);">email, full_name, phone, country, signup_ip, referrer_email, company_name, job_title</span>
                     </div>
                     <div class="result-item-actions">
-                      <button><span class="material-symbols-outlined" aria-hidden="true">menu_book</span> View in catalog</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">account_tree</span> See lineage</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">lock</span> Check access</button>
+                      <button><span class="material-symbols-outlined">menu_book</span> View in catalog</button>
+                      <button><span class="material-symbols-outlined">account_tree</span> See lineage</button>
+                      <button><span class="material-symbols-outlined">lock</span> Check access</button>
                     </div>
                   </div>
                 </div>
@@ -2061,67 +1479,44 @@
                 <div class="result-item" id="result3">
                   <div class="result-item-header" onclick="toggleResult('result3')">
                     <div class="result-item-left">
-                      <span class="result-item-icon"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span></span>
+                      <span class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></span>
                       <span class="result-item-name">marketing.email_events</span>
                     </div>
                     <div class="result-item-meta">
-                      <span class="result-item-tag classification-tag pii">PII</span>
+                      <span class="result-item-tag" style="background:var(--sds-status-error-bg);color:var(--sds-status-error-text);">PII</span>
                       <span class="result-item-detail">3 PII cols</span>
                       <span class="result-item-detail">Quality: 78</span>
-                      <span class="result-item-expand"><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></span>
+                      <span class="result-item-expand"><span class="material-symbols-outlined">expand_more</span></span>
                     </div>
                   </div>
                   <div class="result-item-body">
-                    <div class="result-item-detail-text">
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);margin-bottom:var(--sds-space-200);">
                       Source: Databricks &middot; Owner: Marketing Ops &middot; 12.1M rows &middot; Updated 1 day ago
                     </div>
-                    <div class="result-item-pii-cols">
-                      PII columns: <code>recipient_email, sender_name, user_agent</code>
+                    <div style="font-size:var(--sds-type-caption);color:var(--sds-text-secondary);">
+                      PII columns: <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);">recipient_email, sender_name, user_agent</span>
                     </div>
                     <div class="result-item-actions">
-                      <button><span class="material-symbols-outlined" aria-hidden="true">menu_book</span> View in catalog</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">account_tree</span> See lineage</button>
-                      <button><span class="material-symbols-outlined" aria-hidden="true">lock</span> Check access</button>
+                      <button><span class="material-symbols-outlined">menu_book</span> View in catalog</button>
+                      <button><span class="material-symbols-outlined">account_tree</span> See lineage</button>
+                      <button><span class="material-symbols-outlined">lock</span> Check access</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="response-attribution">
-                <span class="material-symbols-outlined" aria-hidden="true">info</span>
+                <span class="material-symbols-outlined">info</span>
                 Searched 3,240 assets across 5 connected sources &middot; Based on: catalog metadata, classification scan results
-              </div>
-              <div class="response-card-footer">
-                <div class="response-card-footer-left">
-                  <button class="response-footer-btn" title="Copy response" aria-label="Copy response to clipboard" onclick="copyResponse(this)">
-                    <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-                  </button>
-                </div>
-                <div class="response-card-footer-right">
-                  <button class="response-footer-btn" title="Helpful" aria-label="Mark response as helpful" onclick="toggleFeedback(this, 'up')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
-                  </button>
-                  <button class="response-footer-btn" title="Not helpful" aria-label="Mark response as not helpful" onclick="toggleFeedback(this, 'down')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_down</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Turn 2: Understanding -->
-        <div class="agent-msg user" role="listitem">
+        <div class="agent-msg user">
           <div class="agent-msg-bubble">Show me who has access to the customers table</div>
-          <div class="agent-msg-meta">
-            <span class="agent-msg-time">9:15 AM</span>
-            <button class="msg-edit-btn" title="Edit message" aria-label="Edit this message">
-              <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-              Edit
-            </button>
-          </div>
         </div>
-        <div class="agent-msg assistant" role="listitem">
-          <span class="agent-msg-time">9:15 AM</span>
+        <div class="agent-msg assistant">
           <div class="agent-msg-bubble">
             <div class="response-card">
               <div class="response-card-body">
@@ -2138,19 +1533,19 @@
                   </div>
                   <div class="access-stat">
                     <div class="access-stat-value">3</div>
-                    <div class="access-stat-label">Service accounts</div>
+                    <div class="access-stat-label">Service accts</div>
                   </div>
                 </div>
 
-                <table class="access-matrix" aria-label="Access permissions matrix">
+                <table class="access-matrix">
                   <thead>
                     <tr>
-                      <th scope="col">Role</th>
-                      <th scope="col">Select</th>
-                      <th scope="col">Insert</th>
-                      <th scope="col">Update</th>
-                      <th scope="col">Delete</th>
-                      <th scope="col">Members</th>
+                      <th>Role</th>
+                      <th>Select</th>
+                      <th>Insert</th>
+                      <th>Update</th>
+                      <th>Delete</th>
+                      <th>Members</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -2190,190 +1585,99 @@
                 </table>
 
                 <div class="warning-callout">
-                  <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+                  <span class="material-symbols-outlined">warning</span>
                   <p><strong>SERVICE_ETL</strong> has write access but hasn't queried this table in 90 days. This may indicate stale permissions that should be reviewed.</p>
                 </div>
 
-                <div class="suggested-follow" role="group" aria-label="Suggested follow-up">
-                  <span class="suggested-follow-label">Suggested follow-up</span>
-                  Would you like me to flag the stale service account access for review?
-                </div>
+                <div class="suggested-follow">Would you like me to flag the stale service account access for review?</div>
               </div>
               <div class="response-attribution">
-                <span class="material-symbols-outlined" aria-hidden="true">info</span>
+                <span class="material-symbols-outlined">info</span>
                 Based on: Snowflake access logs, RBAC configuration, query history (last 90 days)
-              </div>
-              <div class="response-card-footer">
-                <div class="response-card-footer-left">
-                  <button class="response-footer-btn" title="Copy response" aria-label="Copy response to clipboard" onclick="copyResponse(this)">
-                    <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-                  </button>
-                </div>
-                <div class="response-card-footer-right">
-                  <button class="response-footer-btn" title="Helpful" aria-label="Mark response as helpful" onclick="toggleFeedback(this, 'up')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
-                  </button>
-                  <button class="response-footer-btn" title="Not helpful" aria-label="Mark response as not helpful" onclick="toggleFeedback(this, 'down')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_down</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Turn 3: Acting (with confirmation + undo) -->
-        <div class="agent-msg user" role="listitem">
+        <!-- Turn 3: Acting -->
+        <div class="agent-msg user">
           <div class="agent-msg-bubble">Yes, flag it and also classify the untagged columns</div>
-          <div class="agent-msg-meta">
-            <span class="agent-msg-time">9:16 AM</span>
-          </div>
         </div>
-        <div class="agent-msg assistant" role="listitem">
-          <span class="agent-msg-time">9:16 AM</span>
+        <div class="agent-msg assistant">
           <div class="agent-msg-bubble">
             <div class="response-card">
               <div class="response-card-body">
-                <p class="action-completed-header">
-                  <span class="material-symbols-outlined" aria-hidden="true">verified</span>
-                  Actions confirmed and completed:
-                </p>
                 <div class="action-result-list">
                   <div class="action-result-item">
-                    <span class="material-symbols-outlined success" aria-hidden="true">check_circle</span>
+                    <span class="material-symbols-outlined success">check_circle</span>
                     <span><strong>Flagged SERVICE_ETL stale access</strong> for review &mdash; assigned to Jordan R. Review ticket #SEC-1247 created.</span>
                   </div>
                   <div class="action-result-item">
-                    <span class="material-symbols-outlined success" aria-hidden="true">check_circle</span>
+                    <span class="material-symbols-outlined success">check_circle</span>
                     <span><strong>Classified 5 columns</strong> in analytics_warehouse.customers:</span>
                   </div>
                 </div>
 
-                <div class="classification-list">
-                  <div class="classification-row">
-                    <span class="classification-col-name">email</span>
-                    <span class="classification-tag pii classification-tag-sm">PII</span>
-                    <span class="classification-confidence">98% confidence</span>
-                  </div>
-                  <div class="classification-row">
-                    <span class="classification-col-name">phone</span>
-                    <span class="classification-tag pii classification-tag-sm">PII</span>
-                    <span class="classification-confidence">96% confidence</span>
-                  </div>
-                  <div class="classification-row">
-                    <span class="classification-col-name">address_line1</span>
-                    <span class="classification-tag pii classification-tag-sm">PII</span>
-                    <span class="classification-confidence">95% confidence</span>
-                  </div>
-                  <div class="classification-row">
-                    <span class="classification-col-name">created_at</span>
-                    <span class="classification-tag internal classification-tag-sm">Internal</span>
-                    <span class="classification-confidence">91% confidence</span>
-                  </div>
-                  <div class="classification-row">
-                    <span class="classification-col-name">product_category</span>
-                    <span class="classification-tag public classification-tag-sm">Public</span>
-                    <span class="classification-confidence low">72% confidence</span>
+                <div style="margin-top:var(--sds-space-300);margin-left:var(--sds-space-800);">
+                  <div style="display:flex;flex-direction:column;gap:var(--sds-space-150);">
+                    <div style="display:flex;align-items:center;gap:var(--sds-space-200);font-size:var(--sds-type-caption);">
+                      <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);font-weight:600;min-width:120px;">email</span>
+                      <span class="classification-tag pii" style="font-size:10px;">PII</span>
+                      <span style="color:var(--sds-text-tertiary);">98% confidence</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:var(--sds-space-200);font-size:var(--sds-type-caption);">
+                      <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);font-weight:600;min-width:120px;">phone</span>
+                      <span class="classification-tag pii" style="font-size:10px;">PII</span>
+                      <span style="color:var(--sds-text-tertiary);">96% confidence</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:var(--sds-space-200);font-size:var(--sds-type-caption);">
+                      <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);font-weight:600;min-width:120px;">address_line1</span>
+                      <span class="classification-tag pii" style="font-size:10px;">PII</span>
+                      <span style="color:var(--sds-text-tertiary);">95% confidence</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:var(--sds-space-200);font-size:var(--sds-type-caption);">
+                      <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);font-weight:600;min-width:120px;">created_at</span>
+                      <span class="classification-tag internal" style="font-size:10px;">Internal</span>
+                      <span style="color:var(--sds-text-tertiary);">91% confidence</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:var(--sds-space-200);font-size:var(--sds-type-caption);">
+                      <span style="font-family:var(--sds-font-mono);color:var(--sds-text-primary);font-weight:600;min-width:120px;">product_category</span>
+                      <span class="classification-tag public" style="font-size:10px;">Public</span>
+                      <span style="color:var(--sds-color-yellow-500);">72% confidence</span>
+                    </div>
                   </div>
                 </div>
 
-                <div class="confidence-inline">
-                  Average confidence: 94% &middot; Review suggested for <strong>product_category</strong> (72%)
+                <div class="confidence-inline" style="margin-top:var(--sds-space-400);">
+                  Average confidence: 94% &middot; Review suggested for <strong style="color:var(--sds-text-primary);">product_category</strong> (72%)
                 </div>
 
-                <div class="classification-actions">
-                  <button class="action-btn-inline">
-                    <span class="material-symbols-outlined" aria-hidden="true">rate_review</span>
-                    Review classifications
-                  </button>
-                  <button class="action-btn-inline" onclick="showUndoToast('Classification reverted for 5 columns')">
-                    <span class="material-symbols-outlined" aria-hidden="true">undo</span>
-                    Undo classifications
-                  </button>
-                </div>
-              </div>
-              <div class="response-attribution">
-                <span class="material-symbols-outlined" aria-hidden="true">info</span>
-                Actions performed via: classification engine v3.2, access management API
-              </div>
-              <div class="response-card-footer">
-                <div class="response-card-footer-left">
-                  <button class="response-footer-btn" title="Copy response" aria-label="Copy response to clipboard" onclick="copyResponse(this)">
-                    <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-                  </button>
-                </div>
-                <div class="response-card-footer-right">
-                  <button class="response-footer-btn" title="Helpful" aria-label="Mark response as helpful" onclick="toggleFeedback(this, 'up')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_up</span>
-                  </button>
-                  <button class="response-footer-btn" title="Not helpful" aria-label="Mark response as not helpful" onclick="toggleFeedback(this, 'down')">
-                    <span class="material-symbols-outlined" aria-hidden="true">thumb_down</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Turn 4: Error state example (network failure) -->
-        <div class="agent-msg assistant" role="listitem" id="errorMsgExample">
-          <span class="agent-msg-time">9:17 AM</span>
-          <div class="agent-msg-bubble">
-            <div class="error-callout" role="alert">
-              <span class="material-symbols-outlined" aria-hidden="true">error</span>
-              <div class="error-callout-body">
-                <p><strong>Lineage fetch failed.</strong> Unable to retrieve lineage data for analytics_warehouse.customers. The connection to Snowflake timed out after 30 seconds.</p>
-                <div class="error-actions">
-                  <button class="error-retry-btn" onclick="simulateRetry(this)">
-                    <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
-                    Retry
-                  </button>
-                  <button class="error-dismiss-btn" onclick="this.closest('.agent-msg').style.display='none'">Dismiss</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Turn 5: Proactive insight (with controls) -->
-        <div class="agent-msg assistant" role="listitem">
-          <span class="agent-msg-time">9:18 AM</span>
-          <div class="agent-msg-bubble">
-            <div class="proactive-insight" role="status" aria-label="Proactive insight from AI">
-              <div class="proactive-insight-header">
-                <div class="proactive-insight-header-left">
-                  <span class="material-symbols-outlined" aria-hidden="true">trending_up</span>
-                  Proactive insight
-                </div>
-                <button class="proactive-insight-mute" onclick="toggleInsightSettings(this)" aria-label="Insight notification settings" aria-expanded="false" aria-controls="insightSettingsPopover">
-                  <span class="material-symbols-outlined" aria-hidden="true">tune</span>
-                  Settings
+                <button class="action-btn-inline">
+                  <span class="material-symbols-outlined">rate_review</span>
+                  Review classifications
                 </button>
               </div>
-              <div class="insight-settings-popover" id="insightSettingsPopover" role="group" aria-label="Insight notification categories">
-                <label><input type="checkbox" checked> Schema change alerts</label>
-                <label><input type="checkbox" checked> Stale access warnings</label>
-                <label><input type="checkbox" checked> Quality degradation</label>
-                <label><input type="checkbox"> New data source activity</label>
+              <div class="response-attribution">
+                <span class="material-symbols-outlined">info</span>
+                Actions performed via: classification engine v3.2, access management API
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Turn 4: Proactive insight -->
+        <div class="agent-msg assistant">
+          <div class="agent-msg-bubble">
+            <div class="proactive-insight">
+              <div class="proactive-insight-header">
+                <span class="material-symbols-outlined">trending_up</span>
+                Proactive insight
               </div>
               <p>I noticed <strong>3 tables</strong> had schema changes in the last 24 hours that affect <strong>2 of your active dashboards</strong> (Revenue Overview, Customer Segmentation). Want me to show the downstream impact?</p>
               <div class="proactive-insight-actions">
-                <button class="btn-primary-sm" aria-label="Show downstream impact of schema changes">Show impact</button>
-                <button class="btn-secondary-sm" aria-label="Dismiss this insight">Dismiss</button>
+                <button class="btn-primary-sm">Show impact</button>
+                <button class="btn-secondary-sm">Dismiss</button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Loading skeleton example (hidden by default, shown via JS) -->
-        <div class="agent-msg assistant" role="listitem" id="skeletonLoader" style="display:none;">
-          <div class="agent-msg-bubble">
-            <div class="skeleton-card">
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-              <div class="skeleton-block"></div>
             </div>
           </div>
         </div>
@@ -2386,14 +1690,14 @@
           <div class="detail-panel-header">
             <h3>analytics_warehouse.customers</h3>
           </div>
-          <div class="detail-panel-tabs" role="tablist" aria-label="Asset detail tabs">
-            <button class="detail-panel-tab active" role="tab" id="tab-lineage" aria-selected="true" aria-controls="tabpanel-lineage" tabindex="0">Lineage</button>
-            <button class="detail-panel-tab" role="tab" id="tab-schema" aria-selected="false" aria-controls="tabpanel-schema" tabindex="-1">Schema</button>
-            <button class="detail-panel-tab" role="tab" id="tab-access" aria-selected="false" aria-controls="tabpanel-access" tabindex="-1">Access</button>
-            <button class="detail-panel-tab" role="tab" id="tab-quality" aria-selected="false" aria-controls="tabpanel-quality" tabindex="-1">Quality</button>
+          <div class="detail-panel-tabs">
+            <button class="detail-panel-tab active">Lineage</button>
+            <button class="detail-panel-tab">Schema</button>
+            <button class="detail-panel-tab">Access</button>
+            <button class="detail-panel-tab">Quality</button>
           </div>
-          <div class="lineage-graph" style="height:420px;" role="tabpanel" id="tabpanel-lineage" aria-labelledby="tab-lineage">
-            <svg class="lineage-svg" viewBox="0 0 600 420" aria-hidden="true">
+          <div class="lineage-graph" style="height:420px;">
+            <svg class="lineage-svg" viewBox="0 0 600 420">
               <defs>
                 <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
                   <path d="M 0 0 L 8 3 L 0 6 Z" fill="#D0CBC3"/>
@@ -2402,6 +1706,7 @@
                   <path d="M 0 0 L 8 3 L 0 6 Z" fill="#013D5B"/>
                 </marker>
               </defs>
+              <!-- Connectors -->
               <line x1="150" y1="75" x2="220" y2="195" stroke="#D0CBC3" stroke-width="2" marker-end="url(#arrowhead)"/>
               <line x1="150" y1="195" x2="220" y2="195" stroke="#013D5B" stroke-width="2" marker-end="url(#arrowhead-active)"/>
               <line x1="150" y1="315" x2="220" y2="210" stroke="#D0CBC3" stroke-width="2" marker-end="url(#arrowhead)"/>
@@ -2409,6 +1714,7 @@
               <line x1="380" y1="200" x2="440" y2="265" stroke="#D0CBC3" stroke-width="2" marker-end="url(#arrowhead)"/>
             </svg>
 
+            <!-- Source nodes -->
             <div class="lineage-node" style="left:16px;top:48px;">
               <div class="lineage-node-label">Source</div>
               <div class="lineage-node-name">raw_signups</div>
@@ -2424,11 +1730,15 @@
               <div class="lineage-node-name">payment_events</div>
               <div class="lineage-node-source">Stripe API</div>
             </div>
+
+            <!-- Center node -->
             <div class="lineage-node highlighted" style="left:220px;top:168px;border-color:var(--sds-interactive-primary);">
               <div class="lineage-node-label">Table</div>
               <div class="lineage-node-name">customers</div>
               <div class="lineage-node-source">Snowflake</div>
             </div>
+
+            <!-- Downstream -->
             <div class="lineage-node" style="left:440px;top:98px;">
               <div class="lineage-node-label">Dashboard</div>
               <div class="lineage-node-name">Revenue Overview</div>
@@ -2447,18 +1757,18 @@
 
     <!-- Input area -->
     <div class="agent-input-area">
-      <div class="agent-suggestions" role="group" aria-label="Suggested questions">
+      <div class="agent-suggestions">
         <button class="agent-suggestion-chip" onclick="openAgentWith('What changed today?')">What changed today?</button>
         <button class="agent-suggestion-chip" onclick="openAgentWith('Show risk summary')">Show risk summary</button>
         <button class="agent-suggestion-chip" onclick="openAgentWith('Find undocumented tables')">Find undocumented tables</button>
       </div>
       <div class="agent-input-row">
-        <button class="agent-input-btn attach" title="Attach file" aria-label="Attach file">
-          <span class="material-symbols-outlined" aria-hidden="true">attach_file</span>
+        <button class="agent-input-btn attach" title="Attach file">
+          <span class="material-symbols-outlined">attach_file</span>
         </button>
-        <textarea rows="1" placeholder="Ask anything about your data..." id="agentInput" onkeydown="handleInputKey(event)" aria-label="Message input" role="textbox" aria-multiline="true"></textarea>
-        <button class="agent-input-btn send disabled" title="Send message" aria-label="Send message" id="agentSendBtn" aria-disabled="true">
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span>
+        <textarea rows="1" placeholder="Ask anything about your data..." id="agentInput" onkeydown="handleInputKey(event)"></textarea>
+        <button class="agent-input-btn send" title="Send message">
+          <span class="material-symbols-outlined">arrow_upward</span>
         </button>
       </div>
     </div>
@@ -2468,62 +1778,37 @@
 
 <!-- Context Menu -->
 <div class="overlay" id="ctxOverlay" onclick="hideContextMenu()"></div>
-<div class="context-menu" id="contextMenu" role="menu" aria-label="AI actions for table">
-  <div class="context-menu-header" aria-hidden="true">
+<div class="context-menu" id="contextMenu">
+  <div class="context-menu-header">
     <span class="material-symbols-outlined">auto_awesome</span>
     Strata AI
   </div>
-  <div class="context-menu-divider" role="separator"></div>
-  <button class="context-menu-item" onclick="ctxAction('ask')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+  <div class="context-menu-divider"></div>
+  <button class="context-menu-item" onclick="ctxAction('ask')">
+    <span class="material-symbols-outlined">chat</span>
     Ask AI about this table
   </button>
-  <button class="context-menu-item" onclick="ctxAction('explain')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">help_outline</span>
+  <button class="context-menu-item" onclick="ctxAction('explain')">
+    <span class="material-symbols-outlined">help_outline</span>
     Explain columns
   </button>
-  <button class="context-menu-item" onclick="ctxAction('access')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+  <button class="context-menu-item" onclick="ctxAction('access')">
+    <span class="material-symbols-outlined">lock</span>
     Check access to this asset
   </button>
-  <button class="context-menu-item" onclick="ctxAction('similar')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+  <button class="context-menu-item" onclick="ctxAction('similar')">
+    <span class="material-symbols-outlined">content_copy</span>
     Find similar tables
   </button>
-  <div class="context-menu-divider" role="separator"></div>
-  <button class="context-menu-item" onclick="ctxAction('lineage')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">account_tree</span>
+  <div class="context-menu-divider"></div>
+  <button class="context-menu-item" onclick="ctxAction('lineage')">
+    <span class="material-symbols-outlined">account_tree</span>
     View lineage
   </button>
-  <button class="context-menu-item" onclick="ctxAction('classify')" role="menuitem" tabindex="-1">
-    <span class="material-symbols-outlined" aria-hidden="true">label</span>
+  <button class="context-menu-item" onclick="ctxAction('classify')">
+    <span class="material-symbols-outlined">label</span>
     Run classification
   </button>
-</div>
-
-<!-- Confirmation dialog -->
-<div class="confirm-dialog-overlay" id="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="confirmDialogTitle">
-  <div class="confirm-dialog">
-    <h3 id="confirmDialogTitle">
-      <span class="material-symbols-outlined" aria-hidden="true">warning</span>
-      Confirm action
-    </h3>
-    <p id="confirmDialogMsg">This will flag the SERVICE_ETL stale access for review and run classification on 5 untagged columns. These actions will create a review ticket and update column metadata.</p>
-    <div class="confirm-dialog-actions">
-      <button class="btn-cancel" onclick="closeConfirmDialog()">Cancel</button>
-      <button class="btn-confirm-action" onclick="executeConfirmedAction()">Confirm &amp; proceed</button>
-    </div>
-  </div>
-</div>
-
-<!-- Undo toast -->
-<div class="undo-toast" id="undoToast" role="alert" aria-live="assertive">
-  <div class="undo-toast-msg">
-    <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
-    <span id="undoToastMsg">Action completed</span>
-  </div>
-  <button class="undo-toast-btn" onclick="handleUndo()">Undo</button>
-  <div class="undo-toast-timer"><div class="undo-toast-timer-fill" id="undoToastTimerFill"></div></div>
 </div>
 
 <!-- Keyboard shortcut hint -->
@@ -2541,19 +1826,13 @@
     if (target) target.classList.add('active');
 
     document.querySelectorAll('.sds-sidenav-item').forEach(item => {
-      const isActive = item.dataset.nav === screen;
-      item.classList.toggle('active', isActive);
-      if (isActive) {
-        item.setAttribute('aria-current', 'page');
-      } else {
-        item.removeAttribute('aria-current');
-      }
+      item.classList.toggle('active', item.dataset.nav === screen);
     });
 
     window.location.hash = screen;
   }
 
-  // Hash routing — preserves conversation on navigate away/back
+  // Hash routing
   function handleHash() {
     const hash = window.location.hash.replace('#', '') || 'home';
     if (hash === 'agent') {
@@ -2573,33 +1852,30 @@
   const agentToggleBtn = document.getElementById('agentToggleBtn');
   const agentMessages = document.getElementById('agentMessages');
   const agentEmptyState = document.getElementById('agentEmptyState');
-  const agentSendBtn = document.getElementById('agentSendBtn');
   let agentOpen = false;
   let agentFullscreen = false;
 
   function openAgent() {
     agentOpen = true;
     agentPanel.classList.add('open');
-    agentPanel.setAttribute('aria-hidden', 'false');
     agentToggleBtn.classList.add('active');
-    agentToggleBtn.setAttribute('aria-expanded', 'true');
     agentMessages.scrollTop = agentMessages.scrollHeight;
-    setTimeout(() => document.getElementById('agentInput').focus(), 350);
   }
 
   function closeAgent() {
     agentOpen = false;
     agentPanel.classList.remove('open', 'fullscreen');
-    agentPanel.setAttribute('aria-hidden', 'true');
     agentToggleBtn.classList.remove('active');
-    agentToggleBtn.setAttribute('aria-expanded', 'false');
     agentFullscreen = false;
     document.getElementById('fullscreenBtn').querySelector('.material-symbols-outlined').textContent = 'open_in_full';
-    agentToggleBtn.focus();
   }
 
   function toggleAgent() {
-    if (agentOpen) closeAgent(); else openAgent();
+    if (agentOpen) {
+      closeAgent();
+    } else {
+      openAgent();
+    }
   }
 
   function toggleFullscreen() {
@@ -2607,24 +1883,11 @@
     agentPanel.classList.toggle('fullscreen', agentFullscreen);
     const icon = document.getElementById('fullscreenBtn').querySelector('.material-symbols-outlined');
     icon.textContent = agentFullscreen ? 'close_fullscreen' : 'open_in_full';
-    document.getElementById('fullscreenBtn').setAttribute('aria-label',
-      agentFullscreen ? 'Exit full screen view' : 'Enter full screen view');
   }
 
   function showEmptyState() {
     agentMessages.style.display = 'none';
     agentEmptyState.style.display = 'flex';
-    // Update quick prompts based on current page context
-    updateEmptyStatePrompts();
-    const firstPrompt = agentEmptyState.querySelector('.empty-quick-prompt');
-    if (firstPrompt) setTimeout(() => firstPrompt.focus(), 100);
-  }
-
-  function updateEmptyStatePrompts() {
-    // Contextual prompts based on current screen
-    const currentScreen = document.querySelector('.sds-sidenav-item.active');
-    const nav = currentScreen ? currentScreen.dataset.nav : 'home';
-    // In a real implementation, prompts would change per screen context
   }
 
   function loadConversation() {
@@ -2637,56 +1900,21 @@
     openAgent();
     agentMessages.style.display = 'flex';
     agentEmptyState.style.display = 'none';
-    const input = document.getElementById('agentInput');
-    input.value = text;
-    input.focus();
-    updateSendButton();
-  }
-
-  // ============================================================
-  // Send button state management
-  // ============================================================
-  function updateSendButton() {
-    const input = document.getElementById('agentInput');
-    const hasContent = input.value.trim().length > 0;
-    if (hasContent) {
-      agentSendBtn.classList.remove('disabled');
-      agentSendBtn.removeAttribute('aria-disabled');
-    } else {
-      agentSendBtn.classList.add('disabled');
-      agentSendBtn.setAttribute('aria-disabled', 'true');
-    }
+    document.getElementById('agentInput').value = text;
+    document.getElementById('agentInput').focus();
   }
 
   // ============================================================
   // Result item expansion
   // ============================================================
   function toggleResult(id) {
-    const item = document.getElementById(id);
-    const isExpanded = item.classList.toggle('expanded');
-    const header = item.querySelector('.result-item-header');
-    header.setAttribute('aria-expanded', isExpanded);
+    document.getElementById(id).classList.toggle('expanded');
   }
-
-  // Initialize aria-expanded on result items
-  document.querySelectorAll('.result-item-header').forEach(header => {
-    const parent = header.closest('.result-item');
-    header.setAttribute('role', 'button');
-    header.setAttribute('tabindex', '0');
-    header.setAttribute('aria-expanded', parent.classList.contains('expanded'));
-    header.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        header.click();
-      }
-    });
-  });
 
   // ============================================================
   // Context Menu
   // ============================================================
   let currentContextAsset = '';
-  let contextMenuFocusIndex = -1;
 
   function showContextMenu(e, assetName) {
     e.preventDefault();
@@ -2695,8 +1923,11 @@
     const menu = document.getElementById('contextMenu');
     const overlay = document.getElementById('ctxOverlay');
 
+    // Position near click
     let x = e.clientX || e.pageX;
     let y = e.clientY || e.pageY;
+
+    // Ensure menu stays in viewport
     const menuWidth = 240;
     const menuHeight = 280;
     if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 8;
@@ -2706,35 +1937,12 @@
     menu.style.top = y + 'px';
     menu.classList.add('visible');
     overlay.classList.add('visible');
-
-    contextMenuFocusIndex = 0;
-    const items = menu.querySelectorAll('.context-menu-item');
-    if (items.length > 0) items[0].focus();
   }
 
   function hideContextMenu() {
     document.getElementById('contextMenu').classList.remove('visible');
     document.getElementById('ctxOverlay').classList.remove('visible');
-    contextMenuFocusIndex = -1;
   }
-
-  document.getElementById('contextMenu').addEventListener('keydown', function(e) {
-    const items = this.querySelectorAll('.context-menu-item');
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      contextMenuFocusIndex = (contextMenuFocusIndex + 1) % items.length;
-      items[contextMenuFocusIndex].focus();
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      contextMenuFocusIndex = (contextMenuFocusIndex - 1 + items.length) % items.length;
-      items[contextMenuFocusIndex].focus();
-    } else if (e.key === 'Escape') {
-      hideContextMenu();
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      hideContextMenu();
-    }
-  });
 
   function ctxAction(action) {
     hideContextMenu();
@@ -2751,238 +1959,35 @@
   }
 
   // ============================================================
-  // Confirmation Dialog
-  // ============================================================
-  function showConfirmDialog(message, onConfirm) {
-    const dialog = document.getElementById('confirmDialog');
-    document.getElementById('confirmDialogMsg').textContent = message;
-    dialog.classList.add('visible');
-    dialog._onConfirm = onConfirm;
-    setTimeout(() => dialog.querySelector('.btn-cancel').focus(), 100);
-  }
-
-  function closeConfirmDialog() {
-    document.getElementById('confirmDialog').classList.remove('visible');
-  }
-
-  function executeConfirmedAction() {
-    const dialog = document.getElementById('confirmDialog');
-    if (dialog._onConfirm) dialog._onConfirm();
-    closeConfirmDialog();
-  }
-
-  document.getElementById('confirmDialog').addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeConfirmDialog();
-    if (e.key === 'Tab') {
-      const focusable = this.querySelectorAll('button');
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  });
-
-  // ============================================================
-  // Undo Toast
-  // ============================================================
-  let undoTimeout = null;
-
-  function showUndoToast(message) {
-    const toast = document.getElementById('undoToast');
-    document.getElementById('undoToastMsg').textContent = message;
-    const fill = document.getElementById('undoToastTimerFill');
-    // Reset animation
-    fill.style.animation = 'none';
-    fill.offsetHeight; // trigger reflow
-    fill.style.animation = 'undoTimer 8s linear forwards';
-    toast.classList.add('visible');
-    clearTimeout(undoTimeout);
-    undoTimeout = setTimeout(() => {
-      toast.classList.remove('visible');
-    }, 8000);
-  }
-
-  function handleUndo() {
-    const toast = document.getElementById('undoToast');
-    toast.classList.remove('visible');
-    clearTimeout(undoTimeout);
-    // In production, this would call the undo API
-  }
-
-  // ============================================================
-  // Copy response to clipboard
-  // ============================================================
-  function copyResponse(btn) {
-    const card = btn.closest('.response-card');
-    const body = card.querySelector('.response-card-body');
-    const text = body.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.classList.add('active');
-      btn.querySelector('.material-symbols-outlined').textContent = 'check';
-      setTimeout(() => {
-        btn.classList.remove('active');
-        btn.querySelector('.material-symbols-outlined').textContent = 'content_copy';
-      }, 2000);
-    }).catch(() => {
-      // Fallback: select text
-      const range = document.createRange();
-      range.selectNodeContents(body);
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(range);
-    });
-  }
-
-  // ============================================================
-  // Feedback buttons (thumbs up/down)
-  // ============================================================
-  function toggleFeedback(btn, type) {
-    const footer = btn.closest('.response-card-footer-right');
-    const buttons = footer.querySelectorAll('.response-footer-btn');
-    // Toggle: if already active, deactivate
-    if (btn.classList.contains('active')) {
-      btn.classList.remove('active');
-      return;
-    }
-    // Deactivate sibling, activate this
-    buttons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  }
-
-  // ============================================================
-  // Error retry simulation
-  // ============================================================
-  function simulateRetry(btn) {
-    btn.disabled = true;
-    btn.innerHTML = '<span class="material-symbols-outlined animate-spin" aria-hidden="true">refresh</span> Retrying...';
-    setTimeout(() => {
-      const errorMsg = btn.closest('.agent-msg');
-      errorMsg.style.display = 'none';
-    }, 2000);
-  }
-
-  // ============================================================
-  // Proactive insight settings
-  // ============================================================
-  function toggleInsightSettings(btn) {
-    const popover = btn.closest('.proactive-insight').querySelector('.insight-settings-popover');
-    const isVisible = popover.classList.toggle('visible');
-    btn.setAttribute('aria-expanded', isVisible);
-  }
-
-  // Close insight settings when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.proactive-insight-mute') && !e.target.closest('.insight-settings-popover')) {
-      document.querySelectorAll('.insight-settings-popover.visible').forEach(p => p.classList.remove('visible'));
-    }
-  });
-
-  // ============================================================
   // Input handling
   // ============================================================
   function handleInputKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (e.target.value.trim()) {
-        // Show skeleton loader while "processing"
-        const skeleton = document.getElementById('skeletonLoader');
-        skeleton.style.display = 'flex';
-        agentMessages.scrollTop = agentMessages.scrollHeight;
-
-        // Clear input
-        e.target.value = '';
-        updateSendButton();
-
-        // Hide skeleton after simulated delay
-        setTimeout(() => {
-          skeleton.style.display = 'none';
-        }, 3000);
-      }
+      // In prototype, just clear input
+      e.target.value = '';
     }
   }
 
-  // Auto-resize textarea and update send button
-  const agentInput = document.getElementById('agentInput');
-  agentInput.addEventListener('input', function() {
+  // Auto-resize textarea
+  document.getElementById('agentInput').addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 80) + 'px';
-    updateSendButton();
   });
 
   // ============================================================
-  // Panel resize
-  // ============================================================
-  const resizeHandle = document.getElementById('agentResizeHandle');
-  let isResizing = false;
-  let startX, startWidth;
-
-  resizeHandle.addEventListener('mousedown', function(e) {
-    if (agentFullscreen) return;
-    isResizing = true;
-    startX = e.clientX;
-    startWidth = agentPanel.offsetWidth;
-    resizeHandle.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    e.preventDefault();
-  });
-
-  document.addEventListener('mousemove', function(e) {
-    if (!isResizing) return;
-    const diff = startX - e.clientX;
-    const newWidth = Math.max(360, Math.min(800, startWidth + diff));
-    agentPanel.style.width = newWidth + 'px';
-  });
-
-  document.addEventListener('mouseup', function() {
-    if (isResizing) {
-      isResizing = false;
-      resizeHandle.classList.remove('dragging');
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    }
-  });
-
-  // ============================================================
-  // Detail panel tabs — keyboard navigation
-  // ============================================================
-  document.querySelector('.detail-panel-tabs')?.addEventListener('keydown', function(e) {
-    const tabs = Array.from(this.querySelectorAll('.detail-panel-tab'));
-    const currentIndex = tabs.indexOf(document.activeElement);
-    if (currentIndex === -1) return;
-    let newIndex = currentIndex;
-    if (e.key === 'ArrowRight') newIndex = (currentIndex + 1) % tabs.length;
-    else if (e.key === 'ArrowLeft') newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-    else return;
-    e.preventDefault();
-    tabs.forEach((t, i) => {
-      t.classList.toggle('active', i === newIndex);
-      t.setAttribute('aria-selected', i === newIndex);
-      t.setAttribute('tabindex', i === newIndex ? '0' : '-1');
-    });
-    tabs[newIndex].focus();
-  });
-
-  // ============================================================
-  // Keyboard shortcuts
+  // Keyboard shortcut
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       toggleAgent();
-      if (agentOpen) document.getElementById('agentInput').focus();
-    }
-    if (e.key === 'Escape') {
-      const confirmDialog = document.getElementById('confirmDialog');
-      if (confirmDialog.classList.contains('visible')) {
-        closeConfirmDialog();
-      } else if (agentOpen) {
-        closeAgent();
+      if (agentOpen) {
+        document.getElementById('agentInput').focus();
       }
+    }
+    if (e.key === 'Escape' && agentOpen) {
+      closeAgent();
     }
   });
 
@@ -3002,32 +2007,12 @@
   });
 
   // ============================================================
-  // Conversation state preservation — stores scroll position
-  // ============================================================
-  let conversationScrollPos = 0;
-  const mainContent = document.querySelector('.main-content');
-
-  // Save agent panel scroll on navigation
-  document.querySelectorAll('.sds-sidenav-item').forEach(item => {
-    item.addEventListener('click', function() {
-      if (agentMessages) conversationScrollPos = agentMessages.scrollTop;
-    });
-  });
-
-  // Restore scroll when coming back
-  window.addEventListener('hashchange', function() {
-    if (agentOpen && agentMessages) {
-      setTimeout(() => { agentMessages.scrollTop = conversationScrollPos; }, 100);
-    }
-  });
-
-  // ============================================================
-  // Initialize
+  // Initialize: open agent panel by default to show the conversation
   // ============================================================
   window.addEventListener('DOMContentLoaded', function() {
     handleHash();
+    // Open agent panel by default to showcase the design
     setTimeout(openAgent, 400);
-    updateSendButton();
   });
 </script>
 
