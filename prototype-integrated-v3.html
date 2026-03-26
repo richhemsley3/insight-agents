@@ -461,7 +461,7 @@
     display: flex; align-items: center; gap: var(--sds-space-200);
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
     color: var(--sds-color-blue-700); text-transform: uppercase;
-    letter-spacing: var(--sds-tracking-wide); margin: 0;
+    letter-spacing: var(--sds-tracking-wide);
   }
   .ai-section-label .material-symbols-outlined {
     font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
@@ -495,8 +495,7 @@
     align-items: center; justify-content: center; opacity: 0;
     transition: opacity 0.12s ease, background 0.12s ease;
   }
-  .insight-card:hover .insight-card-dismiss,
-  .insight-card-dismiss:focus-visible { opacity: 1; }
+  .insight-card:hover .insight-card-dismiss { opacity: 1; }
   .insight-card-dismiss:hover { background: var(--sds-bg-subtle); }
   .insight-card-dismiss .material-symbols-outlined {
     font-size: 16px; color: var(--sds-text-tertiary);
@@ -580,7 +579,7 @@
   .home-card-title {
     display: flex; align-items: center; gap: var(--sds-space-200);
     font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); margin: 0;
+    color: var(--sds-text-primary);
   }
   .home-card-title .material-symbols-outlined {
     font-size: 18px; color: var(--sds-interactive-primary);
@@ -985,10 +984,7 @@
   .result-item-header {
     display: flex; align-items: center; justify-content: space-between;
     padding: var(--sds-space-300); cursor: pointer; transition: background 0.12s ease;
-    border: none; background: transparent; font-family: var(--sds-font-sans);
-    text-align: left; width: 100%; font-size: inherit; color: inherit;
   }
-  .result-item-header:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: -2px; border-radius: 8px; }
   .result-item-header:hover { background: var(--sds-bg-subtle); }
   .result-item-left { display: flex; align-items: center; gap: var(--sds-space-200); min-width: 0; flex: 1; }
   .result-item-icon .material-symbols-outlined {
@@ -1316,179 +1312,10 @@
   .skeleton-bar { height: 6px; border-radius: 3px; }
 
   /* ============================================================
-     Onboarding Tooltip Walkthrough (First-Run Experience)
-     ============================================================ */
-  .onboarding-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.35);
-    z-index: 900; opacity: 0; transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-  .onboarding-overlay.visible { opacity: 1; pointer-events: auto; }
-  .onboarding-spotlight {
-    position: absolute; border-radius: 14px;
-    box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 901;
-  }
-  .onboarding-tooltip {
-    position: absolute; z-index: 902;
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
-    border-radius: 12px; padding: var(--sds-space-500);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    max-width: 320px; min-width: 260px;
-    animation: msgSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  .onboarding-tooltip-step {
-    font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-interactive-primary); text-transform: uppercase;
-    letter-spacing: var(--sds-tracking-wide); margin-bottom: var(--sds-space-200);
-  }
-  .onboarding-tooltip h4 {
-    font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); margin-bottom: var(--sds-space-150);
-    line-height: var(--sds-leading-snug);
-  }
-  .onboarding-tooltip p {
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    line-height: var(--sds-leading-normal); margin-bottom: var(--sds-space-400);
-  }
-  .onboarding-tooltip-actions {
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .onboarding-tooltip-skip {
-    font-size: var(--sds-type-label); color: var(--sds-text-tertiary);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    padding: var(--sds-space-100) 0; transition: color 0.12s;
-  }
-  .onboarding-tooltip-skip:hover { color: var(--sds-text-primary); }
-  .onboarding-tooltip-next {
-    display: inline-flex; align-items: center; gap: var(--sds-space-100);
-    padding: var(--sds-space-200) var(--sds-space-400); border-radius: 8px;
-    background: var(--sds-interactive-primary); color: var(--sds-text-on-primary);
-    font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold);
-    font-family: var(--sds-font-sans); border: none; cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  .onboarding-tooltip-next:hover { background: var(--sds-interactive-primary-hover); }
-  .onboarding-dots {
-    display: flex; gap: var(--sds-space-100); margin-top: var(--sds-space-300);
-    justify-content: center;
-  }
-  .onboarding-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--sds-color-warm-gray-200); transition: all 0.2s ease;
-  }
-  .onboarding-dot.active { background: var(--sds-interactive-primary); width: 18px; border-radius: 3px; }
-
-  /* ============================================================
-     Clear Conversation Button
-     ============================================================ */
-  .conversation-actions-bar {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: var(--sds-space-600);
-  }
-  .clear-conversation-btn {
-    display: inline-flex; align-items: center; gap: var(--sds-space-150);
-    font-size: var(--sds-type-label); color: var(--sds-text-tertiary);
-    background: none; border: 1px solid var(--sds-border-subtle);
-    border-radius: 6px; padding: var(--sds-space-150) var(--sds-space-300);
-    cursor: pointer; font-family: var(--sds-font-sans);
-    transition: all 0.15s ease;
-  }
-  .clear-conversation-btn:hover { color: var(--sds-text-primary); background: var(--sds-bg-subtle); border-color: var(--sds-border-default); }
-  .clear-conversation-btn .material-symbols-outlined {
-    font-size: 14px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-
-  /* ============================================================
-     Skeleton Loading State (wired into initial load)
-     ============================================================ */
-  .skeleton-loading .insight-cards-row,
-  .skeleton-loading .home-grid { display: none; }
-  .skeleton-loading .ai-section-header { display: none; }
-  .skeleton-loading .insights-footer { display: none; }
-  .skeleton-placeholder { display: none; }
-  .skeleton-loading .skeleton-placeholder { display: block; }
-  .skeleton-insight-row {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-400);
-    margin-bottom: var(--sds-space-600);
-  }
-  .skeleton-insight-card {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500); min-height: 180px;
-  }
-  .skeleton-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sds-space-600);
-  }
-  .skeleton-widget {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500); min-height: 200px;
-  }
-
-  /* ============================================================
-     Tooltip Edge-Aware Positioning
-     ============================================================ */
-  .trust-tag-tooltip.edge-left { left: 0; transform: translateX(0); }
-  .trust-tag-tooltip.edge-left::after { left: 16px; transform: translateX(0); }
-  .trust-tag-tooltip.edge-right { left: auto; right: 0; transform: translateX(0); }
-  .trust-tag-tooltip.edge-right::after { left: auto; right: 16px; transform: translateX(0); }
-  .trust-tag-tooltip.pos-below { bottom: auto; top: calc(100% + 6px); }
-  .trust-tag-tooltip.pos-below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--sds-color-warm-gray-800); }
-
-  /* ============================================================
-     Empty State Pattern
-     ============================================================ */
-  .empty-state {
-    text-align: center; padding: var(--sds-space-1000) var(--sds-space-600);
-  }
-  .empty-state .material-symbols-outlined {
-    font-size: 48px; color: var(--sds-text-disabled);
-    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;
-    display: block; margin-bottom: var(--sds-space-400);
-  }
-  .empty-state h3 {
-    font-size: var(--sds-type-subheading); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-secondary); margin-bottom: var(--sds-space-200);
-  }
-  .empty-state p {
-    font-size: var(--sds-type-label); color: var(--sds-text-tertiary);
-    line-height: var(--sds-leading-normal); max-width: 360px; margin: 0 auto var(--sds-space-500);
-  }
-
-  /* ============================================================
-     Additional Micro-Interactions
-     ============================================================ */
-  .governance-action-item { position: relative; overflow: hidden; }
-  .governance-action-item::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(1,61,91,0.03), transparent);
-    transform: translateX(-100%); transition: transform 0.4s ease;
-    pointer-events: none;
-  }
-  .governance-action-item:hover::after { transform: translateX(100%); }
-  .insight-card { transition: box-shadow 0.15s ease, transform 0.15s ease; }
-  .insight-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
-  .home-card { transition: box-shadow 0.2s ease; }
-  .home-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-  .response-footer-btn { position: relative; }
-  .response-footer-btn::after {
-    content: ''; position: absolute; inset: 0; border-radius: 6px;
-    background: var(--sds-interactive-primary); opacity: 0;
-    transition: opacity 0.15s ease; z-index: -1;
-  }
-  .response-footer-btn:focus-visible::after { opacity: 0.06; }
-
-  /* Collapsible section transition animation (Round 2 remaining) */
-  .home-card-body.collapsible {
-    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.25s ease;
-  }
-
-  /* ============================================================
      Responsive Layout
      ============================================================ */
   @media (max-width: 1200px) {
     .home-content { padding: 0 var(--sds-space-600) var(--sds-space-1000); }
-    .skeleton-insight-row { grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-300); }
     .home-hero { padding: var(--sds-space-1000) var(--sds-space-600) var(--sds-space-600); }
     .insight-cards-row { gap: var(--sds-space-300); }
     .home-grid { gap: var(--sds-space-400); }
@@ -1501,8 +1328,6 @@
     .home-content { padding: 0 var(--sds-space-400) var(--sds-space-800); }
     .home-hero { padding: var(--sds-space-800) var(--sds-space-400) var(--sds-space-500); }
     .sds-header-nav { display: none; }
-    .skeleton-insight-row { grid-template-columns: 1fr; }
-    .skeleton-grid { grid-template-columns: 1fr; }
     .conversation-container { padding: 0 var(--sds-space-400) var(--sds-space-800); }
     .blast-flow { flex-direction: column; align-items: stretch; }
     .blast-arrow { justify-content: center; }
@@ -1547,26 +1372,6 @@
 <div class="undo-toast" id="undoToast" role="alert">
   <span>Insight dismissed</span>
   <button class="undo-toast-btn" id="undoBtn">Undo</button>
-</div>
-
-<!-- Onboarding Overlay (first-run experience) -->
-<div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Welcome walkthrough">
-  <div class="onboarding-spotlight" id="onboardingSpotlight"></div>
-  <div class="onboarding-tooltip" id="onboardingTooltip" tabindex="-1">
-    <div class="onboarding-tooltip-step" id="onboardingStep">Step 1 of 4</div>
-    <h4 id="onboardingTitle">Ask anything about your data</h4>
-    <p id="onboardingDesc">The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more.</p>
-    <div class="onboarding-tooltip-actions">
-      <button class="onboarding-tooltip-skip" id="onboardingSkip">Skip tour</button>
-      <button class="onboarding-tooltip-next" id="onboardingNext">Next</button>
-    </div>
-    <div class="onboarding-dots" id="onboardingDots">
-      <span class="onboarding-dot active"></span>
-      <span class="onboarding-dot"></span>
-      <span class="onboarding-dot"></span>
-      <span class="onboarding-dot"></span>
-    </div>
-  </div>
 </div>
 
 <!-- ============================================================
@@ -1671,7 +1476,7 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="main-content" id="main-content">
+  <main class="main-content" id="main-content" role="main">
 
     <!-- ======================================================
          #home — AI-First Homepage
@@ -1714,93 +1519,15 @@
       </div>
 
       <!-- Home Content -->
-      <div class="home-content" id="homeContent">
-
-        <!-- Skeleton Loading Placeholder (shown during initial load) -->
-        <div class="skeleton-placeholder" aria-hidden="true">
-          <div class="skeleton-insight-row">
-            <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:40%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:70%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:100%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:50%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:100px;height:28px;border-radius:6px"></div>
-                <div class="skeleton" style="width:80px;height:28px;border-radius:6px"></div>
-              </div>
-            </div>
-            <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:35%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:65%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:90%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:55%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:90px;height:28px;border-radius:6px"></div>
-              </div>
-            </div>
-            <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:45%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:60%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:85%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:40%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:110px;height:28px;border-radius:6px"></div>
-              </div>
-            </div>
-          </div>
-          <div class="skeleton-grid">
-            <div style="display:flex;flex-direction:column;gap:24px">
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:50%;height:14px;margin-bottom:16px"></div>
-                <div style="display:flex;gap:24px;align-items:center">
-                  <div class="skeleton skeleton-ring"></div>
-                  <div style="flex:1">
-                    <div class="skeleton skeleton-bar" style="width:100%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:80%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:90%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:70%"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:40%;height:14px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-bar" style="width:100%;height:8px;margin-bottom:12px"></div>
-                <div class="skeleton skeleton-text medium" style="width:60%;height:12px;margin-bottom:8px"></div>
-                <div class="skeleton skeleton-text full" style="width:90%;height:12px"></div>
-              </div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:24px">
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:45%;height:14px;margin-bottom:16px"></div>
-                <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px">
-                  <div class="skeleton" style="width:50px;height:32px;border-radius:6px"></div>
-                  <div class="skeleton skeleton-bar" style="flex:1;height:8px"></div>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                </div>
-              </div>
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:55%;height:14px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-bar" style="width:100%;height:8px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-text medium" style="width:70%;height:12px;margin-bottom:12px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="home-content">
 
         <!-- AI-Generated Insights -->
         <section aria-label="AI-Generated Insights">
         <div class="ai-section-header">
-          <h2 class="ai-section-label">
+          <div class="ai-section-label">
             <span class="material-symbols-outlined">auto_awesome</span>
             Insights
-          </h2>
+          </div>
           <button class="ai-section-link">View all insights</button>
         </div>
 
@@ -1869,18 +1596,18 @@
             <!-- AI-Readiness Score -->
             <div class="home-card">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">psychology</span>
                   AI-Readiness Score
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
+                </div>
+                <div class="home-card-badge">
                   <span class="material-symbols-outlined">auto_awesome</span>
                 </div>
               </div>
               <div class="home-card-body">
                 <div class="ai-readiness-score">
                   <div class="readiness-ring">
-                    <svg viewBox="0 0 88 88" role="img" aria-label="AI-Readiness score: 72 out of 100">
+                    <svg viewBox="0 0 88 88">
                       <circle class="readiness-ring-bg" cx="44" cy="44" r="38"/>
                       <circle class="readiness-ring-fill" cx="44" cy="44" r="38" stroke-dasharray="238.76" stroke-dashoffset="66.85"/>
                     </svg>
@@ -1891,34 +1618,34 @@
                   </div>
                   <div class="readiness-right">
                     <div class="readiness-dimensions">
-                      <div class="readiness-dim" role="meter" aria-label="Classification" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim">
                         <span class="readiness-dim-name">Classification</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:87%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill high" style="width:87%"></div></div>
                         <span class="readiness-dim-value">87%</span>
                       </div>
-                      <div class="readiness-dim highlight" role="meter" aria-label="Documentation" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim highlight">
                         <span class="readiness-dim-name">Documentation</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill mid" style="width:62%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill mid" style="width:62%"></div></div>
                         <span class="readiness-dim-value">62%</span>
                       </div>
-                      <div class="readiness-dim" role="meter" aria-label="Freshness" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim">
                         <span class="readiness-dim-name">Freshness</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:84%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill high" style="width:84%"></div></div>
                         <span class="readiness-dim-value">84%</span>
                       </div>
-                      <div class="readiness-dim" role="meter" aria-label="Lineage" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim">
                         <span class="readiness-dim-name">Lineage</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill mid" style="width:71%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill mid" style="width:71%"></div></div>
                         <span class="readiness-dim-value">71%</span>
                       </div>
-                      <div class="readiness-dim" role="meter" aria-label="Quality" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim">
                         <span class="readiness-dim-name">Quality</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:91%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill high" style="width:91%"></div></div>
                         <span class="readiness-dim-value">91%</span>
                       </div>
-                      <div class="readiness-dim" role="meter" aria-label="Schema Stability" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100">
+                      <div class="readiness-dim">
                         <span class="readiness-dim-name">Schema Stability</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:82%"></div></div>
+                        <div class="readiness-dim-bar"><div class="readiness-dim-fill high" style="width:82%"></div></div>
                         <span class="readiness-dim-value">82%</span>
                       </div>
                     </div>
@@ -1937,10 +1664,10 @@
             <!-- Source Health — collapsed by default (progressive disclosure) -->
             <div class="home-card" data-collapsible="true">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">database</span>
                   Source Health
-                </h2>
+                </div>
                 <button class="home-card-toggle" aria-expanded="true" onclick="toggleCardCollapse(this)">
                   <span class="material-symbols-outlined">expand_more</span>
                 </button>
@@ -1997,10 +1724,10 @@
             <!-- Recent Activity — collapsed by default (progressive disclosure) -->
             <div class="home-card" data-collapsible="true">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">history</span>
                   Recent Activity
-                </h2>
+                </div>
                 <button class="home-card-toggle" aria-expanded="false" onclick="toggleCardCollapse(this)">
                   <span class="material-symbols-outlined">expand_more</span>
                 </button>
@@ -2109,16 +1836,16 @@
             <!-- Security Posture -->
             <div class="home-card">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">security</span>
                   Security Posture
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
+                </div>
+                <div class="home-card-badge">
                   <span class="material-symbols-outlined">auto_awesome</span>
                 </div>
               </div>
               <div class="home-card-body">
-                <div class="security-score-row" role="meter" aria-label="Security score" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
+                <div class="security-score-row">
                   <div>
                     <div class="security-score-value">83 <span class="security-score-unit">/ 100</span></div>
                     <div class="security-score-meta">&uarr; +5 this week</div>
@@ -2162,20 +1889,20 @@
             <!-- Governance Progress -->
             <div class="home-card">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">emoji_events</span>
                   Governance Progress
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
+                </div>
+                <div class="home-card-badge">
                   <span class="material-symbols-outlined">auto_awesome</span>
                 </div>
               </div>
               <div class="home-card-body">
-                <div class="governance-score-row" role="meter" aria-label="Governance progress" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100">
+                <div class="governance-score-row">
                   <div class="governance-score-value">
                     67%
                   </div>
-                  <div class="governance-bar" aria-hidden="true"><div class="governance-fill" style="width: 67%;"></div></div>
+                  <div class="governance-bar"><div class="governance-fill" style="width: 67%;"></div></div>
                 </div>
                 <div class="governance-stage">
                   Stage: <strong>Classification</strong> (Month 2)
@@ -2216,10 +1943,10 @@
             <!-- Popular on Your Team — collapsed by default -->
             <div class="home-card" data-collapsible="true">
               <div class="home-card-header">
-                <h2 class="home-card-title">
+                <div class="home-card-title">
                   <span class="material-symbols-outlined">trending_up</span>
                   Popular on Your Team
-                </h2>
+                </div>
                 <button class="home-card-toggle" aria-expanded="false" onclick="toggleCardCollapse(this)">
                   <span class="material-symbols-outlined">expand_more</span>
                 </button>
@@ -2276,16 +2003,10 @@
       </div>
 
       <div class="conversation-container">
-        <div class="conversation-actions-bar">
-          <button class="conversation-back" onclick="navigateTo('home')" style="margin-bottom:0">
-            <span class="material-symbols-outlined">arrow_back</span>
-            Back to dashboard
-          </button>
-          <button class="clear-conversation-btn" id="clearConvBtn" onclick="clearConversation()" aria-label="Clear this conversation and return to dashboard">
-            <span class="material-symbols-outlined">delete_sweep</span>
-            Clear conversation
-          </button>
-        </div>
+        <button class="conversation-back" onclick="navigateTo('home')">
+          <span class="material-symbols-outlined">arrow_back</span>
+          Back to dashboard
+        </button>
 
         <div class="conversation-messages" id="conversationMessages">
           <!-- User Query -->
@@ -2308,24 +2029,6 @@
             </div>
           </div>
 
-          <!-- AI Error State (shown on timeout) -->
-          <div class="conv-msg assistant" id="aiErrorMsg" style="display: none;">
-            <div class="ai-error-state" role="alert">
-              <span class="material-symbols-outlined">error</span>
-              <div class="ai-error-state-body">
-                <h4>Something went wrong</h4>
-                <p>The AI assistant could not generate a response. This may be a temporary issue with the analysis service. Your query has been saved.</p>
-                <div style="display: flex; gap: var(--sds-space-200);">
-                  <button class="btn-primary-sm" id="retryBtn" onclick="retryQuery()">
-                    <span class="material-symbols-outlined" style="font-size:14px">refresh</span>
-                    Try again
-                  </button>
-                  <button class="btn-secondary-sm" onclick="navigateTo('home')">Back to dashboard</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- AI Response with blast radius -->
           <div class="conv-msg assistant" id="aiResponseMsg">
             <div class="response-card">
@@ -2334,7 +2037,7 @@
 
                 <!-- Result 1 with trust tags + tooltips -->
                 <div class="result-item">
-                  <button class="result-item-header" onclick="navigateTo('catalog')" aria-label="View in catalog">
+                  <div class="result-item-header" onclick="navigateTo('catalog')">
                     <div class="result-item-left">
                       <div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div>
                       <div>
@@ -2351,12 +2054,12 @@
                     <div class="result-item-meta">
                       <span class="result-item-tag result-tag-error">3 Columns Renamed</span>
                     </div>
-                  </button>
+                  </div>
                 </div>
 
                 <!-- Result 2 -->
                 <div class="result-item">
-                  <button class="result-item-header" onclick="navigateTo('catalog')" aria-label="View in catalog">
+                  <div class="result-item-header" onclick="navigateTo('catalog')">
                     <div class="result-item-left">
                       <div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div>
                       <div>
@@ -2372,12 +2075,12 @@
                     <div class="result-item-meta">
                       <span class="result-item-tag result-tag-warning">2 Cols Added</span>
                     </div>
-                  </button>
+                  </div>
                 </div>
 
                 <!-- Result 3 -->
                 <div class="result-item">
-                  <button class="result-item-header" onclick="navigateTo('catalog')" aria-label="View in catalog">
+                  <div class="result-item-header" onclick="navigateTo('catalog')">
                     <div class="result-item-left">
                       <div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div>
                       <div>
@@ -2393,7 +2096,7 @@
                     <div class="result-item-meta">
                       <span class="result-item-tag result-tag-warning">1 Col Removed</span>
                     </div>
-                  </button>
+                  </div>
                 </div>
 
                 <!-- Blast Radius Visualization -->
@@ -2407,17 +2110,17 @@
                       crm_prod.contacts
                       <span class="blast-node-sub">3 cols renamed</span>
                     </div>
-                    <div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div>
+                    <div class="blast-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
                     <div class="blast-node impacted">
                       4 dbt models
                       <span class="blast-node-sub">stg_contacts, dim_customer, fct_engagement, int_crm_unified</span>
                     </div>
-                    <div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div>
+                    <div class="blast-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
                     <div class="blast-node impacted">
                       2 dashboards
                       <span class="blast-node-sub">Customer 360, Marketing KPIs</span>
                     </div>
-                    <div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div>
+                    <div class="blast-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
                     <div class="blast-node">
                       ~340 queries/day
                       <span class="blast-node-sub">12 users affected</span>
@@ -2457,7 +2160,7 @@
               <div class="response-card-body">
                 <p>The <strong>Customer 360</strong> dashboard is used by 8 team members (Sales, CS) and the <strong>Marketing KPIs</strong> dashboard is embedded in the executive weekly review. Together they serve ~340 queries per day from 12 unique users. The most impacted consumers:</p>
                 <div class="result-item">
-                  <button class="result-item-header" onclick="navigateTo('catalog')" aria-label="View in catalog">
+                  <div class="result-item-header" onclick="navigateTo('catalog')">
                     <div class="result-item-left">
                       <div class="result-item-icon"><span class="material-symbols-outlined">dashboard</span></div>
                       <div>
@@ -2472,10 +2175,10 @@
                     <div class="result-item-meta">
                       <span class="result-item-usage">8 users &middot; 210 queries/day</span>
                     </div>
-                  </button>
+                  </div>
                 </div>
                 <div class="result-item">
-                  <button class="result-item-header" onclick="navigateTo('catalog')" aria-label="View in catalog">
+                  <div class="result-item-header" onclick="navigateTo('catalog')">
                     <div class="result-item-left">
                       <div class="result-item-icon"><span class="material-symbols-outlined">dashboard</span></div>
                       <div>
@@ -2490,7 +2193,7 @@
                     <div class="result-item-meta">
                       <span class="result-item-usage">4 users &middot; 130 queries/day</span>
                     </div>
-                  </button>
+                  </div>
                 </div>
               </div>
               <div class="response-attribution">
@@ -2512,8 +2215,8 @@
         </div>
 
         <!-- Follow-up input -->
-        <div class="conv-follow-input" role="search" aria-label="Follow-up question">
-          <input type="text" placeholder="Ask a follow-up question..." aria-label="Ask a follow-up question" autocomplete="off">
+        <div class="conv-follow-input">
+          <input type="text" placeholder="Ask a follow-up question..." aria-label="Ask a follow-up question">
           <button class="conv-follow-send" aria-label="Send follow-up">
             <span class="material-symbols-outlined">arrow_upward</span>
           </button>
@@ -2547,13 +2250,13 @@
           <table class="catalog-table" aria-label="Data catalog assets">
             <thead>
               <tr>
-                <th scope="col">Asset Name</th>
-                <th scope="col">Source</th>
-                <th scope="col">Classification</th>
-                <th scope="col">Quality</th>
-                <th scope="col">Owner</th>
-                <th scope="col">Trust</th>
-                <th scope="col" class="catalog-th-actions"><span class="sr-only">Actions</span></th>
+                <th>Asset Name</th>
+                <th>Source</th>
+                <th>Classification</th>
+                <th>Quality</th>
+                <th>Owner</th>
+                <th>Trust</th>
+                <th class="catalog-th-actions"></th>
               </tr>
             </thead>
             <tbody>
@@ -2712,7 +2415,7 @@
         </div>
         <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
           <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">security</span>
-          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Security Posture Detail View</h2>
+          <h3 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary);">Security Posture Detail View</h3>
           <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Full security posture dashboard with compliance tracking, access audit logs, and risk assessment. Coming in the next sprint.</p>
           <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
         </div>
@@ -2833,51 +2536,45 @@
   });
 
   // ============================================================
-  // AI Query with thinking animation + error timeout
+  // AI Query with thinking animation transition
   // ============================================================
-  let currentQuery = '';
-  let aiResponseTimeout = null;
-  let aiErrorTimeout = null;
-
   function askAI(query) {
-    currentQuery = query;
     document.getElementById('convUserQuery').textContent = query;
     document.getElementById('ai-status').textContent = 'Searching for: ' + query;
 
-    // Show thinking state, hide response and error
+    // Show thinking state, hide response
     const thinkingMsg = document.getElementById('aiThinkingMsg');
     const responseMsg = document.getElementById('aiResponseMsg');
-    const errorMsg = document.getElementById('aiErrorMsg');
     const thinkingLabel = document.getElementById('aiThinkingLabel');
 
     thinkingMsg.style.display = '';
     responseMsg.style.display = 'none';
-    errorMsg.style.display = 'none';
-
-    // Clear any existing timeouts
-    clearTimeout(aiResponseTimeout);
-    clearTimeout(aiErrorTimeout);
 
     // Set contextual thinking label
-    const q = query.toLowerCase();
-    if (q.includes('schema')) thinkingLabel.textContent = 'Analyzing schema changes across 14 sources...';
-    else if (q.includes('pii')) thinkingLabel.textContent = 'Scanning catalog for PII columns...';
-    else if (q.includes('blast')) thinkingLabel.textContent = 'Tracing downstream dependencies...';
-    else if (q.includes('access') || q.includes('stale')) thinkingLabel.textContent = 'Reviewing access logs and permissions...';
-    else if (q.includes('risk') || q.includes('security')) thinkingLabel.textContent = 'Assessing risk posture across sources...';
-    else if (q.includes('classify')) thinkingLabel.textContent = 'Running classification patterns...';
-    else if (q.includes('doc')) thinkingLabel.textContent = 'Generating documentation from schema metadata...';
-    else if (q.includes('impact') || q.includes('downstream')) thinkingLabel.textContent = 'Mapping downstream impact across the lineage graph...';
-    else if (q.includes('compliance') || q.includes('hipaa')) thinkingLabel.textContent = 'Checking compliance status against regulatory requirements...';
-    else if (q.includes('owner') || q.includes('assign')) thinkingLabel.textContent = 'Looking up ownership assignments and gaps...';
-    else thinkingLabel.textContent = 'Analyzing your data environment...';
+    if (query.toLowerCase().includes('schema')) {
+      thinkingLabel.textContent = 'Analyzing schema changes across 14 sources...';
+    } else if (query.toLowerCase().includes('pii')) {
+      thinkingLabel.textContent = 'Scanning catalog for PII columns...';
+    } else if (query.toLowerCase().includes('blast')) {
+      thinkingLabel.textContent = 'Tracing downstream dependencies...';
+    } else if (query.toLowerCase().includes('access') || query.toLowerCase().includes('stale')) {
+      thinkingLabel.textContent = 'Reviewing access logs and permissions...';
+    } else if (query.toLowerCase().includes('risk') || query.toLowerCase().includes('security')) {
+      thinkingLabel.textContent = 'Assessing risk posture across sources...';
+    } else if (query.toLowerCase().includes('classify')) {
+      thinkingLabel.textContent = 'Running classification patterns...';
+    } else if (query.toLowerCase().includes('doc')) {
+      thinkingLabel.textContent = 'Generating documentation from schema metadata...';
+    } else {
+      thinkingLabel.textContent = 'Analyzing your data environment...';
+    }
 
     navigateTo('home-conversation');
     promptInput.value = '';
     sendBtn.classList.remove('visible');
 
     // Simulate AI processing delay, then reveal response
-    aiResponseTimeout = setTimeout(() => {
+    setTimeout(() => {
       thinkingMsg.style.display = 'none';
       responseMsg.style.display = '';
       responseMsg.style.animation = 'none';
@@ -2886,34 +2583,11 @@
       document.getElementById('ai-status').textContent = 'AI response ready for: ' + query;
     }, 2200);
 
-    // Error timeout: if response not shown in 15s, show error state
-    aiErrorTimeout = setTimeout(() => {
-      if (responseMsg.style.display === 'none' && thinkingMsg.style.display !== 'none') {
-        thinkingMsg.style.display = 'none';
-        errorMsg.style.display = '';
-        errorMsg.style.animation = 'msgSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both';
-        document.getElementById('ai-status').textContent = 'AI response failed for: ' + query;
-      }
-    }, 15000);
-
     // Focus management
     setTimeout(() => {
       const backBtn = document.querySelector('.conversation-back');
       if (backBtn) backBtn.focus();
     }, 350);
-  }
-
-  function retryQuery() {
-    if (currentQuery) askAI(currentQuery);
-  }
-
-  function clearConversation() {
-    clearTimeout(aiResponseTimeout);
-    clearTimeout(aiErrorTimeout);
-    currentQuery = '';
-    document.getElementById('ai-status').textContent = 'Conversation cleared.';
-    navigateTo('home');
-    setTimeout(() => promptInput.focus(), 300);
   }
 
   // ============================================================
@@ -3068,6 +2742,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'd' || e.key === 'D') {
+      // Dismiss first visible insight card that's focused or hovered
       const focused = document.activeElement;
       if (focused && focused.closest('.insight-card')) {
         const dismissBtn = focused.closest('.insight-card').querySelector('.insight-card-dismiss');
@@ -3075,202 +2750,6 @@
       }
     }
   });
-
-  // ============================================================
-  // Skeleton Loading State — simulated initial load
-  // ============================================================
-  (function initSkeletonLoading() {
-    const homeContent = document.getElementById('homeContent');
-    if (!homeContent) return;
-    homeContent.classList.add('skeleton-loading');
-
-    setTimeout(() => {
-      homeContent.classList.remove('skeleton-loading');
-      // After skeleton resolves, check for first-run onboarding
-      if (!localStorage.getItem('strata_onboarding_complete')) {
-        setTimeout(() => startOnboarding(), 600);
-      }
-    }, 1200);
-  })();
-
-  // ============================================================
-  // Tooltip Edge-Aware Positioning
-  // ============================================================
-  document.querySelectorAll('.trust-tag').forEach(tag => {
-    tag.addEventListener('mouseenter', () => {
-      const tooltip = tag.querySelector('.trust-tag-tooltip');
-      if (!tooltip) return;
-      // Reset classes
-      tooltip.classList.remove('edge-left', 'edge-right', 'pos-below');
-      // Check position
-      const tagRect = tag.getBoundingClientRect();
-      const tooltipWidth = 200; // approximate
-      if (tagRect.left < tooltipWidth / 2) {
-        tooltip.classList.add('edge-left');
-      } else if (window.innerWidth - tagRect.right < tooltipWidth / 2) {
-        tooltip.classList.add('edge-right');
-      }
-      if (tagRect.top < 60) {
-        tooltip.classList.add('pos-below');
-      }
-    });
-  });
-
-  // ============================================================
-  // Onboarding Walkthrough (first-run experience)
-  // ============================================================
-  const onboardingSteps = [
-    {
-      target: '.ai-prompt-bar',
-      title: 'Ask anything about your data',
-      desc: 'The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more.',
-      position: 'below'
-    },
-    {
-      target: '.role-selector-btn',
-      title: 'Personalize your view',
-      desc: 'Switch roles to see insights tailored for engineers, analysts, stewards, security leads, or executives.',
-      position: 'below'
-    },
-    {
-      target: '.insight-cards-row',
-      title: 'AI-generated insights',
-      desc: 'Prioritized alerts about schema drift, stale access, and auto-classified data. Dismiss or act on each with one click.',
-      position: 'below'
-    },
-    {
-      target: '.governance-actions-list',
-      title: 'Track governance progress',
-      desc: 'Complete guided actions to improve your governance score. Each task shows its point value to help you prioritize.',
-      position: 'above'
-    }
-  ];
-
-  let onboardingIndex = 0;
-
-  function startOnboarding() {
-    onboardingIndex = 0;
-    const overlay = document.getElementById('onboardingOverlay');
-    overlay.classList.add('visible');
-    showOnboardingStep();
-  }
-
-  function showOnboardingStep() {
-    const step = onboardingSteps[onboardingIndex];
-    const targetEl = document.querySelector(step.target);
-    if (!targetEl) { endOnboarding(); return; }
-
-    const overlay = document.getElementById('onboardingOverlay');
-    const spotlight = document.getElementById('onboardingSpotlight');
-    const tooltip = document.getElementById('onboardingTooltip');
-    const stepLabel = document.getElementById('onboardingStep');
-    const title = document.getElementById('onboardingTitle');
-    const desc = document.getElementById('onboardingDesc');
-    const dots = document.getElementById('onboardingDots');
-    const nextBtn = document.getElementById('onboardingNext');
-
-    // Scroll target into view
-    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    setTimeout(() => {
-      const rect = targetEl.getBoundingClientRect();
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const mainContent = document.querySelector('.main-content');
-      const mainScrollTop = mainContent ? mainContent.scrollTop : 0;
-
-      // Position spotlight
-      const pad = 8;
-      spotlight.style.top = (rect.top - pad) + 'px';
-      spotlight.style.left = (rect.left - pad) + 'px';
-      spotlight.style.width = (rect.width + pad * 2) + 'px';
-      spotlight.style.height = (rect.height + pad * 2) + 'px';
-
-      // Position tooltip
-      if (step.position === 'below') {
-        tooltip.style.top = (rect.bottom + 16) + 'px';
-        tooltip.style.left = Math.max(20, rect.left) + 'px';
-        tooltip.style.bottom = 'auto';
-      } else {
-        tooltip.style.bottom = (window.innerHeight - rect.top + 16) + 'px';
-        tooltip.style.left = Math.max(20, rect.left) + 'px';
-        tooltip.style.top = 'auto';
-      }
-
-      // Content
-      stepLabel.textContent = 'Step ' + (onboardingIndex + 1) + ' of ' + onboardingSteps.length;
-      title.textContent = step.title;
-      desc.textContent = step.desc;
-      nextBtn.textContent = onboardingIndex === onboardingSteps.length - 1 ? 'Get started' : 'Next';
-
-      // Dots
-      dots.innerHTML = onboardingSteps.map((_, i) =>
-        '<span class="onboarding-dot' + (i === onboardingIndex ? ' active' : '') + '"></span>'
-      ).join('');
-
-      // Re-animate tooltip
-      tooltip.style.animation = 'none';
-      tooltip.offsetHeight;
-      tooltip.style.animation = 'msgSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both';
-      tooltip.focus();
-    }, 400);
-  }
-
-  function endOnboarding() {
-    const overlay = document.getElementById('onboardingOverlay');
-    overlay.classList.remove('visible');
-    localStorage.setItem('strata_onboarding_complete', 'true');
-    document.getElementById('ai-status').textContent = 'Welcome tour complete.';
-    setTimeout(() => document.getElementById('aiPromptInput').focus(), 300);
-  }
-
-  document.getElementById('onboardingNext').addEventListener('click', () => {
-    onboardingIndex++;
-    if (onboardingIndex >= onboardingSteps.length) {
-      endOnboarding();
-    } else {
-      showOnboardingStep();
-    }
-  });
-
-  document.getElementById('onboardingSkip').addEventListener('click', endOnboarding);
-
-  // Escape closes onboarding
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('onboardingOverlay').classList.contains('visible')) {
-      endOnboarding();
-    }
-  });
-
-  // ============================================================
-  // Save collapsed state preferences (localStorage)
-  // ============================================================
-  (function initCollapsePrefs() {
-    document.querySelectorAll('.home-card[data-collapsible]').forEach((card, i) => {
-      const key = 'strata_collapse_' + i;
-      const saved = localStorage.getItem(key);
-      const toggle = card.querySelector('.home-card-toggle');
-      const body = card.querySelector('.home-card-body.collapsible');
-      if (!toggle || !body) return;
-      if (saved === 'expanded') {
-        body.classList.remove('collapsed');
-        toggle.setAttribute('aria-expanded', 'true');
-      } else if (saved === 'collapsed') {
-        body.classList.add('collapsed');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  })();
-
-  // Persist collapse state on toggle
-  const origToggle = window.toggleCardCollapse;
-  window.toggleCardCollapse = function(toggleBtn) {
-    origToggle(toggleBtn);
-    const cards = document.querySelectorAll('.home-card[data-collapsible]');
-    cards.forEach((card, i) => {
-      const t = card.querySelector('.home-card-toggle');
-      if (t) localStorage.setItem('strata_collapse_' + i, t.getAttribute('aria-expanded') === 'true' ? 'expanded' : 'collapsed');
-    });
-  };
 </script>
 </body>
 </html>
