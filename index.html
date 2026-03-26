@@ -159,13 +159,27 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .ai-prompt-bar:focus-within { transform: none !important; }
+    .sds-card--hoverable:hover { transform: none !important; }
+    .sds-card--hoverable:active { transform: none !important; }
+    .conv-msg { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .onboarding-tooltip { animation: none !important; }
+    .screen.active { animation: none !important; }
+    .undo-toast.visible { transition: none !important; }
+    .confirm-toast.visible { transition: none !important; }
+    .onboarding-spotlight { transition: none !important; }
   }
 
   /* Active/pressed states */
   button:active:not(:disabled), .sds-sidenav-item:active,
   .suggestion-chip:active, .quick-action-item:active,
-  .popular-query-item:active, .sds-insight__action:active {
+  .sds-insight__action:active {
     transform: scale(0.97);
     transition: transform 0.06s ease;
   }
@@ -303,12 +317,13 @@
   }
   .role-dropdown.visible { display: block; animation: fadeIn 0.12s ease; }
   .role-dropdown-item {
-    display: flex; flex-direction: column; gap: 1px;
+    display: flex; flex-direction: column; gap: var(--sds-space-050);
     padding: var(--sds-space-200) var(--sds-space-400); cursor: pointer;
-    transition: background 0.1s; border: none; background: transparent;
+    transition: background 0.12s ease; border: none; background: transparent;
     font-family: var(--sds-font-sans); text-align: left; width: 100%;
   }
   .role-dropdown-item:hover { background: var(--sds-bg-subtle); }
+  .role-dropdown-item:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: -2px; border-radius: 4px; }
   .role-dropdown-item.active { background: var(--sds-color-blue-025); }
   .role-dropdown-item .role-name { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); }
   .role-dropdown-item .role-title { font-size: var(--sds-type-caption); color: var(--sds-text-tertiary); }
@@ -371,14 +386,9 @@
     background: linear-gradient(180deg, var(--sds-color-blue-025) 0%, var(--sds-bg-surface) 100%);
   }
   .home-hero--compact { padding-bottom: var(--sds-space-400); }
-  .home-hero-greeting h1 {
-    font-size: var(--sds-type-display); font-weight: var(--sds-weight-bold);
-    color: var(--sds-text-primary); line-height: var(--sds-leading-tight);
-    letter-spacing: var(--sds-tracking-tight); margin-bottom: var(--sds-space-200);
-  }
-  .home-hero-greeting .hero-subtitle {
+  .hero-subtitle {
     font-size: var(--sds-type-body); color: var(--sds-text-secondary);
-    margin-bottom: var(--sds-space-800); display: flex; align-items: center;
+    display: flex; align-items: center;
     justify-content: center; gap: var(--sds-space-200); flex-wrap: wrap;
   }
   .hero-subtitle .hero-stat {
@@ -386,6 +396,9 @@
   }
   .hero-subtitle .hero-dot {
     width: 3px; height: 3px; border-radius: 50%; background: var(--sds-text-disabled);
+  }
+  .hero-subtitle--spaced {
+    margin-top: var(--sds-space-400);
   }
 
   /* AI Prompt Bar */
@@ -418,7 +431,7 @@
     font-family: var(--sds-font-sans); font-size: var(--sds-type-overline);
     color: var(--sds-text-tertiary); background: var(--sds-bg-subtle);
     border: 1px solid var(--sds-border-default); border-radius: 5px;
-    padding: 2px 7px; line-height: 1.3; white-space: nowrap;
+    padding: var(--sds-space-050) var(--sds-space-200); line-height: 1.3; white-space: nowrap;
   }
   .ai-prompt-bar .prompt-send {
     width: 32px; height: 32px; border-radius: 8px; border: none;
@@ -474,6 +487,7 @@
     cursor: pointer; background: none; border: none; font-family: var(--sds-font-sans);
   }
   .ai-section-link:hover { text-decoration: underline; }
+  .ai-section-link:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; border-radius: 4px; }
 
   /* Insight Cards Row */
   .insight-cards-row {
@@ -487,7 +501,7 @@
   .sds-insight {
     background: var(--sds-color-white);
     border: 1px solid var(--sds-color-warm-gray-100);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: var(--sds-space-500);
     display: flex;
     gap: var(--sds-space-400);
@@ -544,7 +558,7 @@
     gap: var(--sds-space-300);
     margin-top: var(--sds-space-100);
     font-size: var(--sds-type-caption);
-    color: var(--sds-color-warm-gray-450);
+    color: var(--sds-text-secondary);
   }
   .sds-insight__meta-divider {
     width: 1px;
@@ -644,17 +658,108 @@
     font-weight: var(--sds-weight-semibold);
   }
   .insights-footer button:hover { text-decoration: underline; }
+  .insights-footer button:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; border-radius: 4px; }
 
-  /* Two-Column Grid */
-  .home-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sds-space-600);
+  /* (home-grid removed — replaced by single-column Data Health card) */
+
+  /* R3: Smooth transitions on card hover (micro-interaction polish) */
+  .sds-card { transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+  .sds-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+  /* Popular Queries Inline Chips */
+  .popular-chip {
+    font-size: var(--sds-type-caption); color: var(--sds-text-secondary);
+    background: var(--sds-bg-subtle); border: 1px solid var(--sds-border-subtle);
+    border-radius: 16px; padding: var(--sds-space-100) var(--sds-space-300);
+    cursor: pointer; font-family: var(--sds-font-sans);
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
-  .home-grid-col { display: flex; flex-direction: column; gap: var(--sds-space-600); }
+  .popular-chip:hover { background: var(--sds-color-warm-gray-100); border-color: var(--sds-border-default); color: var(--sds-text-primary); }
+  .popular-chip:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; }
+  .popular-chip:active { transform: scale(0.97); transition: transform 0.06s ease; }
+
+  /* Data Health Next Action Items */
+  .health-action-item {
+    display: flex; align-items: center; gap: var(--sds-space-300);
+    padding: var(--sds-space-300) var(--sds-space-400); background: none; border: none;
+    border-bottom: 1px solid var(--sds-border-subtle); cursor: pointer;
+    width: 100%; text-align: left; font-family: inherit;
+    transition: background 0.15s ease;
+  }
+  .health-action-item:last-child { border-bottom: none; }
+  .health-action-item:hover { background: var(--sds-bg-subtle); }
+  .health-action-item:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: -2px; border-radius: 4px; }
+  .health-action-item:active { transform: scale(0.98); transition: transform 0.06s ease; }
+  .health-action-item .material-symbols-outlined { font-size: 18px; color: var(--sds-text-tertiary); }
+  .health-action-item__label { flex: 1; font-size: var(--sds-type-body); color: var(--sds-text-primary); }
+  .health-action-item__points { font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold); color: var(--sds-color-green-500); }
+
+  /* Data Health Score Styles */
+  .health-score { text-align: center; flex-shrink: 0; }
+  .health-score__value { font-size: 48px; font-weight: var(--sds-weight-bold); color: var(--sds-text-primary); line-height: 1; }
+  .health-score__max { font-size: var(--sds-type-label); color: var(--sds-text-tertiary); }
+  .health-score__trend { font-size: var(--sds-type-caption); color: var(--sds-color-green-500); margin-top: var(--sds-space-100); }
+
+  /* Data Health Dimension Bars */
+  .health-dimensions { flex: 1; display: flex; flex-direction: column; gap: var(--sds-space-300); }
+  .health-dimension__header { display: flex; justify-content: space-between; margin-bottom: var(--sds-space-100); }
+  .health-dimension__name { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); }
+  .health-dimension__pct { font-size: var(--sds-type-label); color: var(--sds-text-secondary); }
+  .health-bar { height: 8px; background: var(--sds-color-warm-gray-100); border-radius: 4px; overflow: hidden; }
+  .health-bar__fill { height: 100%; border-radius: 4px; }
+  .health-bar__fill--green { background: var(--sds-color-green-400); }
+  .health-bar__fill--yellow { background: var(--sds-color-yellow-200); }
+
+  /* AI Note in Data Health */
+  .health-ai-note {
+    background: var(--sds-color-blue-050); border-left: 3px solid var(--sds-interactive-primary);
+    border-radius: 0 8px 8px 0; padding: var(--sds-space-300) var(--sds-space-400);
+    margin-bottom: var(--sds-space-500);
+  }
+  .health-ai-note__inner { display: flex; align-items: flex-start; gap: var(--sds-space-200); }
+  .health-ai-note__inner .material-symbols-outlined { font-size: 16px; color: var(--sds-interactive-primary); margin-top: 2px; }
+  .health-ai-note__inner p { font-size: var(--sds-type-label); color: var(--sds-text-primary); margin: 0; line-height: var(--sds-leading-normal); }
+
+  /* Data Health Next Actions Section Header */
+  .health-actions-label {
+    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
+    text-transform: uppercase; letter-spacing: var(--sds-tracking-wide);
+    color: var(--sds-text-tertiary); margin-bottom: var(--sds-space-300);
+  }
+
+  /* Data Health Footer */
+  .health-card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: var(--sds-space-400); padding-top: var(--sds-space-400);
+    border-top: 1px solid var(--sds-border-subtle);
+  }
+  .health-card-footer__link {
+    font-size: var(--sds-type-label); color: var(--sds-text-link);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    font-weight: var(--sds-weight-medium); display: flex; align-items: center;
+    gap: var(--sds-space-100);
+  }
+  .health-card-footer__link:hover { text-decoration: underline; }
+  .health-card-footer__link:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; border-radius: 4px; }
+  .health-card-footer__link .material-symbols-outlined { font-size: 16px; }
+  .health-card-footer__meta { font-size: var(--sds-type-caption); color: var(--sds-text-secondary); }
+
+  /* Popular Queries Row */
+  .popular-queries-row {
+    display: flex; align-items: center; gap: var(--sds-space-300);
+    margin-top: var(--sds-space-500); padding: 0 var(--sds-space-100);
+  }
+  .popular-queries-label {
+    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
+    white-space: nowrap; display: flex; align-items: center; gap: var(--sds-space-150);
+  }
+  .popular-queries-label .material-symbols-outlined { font-size: 16px; }
+  .popular-queries-chips { display: flex; gap: var(--sds-space-200); flex-wrap: wrap; }
 
   /* Card Styles */
   .home-card {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; overflow: hidden;
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; overflow: hidden;
   }
   .home-card-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -680,167 +785,19 @@
   }
   .home-card-body { padding: 0 var(--sds-space-500) var(--sds-space-500); }
 
-  /* Collapsible card body for progressive disclosure */
-  .home-card-body.collapsible { overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; }
-  .home-card-body.collapsible.collapsed { max-height: 0 !important; opacity: 0; padding-top: 0; padding-bottom: 0; }
-  .home-card-toggle {
-    display: flex; align-items: center; gap: var(--sds-space-100);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    padding: 0; transition: color 0.12s ease;
-  }
-  .home-card-toggle:hover { color: var(--sds-text-primary); }
-  .home-card-toggle .material-symbols-outlined {
-    font-size: 16px; transition: transform 0.2s ease;
-    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-  .home-card-toggle[aria-expanded="false"] .material-symbols-outlined { transform: rotate(-90deg); }
+  /* (Collapsible card styles removed — no more collapsible cards on homepage) */
 
-  /* ============================================================
-     AI-Readiness Score
-     ============================================================ */
-  .ai-readiness-score {
-    display: flex; align-items: center; gap: var(--sds-space-600);
-    margin-bottom: var(--sds-space-500);
-  }
-  .readiness-ring {
-    width: 88px; height: 88px; position: relative; flex-shrink: 0;
-  }
-  .readiness-ring svg { width: 88px; height: 88px; transform: rotate(-90deg); }
-  .readiness-ring-bg { fill: none; stroke: var(--sds-color-warm-gray-100); stroke-width: 6; }
-  .readiness-ring-fill { fill: none; stroke: var(--sds-interactive-primary); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
-  .readiness-ring-label {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  .readiness-ring-value { font-size: 22px; font-weight: var(--sds-weight-bold); color: var(--sds-text-primary); line-height: 1; }
-  .readiness-ring-caption { font-size: var(--sds-type-overline); color: var(--sds-text-tertiary); margin-top: 2px; }
-  .readiness-right { flex: 1; min-width: 0; }
-  .readiness-right .readiness-label { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); margin-bottom: var(--sds-space-100); }
-  .readiness-dimensions { display: flex; flex-direction: column; gap: var(--sds-space-200); }
-  .readiness-dim {
-    display: flex; align-items: center; gap: var(--sds-space-200);
-  }
-  .readiness-dim-name { font-size: var(--sds-type-caption); color: var(--sds-text-secondary); width: 108px; flex-shrink: 0; text-align: right; }
-  .readiness-dim-bar { flex: 1; height: 6px; background: var(--sds-color-warm-gray-100); border-radius: 3px; overflow: hidden; }
-  .readiness-dim-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-  .readiness-dim-fill.high { background: var(--sds-color-green-400); }
-  .readiness-dim-fill.mid { background: var(--sds-color-yellow-200); }
-  .readiness-dim-fill.low { background: var(--sds-color-red-500); }
-  .readiness-dim-value { font-size: var(--sds-type-caption); color: var(--sds-text-primary); font-weight: var(--sds-weight-semibold); width: 32px; }
-  .readiness-dim.highlight .readiness-dim-name { color: var(--sds-status-warning-text); font-weight: var(--sds-weight-semibold); }
+  /* (AI-Readiness Score removed — merged into Data Health card) */
 
-  .readiness-ai-note {
-    background: var(--sds-color-blue-025); border-radius: 8px;
-    padding: var(--sds-space-300) var(--sds-space-400); margin-top: var(--sds-space-400);
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary); line-height: var(--sds-leading-normal);
-    position: relative;
-  }
-  .readiness-ai-note::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--sds-color-blue-450); border-radius: 3px 0 0 3px;
-  }
-  .readiness-card-actions {
-    display: flex; gap: var(--sds-space-200); margin-top: var(--sds-space-400);
-  }
+  /* (Source Health removed — moved to Sources page) */
 
-  /* ============================================================
-     Source Health
-     ============================================================ */
-  .source-health-summary {
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    margin-bottom: var(--sds-space-400);
-  }
-  .source-health-status {
-    display: flex; gap: var(--sds-space-400); margin-bottom: var(--sds-space-400);
-  }
-  .source-status-item {
-    display: flex; align-items: center; gap: var(--sds-space-150);
-    font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold);
-  }
-  .source-status-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
-  .source-status-dot.green { background: var(--sds-color-green-400); }
-  .source-status-dot.yellow { background: var(--sds-color-yellow-200); }
-  .source-status-dot.red { background: var(--sds-color-red-500); }
-  .source-status-text-success { color: var(--sds-status-success-text); }
-  .source-status-text-warning { color: var(--sds-status-warning-text); }
-  .source-status-text-error { color: var(--sds-status-error-text); }
-  .source-breach-list { display: flex; flex-direction: column; gap: var(--sds-space-200); }
-  .source-breach-item {
-    display: flex; align-items: flex-start; gap: var(--sds-space-300);
-    padding: var(--sds-space-300); background: var(--sds-status-error-bg);
-    border-radius: 8px; border: 1px solid var(--sds-color-red-100);
-  }
-  .source-breach-item .material-symbols-outlined {
-    font-size: 16px; color: var(--sds-status-error-text); flex-shrink: 0; margin-top: 1px;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .source-breach-info { flex: 1; min-width: 0; }
-  .source-breach-info .breach-name { font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold); color: var(--sds-text-primary); font-family: var(--sds-font-mono); }
-  .source-breach-info .breach-meta { font-size: var(--sds-type-caption); color: var(--sds-text-secondary); margin-top: var(--sds-space-050); }
-  .source-breach-info .breach-status { color: var(--sds-status-error-text); }
-  .source-breach-actions { display: flex; gap: var(--sds-space-200); margin-top: var(--sds-space-200); }
+  /* (Recent Activity removed — moved to dedicated Activity page) */
 
-  /* ============================================================
-     Recent Activity (AI-Enhanced)
-     ============================================================ */
-  .activity-timeline { display: flex; flex-direction: column; }
-  .activity-item {
-    display: flex; align-items: flex-start; gap: var(--sds-space-300);
-    padding: var(--sds-space-300) 0; position: relative;
-  }
-  .activity-item:not(:last-child) { border-bottom: 1px solid var(--sds-border-subtle); }
-  .activity-item-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .activity-item-icon .material-symbols-outlined {
-    font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .activity-item-icon.success { background: var(--sds-status-success-bg); }
-  .activity-item-icon.success .material-symbols-outlined { color: var(--sds-status-success-text); }
-  .activity-item-icon.warning { background: var(--sds-status-warning-bg); }
-  .activity-item-icon.warning .material-symbols-outlined { color: var(--sds-status-warning-text); }
-  .activity-item-icon.info { background: var(--sds-status-info-bg); }
-  .activity-item-icon.info .material-symbols-outlined { color: var(--sds-status-info-text); }
-  .activity-item-icon.purple { background: var(--sds-status-purple-bg); }
-  .activity-item-icon.purple .material-symbols-outlined { color: var(--sds-status-purple-text); }
-  .activity-item-body { flex: 1; min-width: 0; }
-  .activity-item-body p {
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    line-height: var(--sds-leading-normal);
-  }
-  .activity-item-body p strong { color: var(--sds-text-primary); font-weight: var(--sds-weight-semibold); }
-  .activity-item-body .ai-annotation {
-    font-size: var(--sds-type-caption); color: var(--sds-color-blue-700);
-    margin-top: var(--sds-space-100); display: flex; align-items: flex-start; gap: var(--sds-space-100);
-    line-height: var(--sds-leading-normal);
-  }
-  .activity-item-body .ai-annotation .material-symbols-outlined {
-    font-size: 12px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-    margin-top: 2px; flex-shrink: 0;
-  }
-  .activity-item-actions {
-    display: flex; gap: var(--sds-space-200); margin-top: var(--sds-space-200);
-  }
-  .activity-item-ask {
-    font-size: var(--sds-type-caption); color: var(--sds-text-link);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans);
-    font-weight: var(--sds-weight-semibold); padding: 0;
-  }
-  .activity-item-ask:hover { text-decoration: underline; }
-  .activity-item-time {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    white-space: nowrap; flex-shrink: 0; margin-top: 2px;
-  }
-
-  /* Trust Tags — with tooltip support */
+  /* Trust Tags — with tooltip support (kept for conversation + catalog views) */
   .trust-tags { display: flex; flex-wrap: wrap; gap: var(--sds-space-100); margin-top: var(--sds-space-150); }
   .trust-tag {
-    display: inline-flex; align-items: center; gap: 3px;
-    padding: 4px var(--sds-space-200); border-radius: 4px;
+    display: inline-flex; align-items: center; gap: var(--sds-space-050);
+    padding: var(--sds-space-100) var(--sds-space-200); border-radius: 4px;
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
     text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.6;
     position: relative; cursor: help; min-height: 24px;
@@ -855,7 +812,6 @@
   .trust-tag .material-symbols-outlined {
     font-size: 10px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
-  /* Trust tag tooltip */
   .trust-tag-tooltip {
     position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
     background: var(--sds-color-warm-gray-800); color: var(--sds-text-on-primary);
@@ -872,148 +828,11 @@
   }
   .trust-tag:hover .trust-tag-tooltip { opacity: 1; }
 
-  /* ============================================================
-     Security Posture Widget
-     ============================================================ */
-  .security-score-row {
-    display: flex; align-items: center; gap: var(--sds-space-400); margin-bottom: var(--sds-space-400);
-  }
-  .security-score-value {
-    font-size: 28px; font-weight: var(--sds-weight-bold); color: var(--sds-text-primary);
-    line-height: 1;
-  }
-  .security-score-bar-wrap { flex: 1; }
-  .security-score-bar {
-    height: 8px; background: var(--sds-color-warm-gray-100); border-radius: 4px; overflow: hidden;
-  }
-  .security-score-fill {
-    height: 100%; border-radius: 4px; background: var(--sds-color-green-400);
-    transition: width 0.6s ease;
-  }
-  .security-score-unit { font-size: var(--sds-type-label); color: var(--sds-text-tertiary); font-weight: var(--sds-weight-regular); }
-  .security-score-meta {
-    font-size: var(--sds-type-caption); color: var(--sds-status-success-text);
-    margin-top: var(--sds-space-100); font-weight: var(--sds-weight-semibold);
-  }
-  .security-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-200);
-    margin-bottom: var(--sds-space-400);
-  }
-  .security-card {
-    background: var(--sds-bg-surface); border-radius: 8px; padding: var(--sds-space-300);
-    cursor: pointer; transition: all 0.12s ease; text-align: center;
-    border: 1px solid transparent; font-family: var(--sds-font-sans);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-  }
-  .security-card:hover { background: var(--sds-color-warm-gray-100); border-color: var(--sds-border-default); }
-  .security-card-value { font-size: var(--sds-type-heading); font-weight: var(--sds-weight-bold); color: var(--sds-text-primary); line-height: 1.2; }
-  .security-card-label { font-size: var(--sds-type-caption); color: var(--sds-text-tertiary); margin-top: var(--sds-space-050); }
-  .security-card.alert .security-card-value { color: var(--sds-status-error-text); }
-  .security-card.warn .security-card-value { color: var(--sds-status-warning-text); }
-  .security-view-link {
-    display: flex; align-items: center; gap: var(--sds-space-100);
-    font-size: var(--sds-type-label); color: var(--sds-text-link); font-weight: var(--sds-weight-semibold);
-    background: none; border: none; cursor: pointer; font-family: var(--sds-font-sans); padding: 0;
-  }
-  .security-view-link:hover { text-decoration: underline; }
-  .security-view-link .material-symbols-outlined {
-    font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .security-card { outline: none; }
-  .security-card:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; }
+  /* (Security Posture removed — merged into Data Health card) */
 
-  /* ============================================================
-     Governance Progress
-     ============================================================ */
-  .governance-score-row {
-    display: flex; align-items: center; gap: var(--sds-space-400); margin-bottom: var(--sds-space-200);
-  }
-  .governance-score-value {
-    font-size: 28px; font-weight: var(--sds-weight-bold); color: var(--sds-text-primary);
-    line-height: 1; display: flex; align-items: center; gap: var(--sds-space-200);
-  }
-  .governance-score-pct { font-size: var(--sds-type-label); color: var(--sds-text-secondary); font-weight: var(--sds-weight-regular); }
-  .governance-bar {
-    flex: 1; height: 8px; background: var(--sds-color-warm-gray-100); border-radius: 4px; overflow: hidden;
-  }
-  .governance-fill {
-    height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--sds-interactive-primary), var(--sds-color-blue-450));
-    transition: width 0.6s ease;
-  }
-  .governance-stage {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary); margin-bottom: var(--sds-space-400);
-  }
-  .governance-stage strong { color: var(--sds-text-primary); }
-  .governance-ai-note {
-    background: var(--sds-color-blue-025); border-radius: 8px;
-    padding: var(--sds-space-300) var(--sds-space-400); margin-bottom: var(--sds-space-400);
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    line-height: var(--sds-leading-normal); position: relative;
-  }
-  .governance-ai-note::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--sds-color-blue-450); border-radius: 3px 0 0 3px;
-  }
-  .governance-actions-list {
-    display: flex; flex-direction: column; gap: var(--sds-space-200);
-  }
-  .governance-action-item {
-    display: flex; align-items: center; gap: var(--sds-space-300);
-    padding: var(--sds-space-200) var(--sds-space-300); border-radius: 8px;
-    background: var(--sds-bg-surface); cursor: pointer; transition: background 0.12s;
-    border: none; font-family: var(--sds-font-sans); text-align: left; width: 100%;
-  }
-  .governance-action-item:hover { background: var(--sds-color-warm-gray-100); }
-  .governance-action-item .gov-action-text { flex: 1; font-size: var(--sds-type-label); color: var(--sds-text-primary); }
-  .governance-action-item .gov-action-pts {
-    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-status-success-text); white-space: nowrap;
-  }
-  .governance-action-item .gov-action-icon {
-    width: 28px; height: 28px; border-radius: 6px; background: var(--sds-status-info-bg);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .governance-action-item .gov-action-icon .material-symbols-outlined {
-    font-size: 16px; color: var(--sds-status-info-text);
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .governance-next-label {
-    font-size: var(--sds-type-label); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); margin-bottom: var(--sds-space-300);
-  }
-  .governance-start-btn {
-    margin-top: var(--sds-space-400);
-  }
+  /* (Governance Progress removed — merged into Data Health card) */
 
-  /* ============================================================
-     Popular Queries
-     ============================================================ */
-  .popular-queries { display: flex; flex-direction: column; gap: var(--sds-space-100); }
-  .popular-query-item {
-    display: flex; align-items: center; gap: var(--sds-space-250);
-    padding: var(--sds-space-250) var(--sds-space-300); border-radius: 8px;
-    cursor: pointer; transition: all 0.12s ease;
-    border: none; background: transparent; font-family: var(--sds-font-sans);
-    text-align: left; width: 100%;
-  }
-  .popular-query-item:hover { background: var(--sds-color-blue-025); }
-  .popular-query-item:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; }
-  .popular-query-item .material-symbols-outlined {
-    font-size: 16px; color: var(--sds-color-blue-450);
-    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-  .popular-query-item span {
-    font-size: var(--sds-type-label); color: var(--sds-text-primary);
-    font-family: var(--sds-font-mono); font-weight: var(--sds-weight-regular);
-  }
-  .popular-queries-attribution {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
-    padding: var(--sds-space-200) var(--sds-space-300) 0;
-    display: flex; align-items: center; gap: var(--sds-space-100);
-  }
-  .popular-queries-attribution .material-symbols-outlined {
-    font-size: 12px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
+  /* (Popular Queries card removed — replaced by inline row) */
 
   /* ============================================================
      Inline Conversation Mode (#home-conversation)
@@ -1030,6 +849,7 @@
     padding: var(--sds-space-150) 0;
   }
   .conversation-back:hover { text-decoration: underline; }
+  .conversation-back:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; border-radius: 4px; }
   .conversation-back .material-symbols-outlined {
     font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
@@ -1048,8 +868,8 @@
   .conv-msg.assistant { width: 100%; }
 
   .response-card {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; overflow: hidden;
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; overflow: hidden;
   }
   .response-card-body { padding: var(--sds-space-400); }
   .response-card-body > p {
@@ -1114,12 +934,12 @@
     background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
     border-radius: 8px; padding: var(--sds-space-200) var(--sds-space-300);
     font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); display: flex; flex-direction: column; gap: 2px;
+    color: var(--sds-text-primary); display: flex; flex-direction: column; gap: var(--sds-space-050);
     min-width: 100px; text-align: center;
   }
   .blast-node.source { border-color: var(--sds-color-red-500); background: var(--sds-status-error-bg); }
   .blast-node.impacted { border-color: var(--sds-color-yellow-200); background: var(--sds-status-warning-bg); }
-  .blast-node .blast-node-sub { font-size: 10px; font-weight: var(--sds-weight-regular); color: var(--sds-text-tertiary); }
+  .blast-node .blast-node-sub { font-size: var(--sds-type-overline); font-weight: var(--sds-weight-regular); color: var(--sds-text-tertiary); }
   .blast-arrow {
     font-size: var(--sds-type-body); color: var(--sds-text-disabled);
     display: flex; align-items: center;
@@ -1175,6 +995,12 @@
   .conv-follow-send .material-symbols-outlined {
     font-size: 18px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
+  .conv-follow-send--hidden {
+    opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+  }
+  .conv-follow-send--visible {
+    opacity: 1; pointer-events: auto;
+  }
 
   /* ============================================================
      Catalog Screen
@@ -1218,7 +1044,7 @@
     cursor: pointer; transition: all 0.15s ease;
   }
   .btn-secondary-sm:hover { background: var(--sds-bg-subtle); border-color: var(--sds-border-strong); }
-  .btn-xs { font-size: var(--sds-type-overline); padding: 2px var(--sds-space-200); }
+  .btn-xs { font-size: var(--sds-type-overline); padding: var(--sds-space-050) var(--sds-space-200); }
   .btn-xs .material-symbols-outlined { font-size: 12px; }
   .catalog-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sds-space-600); }
   .catalog-header h1 { font-size: var(--sds-type-heading); font-weight: var(--sds-weight-bold); color: var(--sds-text-primary); }
@@ -1232,7 +1058,7 @@
   .catalog-search input::placeholder { color: var(--sds-text-tertiary); }
   .catalog-table-wrapper {
     background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; overflow: hidden;
+    border-radius: 8px; overflow: hidden;
   }
   .catalog-table { width: 100%; border-collapse: collapse; }
   .catalog-table th {
@@ -1288,7 +1114,7 @@
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
   }
   .inline-trust-tags {
-    display: flex; flex-wrap: wrap; gap: 3px; margin-top: var(--sds-space-100);
+    display: flex; flex-wrap: wrap; gap: var(--sds-space-100); margin-top: var(--sds-space-100);
   }
 
   /* Utility code style */
@@ -1314,7 +1140,7 @@
   .ai-thinking-content {
     display: flex; flex-direction: column; gap: var(--sds-space-200); padding-top: var(--sds-space-100);
   }
-  .ai-thinking-dots { display: flex; gap: 4px; }
+  .ai-thinking-dots { display: flex; gap: var(--sds-space-100); }
   .ai-thinking-dots span {
     width: 7px; height: 7px; border-radius: 50%;
     background: var(--sds-color-blue-450); opacity: 0.3;
@@ -1327,7 +1153,7 @@
     40% { opacity: 1; transform: scale(1.3); }
   }
   .ai-thinking-label {
-    font-size: var(--sds-type-caption); color: var(--sds-text-tertiary);
+    font-size: var(--sds-type-caption); color: var(--sds-text-secondary);
   }
 
   /* ============================================================
@@ -1362,7 +1188,7 @@
      ============================================================ */
   .ai-error-state {
     background: var(--sds-status-error-bg); border: 1px solid var(--sds-color-red-100);
-    border-radius: 12px; padding: var(--sds-space-500);
+    border-radius: 8px; padding: var(--sds-space-500);
     display: flex; align-items: flex-start; gap: var(--sds-space-300);
   }
   .ai-error-state .material-symbols-outlined {
@@ -1393,10 +1219,300 @@
   .skeleton-text.full { width: 100%; }
   .skeleton-card {
     background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500); min-height: 120px;
+    border-radius: 8px; padding: var(--sds-space-500); min-height: 120px;
   }
   .skeleton-ring { width: 88px; height: 88px; border-radius: 50%; }
   .skeleton-bar { height: 6px; border-radius: 3px; }
+
+  /* Skeleton element sizing classes (R2-1: replaces inline styles) */
+  .skeleton--w40 { width: 40%; }
+  .skeleton--w35 { width: 35%; }
+  .skeleton--w45 { width: 45%; }
+  .skeleton--w50 { width: 50%; }
+  .skeleton--w55 { width: 55%; }
+  .skeleton--w60 { width: 60%; }
+  .skeleton--w65 { width: 65%; }
+  .skeleton--w70 { width: 70%; }
+  .skeleton--w80 { width: 80%; }
+  .skeleton--w85 { width: 85%; }
+  .skeleton--w87 { width: 87%; }
+  .skeleton--w83 { width: 83%; }
+  .skeleton--w67 { width: 67%; }
+  .skeleton--w90 { width: 90%; }
+  .skeleton--w100 { width: 100%; }
+  .skeleton--h6 { height: 6px; }
+  .skeleton--h8 { height: 8px; }
+  .skeleton--h10 { height: 10px; }
+  .skeleton--h12 { height: 12px; }
+  .skeleton--h14 { height: 14px; }
+  .skeleton--h16 { height: 16px; }
+  .skeleton--h28 { height: 28px; }
+  .skeleton--h40 { height: 40px; }
+  .skeleton--h48 { height: 48px; }
+  .skeleton--h60 { height: 60px; }
+  .skeleton-row {
+    display: flex;
+    gap: var(--sds-space-200);
+  }
+  .skeleton-chip {
+    height: 28px;
+    border-radius: 6px;
+  }
+  .skeleton-chip--sm { width: 80px; }
+  .skeleton-chip--md { width: 90px; }
+  .skeleton-chip--lg { width: 100px; }
+  .skeleton-chip--xl { width: 110px; }
+  .skeleton-score-block {
+    width: 70px;
+    height: 60px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .skeleton-health-layout {
+    display: flex;
+    gap: var(--sds-space-1000);
+    align-items: flex-start;
+  }
+  .skeleton-health-bars {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sds-space-300);
+  }
+  .skeleton-action-row {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    margin-top: var(--sds-space-200);
+  }
+  .skeleton-action-row:first-of-type {
+    height: 48px;
+    margin-top: var(--sds-space-400);
+  }
+
+  /* R2-2: Risk/Compliance summary card grid (replaces inline styles in JS templates) */
+  .risk-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sds-space-300);
+    margin: var(--sds-space-400) 0;
+  }
+  .risk-summary-grid--3col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .risk-summary-cell {
+    border-radius: 8px;
+    padding: var(--sds-space-400);
+    text-align: center;
+  }
+  .risk-summary-cell__value {
+    font-size: var(--sds-type-heading);
+    font-weight: var(--sds-weight-bold);
+  }
+  .risk-summary-cell__label {
+    font-size: var(--sds-type-caption);
+    color: var(--sds-text-secondary);
+  }
+  .risk-summary-cell__trend {
+    font-size: var(--sds-type-overline);
+    margin-top: var(--sds-space-100);
+  }
+  .risk-summary-cell--error {
+    background: var(--sds-status-error-bg);
+  }
+  .risk-summary-cell--error .risk-summary-cell__value { color: var(--sds-status-error-text); }
+  .risk-summary-cell--error .risk-summary-cell__trend { color: var(--sds-status-error-text); }
+  .risk-summary-cell--warning {
+    background: var(--sds-status-warning-bg);
+  }
+  .risk-summary-cell--warning .risk-summary-cell__value { color: var(--sds-status-warning-text); }
+  .risk-summary-cell--warning .risk-summary-cell__trend { color: var(--sds-status-success-text); }
+  .risk-summary-cell--info {
+    background: var(--sds-status-info-bg);
+  }
+  .risk-summary-cell--info .risk-summary-cell__value { color: var(--sds-status-info-text); }
+  .risk-summary-cell--info .risk-summary-cell__trend { color: var(--sds-text-tertiary); }
+  .risk-summary-cell--success {
+    background: var(--sds-status-success-bg);
+  }
+  .risk-summary-cell--success .risk-summary-cell__value { color: var(--sds-status-success-text); }
+  .risk-summary-cell--success .risk-summary-cell__trend { color: var(--sds-status-success-text); }
+
+  /* R2-3: Placeholder page empty state (replaces inline styles on placeholder screens) */
+  .placeholder-page {
+    padding: var(--sds-space-1200);
+    text-align: center;
+  }
+  .placeholder-page__icon {
+    font-size: 48px;
+    color: var(--sds-text-disabled);
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;
+    display: block;
+  }
+  .placeholder-page__title {
+    margin-top: var(--sds-space-400);
+    color: var(--sds-text-secondary);
+    font-size: var(--sds-type-title);
+    font-weight: var(--sds-weight-semibold);
+  }
+  .placeholder-page__desc {
+    color: var(--sds-text-tertiary);
+    margin-top: var(--sds-space-200);
+    font-size: var(--sds-type-body);
+    line-height: var(--sds-leading-normal);
+  }
+  .placeholder-page__action {
+    margin-top: var(--sds-space-400);
+  }
+
+  /* R2-4: Data Health card using .sds-card pattern */
+  .sds-card {
+    background: var(--sds-bg-card);
+    border: 1px solid var(--sds-border-default);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .sds-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sds-space-400) var(--sds-space-500);
+    gap: var(--sds-space-300);
+  }
+  .sds-card-header--bordered {
+    border-bottom: 1px solid var(--sds-border-subtle);
+  }
+  .sds-card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--sds-space-200);
+    font-size: var(--sds-type-body);
+    font-weight: var(--sds-weight-semibold);
+    color: var(--sds-text-primary);
+    margin: 0;
+  }
+  .sds-card-body {
+    padding: var(--sds-space-400) var(--sds-space-500);
+  }
+  .sds-card-header + .sds-card-body {
+    padding-top: var(--sds-space-0);
+  }
+  .sds-card-header--bordered + .sds-card-body {
+    padding-top: var(--sds-space-400);
+  }
+  .sds-card-footer {
+    padding: var(--sds-space-300) var(--sds-space-500);
+    border-top: 1px solid var(--sds-border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sds-space-300);
+  }
+  .sds-card-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sds-space-200);
+  }
+
+  /* Data Health card title size override (larger than default .sds-card-title) */
+  .sds-card--health .sds-card-title {
+    font-size: var(--sds-type-title);
+  }
+  .sds-card--spaced {
+    margin-top: var(--sds-space-600);
+  }
+  .sds-card--health .sds-card-title .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--sds-interactive-primary);
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+
+  /* R2-7: Tooltip keyboard accessibility */
+  .trust-tag:focus-visible .trust-tag-tooltip { opacity: 1; }
+  .trust-tag:focus-visible {
+    outline: 2px solid var(--sds-border-focus);
+    outline-offset: 1px;
+    border-radius: 4px;
+  }
+
+  /* Data Health score/bar layout (shared by both home-card and sds-card) */
+  .health-score-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sds-space-1000);
+    margin-bottom: var(--sds-space-500);
+  }
+  .health-actions-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* R2-9: Mobile touch target enforcement */
+  @media (max-width: 600px) {
+    .suggestion-chip {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .popular-chip {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .health-action-item {
+      min-height: 44px;
+    }
+    .trust-tag {
+      min-height: 28px;
+    }
+    .sds-header-icon-btn {
+      width: 44px;
+      height: 44px;
+    }
+    .sds-header-help {
+      width: 44px;
+      height: 44px;
+    }
+    .catalog-action-btn {
+      width: 44px;
+      height: 44px;
+    }
+    .response-footer-btn {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  /* R2-5: Autocomplete keyboard navigation active state */
+  .autocomplete-item:focus-visible {
+    outline: 2px solid var(--sds-border-focus);
+    outline-offset: -2px;
+    border-radius: 4px;
+  }
+  .autocomplete-item[aria-selected="true"] {
+    background: var(--sds-bg-subtle);
+  }
+
+  /* Error state button layout */
+  .error-actions {
+    display: flex;
+    gap: var(--sds-space-200);
+  }
+
+  /* Response card retry icon size */
+  .error-actions .material-symbols-outlined {
+    font-size: 14px;
+  }
+
+  /* Conversation padding-top utility */
+  .conversation-container--padded {
+    padding-top: var(--sds-space-600);
+  }
+
+  /* Conversation back no-margin utility */
+  .conversation-back--inline {
+    margin-bottom: 0;
+  }
 
   /* ============================================================
      Onboarding Tooltip Walkthrough (First-Run Experience)
@@ -1486,10 +1602,12 @@
   /* ============================================================
      Skeleton Loading State (wired into initial load)
      ============================================================ */
-  .skeleton-loading .insight-cards-row,
-  .skeleton-loading .home-grid { display: none; }
+  .skeleton-loading .insight-cards-row { display: none; }
   .skeleton-loading .ai-section-header { display: none; }
   .skeleton-loading .insights-footer { display: none; }
+  .skeleton-loading > .home-card { display: none; }
+  .skeleton-loading > .sds-card { display: none; }
+  .skeleton-loading > .popular-queries-row { display: none; }
   .skeleton-placeholder { display: none; }
   .skeleton-loading .skeleton-placeholder { display: block; }
   .skeleton-insight-row {
@@ -1498,14 +1616,14 @@
   }
   .skeleton-insight-card {
     background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500); min-height: 180px;
+    border-radius: 8px; padding: var(--sds-space-500); min-height: 180px;
   }
   .skeleton-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: var(--sds-space-600);
   }
   .skeleton-widget {
     background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500); min-height: 200px;
+    border-radius: 8px; padding: var(--sds-space-500); min-height: 200px;
   }
 
   /* ============================================================
@@ -1541,15 +1659,7 @@
   /* ============================================================
      Additional Micro-Interactions
      ============================================================ */
-  .governance-action-item { position: relative; overflow: hidden; }
-  .governance-action-item::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(1,61,91,0.03), transparent);
-    transform: translateX(-100%); transition: transform 0.4s ease;
-    pointer-events: none;
-  }
-  .governance-action-item:hover::after { transform: translateX(100%); }
-  /* (insight card hover now handled by .sds-card--hoverable) */
+  /* (insight card hover handled by .sds-card--hoverable) */
   .home-card { transition: box-shadow 0.2s ease; }
   .home-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .response-footer-btn { position: relative; }
@@ -1560,10 +1670,7 @@
   }
   .response-footer-btn:focus-visible::after { opacity: 0.06; }
 
-  /* Collapsible section transition animation (Round 2 remaining) */
-  .home-card-body.collapsible {
-    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.25s ease;
-  }
+  /* (Collapsible section transition removed) */
 
   /* ============================================================
      Responsive Layout
@@ -1574,12 +1681,10 @@
     .home-hero { padding: var(--sds-space-1000) var(--sds-space-600) var(--sds-space-600); }
     .insight-cards-row { gap: var(--sds-space-300); }
     .sds-insight { padding: var(--sds-space-400); }
-    .home-grid { gap: var(--sds-space-400); }
     .sds-header-nav-link { padding: var(--sds-space-150) var(--sds-space-200); font-size: var(--sds-type-caption); }
   }
 
   @media (max-width: 900px) {
-    .home-grid { grid-template-columns: 1fr; }
     .insight-cards-row { grid-template-columns: 1fr; }
     .home-content { padding: 0 var(--sds-space-400) var(--sds-space-800); }
     .home-hero { padding: var(--sds-space-800) var(--sds-space-400) var(--sds-space-500); }
@@ -1591,7 +1696,6 @@
     .blast-arrow { justify-content: center; }
     .blast-arrow .material-symbols-outlined { transform: rotate(90deg); }
     .blast-node { min-width: auto; }
-    .security-grid { grid-template-columns: repeat(2, 1fr); }
     .catalog-content { padding: var(--sds-space-600) var(--sds-space-400); }
     .catalog-table-wrapper { overflow-x: auto; }
     .catalog-table { min-width: 700px; }
@@ -1613,6 +1717,7 @@
     color: var(--sds-text-primary); text-align: left; width: 100%;
   }
   .help-dropdown-item:hover { background: var(--sds-bg-subtle); }
+  .help-dropdown-item:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: -2px; border-radius: 4px; }
   .help-dropdown-item .material-symbols-outlined {
     font-size: 16px; color: var(--sds-text-tertiary);
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
@@ -1693,20 +1798,9 @@
     transition: color 0.12s ease;
   }
   .hero-stat-link:hover { text-decoration: underline; }
+  .hero-stat-link:focus-visible { outline: 2px solid var(--sds-border-focus); outline-offset: 2px; border-radius: 4px; }
 
-  /* Security card context (trend indicators) */
-  .security-card-trend {
-    font-size: 10px; font-weight: var(--sds-weight-semibold);
-    margin-top: var(--sds-space-050);
-  }
-  .security-card-trend.up-good { color: var(--sds-status-success-text); }
-  .security-card-trend.down-good { color: var(--sds-status-success-text); }
-  .security-card-trend.up-bad { color: var(--sds-status-error-text); }
-  .security-card-trend.down-bad { color: var(--sds-status-error-text); }
-  .security-card-trend.neutral { color: var(--sds-text-tertiary); }
-  .security-card-context {
-    font-size: 9px; color: var(--sds-text-tertiary); margin-top: 1px;
-  }
+  /* (Security card trend/context removed) */
 
   /* Role transition fade */
   .home-content.role-transitioning {
@@ -1723,7 +1817,6 @@
     .sds-header-divider { display: none; }
     .role-selector { display: none; }
     .home-hero { padding: var(--sds-space-600) var(--sds-space-300) var(--sds-space-400); }
-    .home-hero-greeting h1 { font-size: 22px; }
     .home-content { padding: 0 var(--sds-space-300) var(--sds-space-600); max-width: 100%; }
     .ai-prompt-bar { height: 44px; border-radius: 10px; padding: 0 var(--sds-space-300); }
     .ai-prompt-bar kbd { display: none; }
@@ -1732,8 +1825,6 @@
     .sds-insight { padding: var(--sds-space-400); gap: var(--sds-space-300); }
     .home-card-header { padding: var(--sds-space-400) var(--sds-space-400) var(--sds-space-200); }
     .home-card-body { padding: 0 var(--sds-space-400) var(--sds-space-400); }
-    .security-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sds-space-150); }
-    .security-card { padding: var(--sds-space-200); }
     .conversation-container { padding: 0 var(--sds-space-300) var(--sds-space-600); }
     .conv-msg.user .conv-msg-bubble { max-width: 90%; }
     .hero-subtitle { font-size: var(--sds-type-caption); }
@@ -1760,7 +1851,7 @@
 <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Welcome walkthrough">
   <div class="onboarding-spotlight" id="onboardingSpotlight"></div>
   <div class="onboarding-tooltip" id="onboardingTooltip" tabindex="-1">
-    <div class="onboarding-tooltip-step" id="onboardingStep">Step 1 of 4</div>
+    <div class="onboarding-tooltip-step" id="onboardingStep">Step 1 of 3</div>
     <h4 id="onboardingTitle">Ask anything about your data</h4>
     <p id="onboardingDesc">The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more.</p>
     <div class="onboarding-tooltip-actions">
@@ -1769,7 +1860,6 @@
     </div>
     <div class="onboarding-dots" id="onboardingDots">
       <span class="onboarding-dot active"></span>
-      <span class="onboarding-dot"></span>
       <span class="onboarding-dot"></span>
       <span class="onboarding-dot"></span>
     </div>
@@ -1894,33 +1984,23 @@
          ====================================================== -->
     <section class="screen active" id="screen-home">
 
-      <!-- Hero: Greeting + AI Prompt Bar -->
+      <!-- Hero: AI Prompt Bar (top) + Compact Greeting -->
       <div class="home-hero">
-        <div class="home-hero-greeting">
-          <h1>Good morning, Jordan</h1>
-          <div class="hero-subtitle" id="heroSubtitle">
-            <span class="hero-stat" id="heroRoleTitle">Data Engineering Lead</span>
-            <span class="hero-dot" aria-hidden="true"></span>
-            <a class="hero-stat hero-stat-link" onclick="navigateTo('sources')">14 sources connected</a>
-            <span class="hero-dot" aria-hidden="true"></span>
-            <a class="hero-stat hero-stat-link" onclick="navigateTo('catalog')">3,240 assets cataloged</a>
-          </div>
-        </div>
 
-        <!-- The AI Prompt Bar -->
+        <!-- The AI Prompt Bar — first interactive element -->
         <div class="ai-prompt-container">
           <div class="ai-prompt-bar" role="search">
             <span class="prompt-icon"><span class="material-symbols-outlined">auto_awesome</span></span>
-            <input type="text" id="aiPromptInput" placeholder="Ask anything about your data...  ⌘K" aria-label="Ask the AI assistant about your data" autocomplete="off">
+            <input type="text" id="aiPromptInput" placeholder="Ask anything about your data...  ⌘K" aria-label="Ask the AI assistant about your data" autocomplete="off" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="autocompleteDropdown recentQueriesDropdown">
             <kbd aria-hidden="true">&#8984;K</kbd>
             <button class="prompt-send" id="promptSendBtn" aria-label="Submit query">
               <span class="material-symbols-outlined">arrow_upward</span>
             </button>
           </div>
           <!-- Autocomplete Dropdown -->
-          <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+          <div class="autocomplete-dropdown" id="autocompleteDropdown" role="listbox" aria-label="Suggestions"></div>
           <!-- Recent Queries Dropdown -->
-          <div class="recent-queries-dropdown" id="recentQueriesDropdown"></div>
+          <div class="recent-queries-dropdown" id="recentQueriesDropdown" role="listbox" aria-label="Recent queries"></div>
         </div>
 
         <!-- Suggestion Chips -->
@@ -1931,6 +2011,17 @@
           <button class="suggestion-chip" onclick="askAI('List unclassified tables in production')">Unclassified tables in prod</button>
           <button class="suggestion-chip" onclick="askAI('Show stale access grants that need review')">Stale access to review</button>
         </div>
+
+        <!-- Compact greeting line -->
+        <div class="hero-subtitle hero-subtitle--spaced" id="heroSubtitle">
+          <span>Jordan</span>
+          <span class="hero-dot" aria-hidden="true"></span>
+          <span class="hero-stat" id="heroRoleTitle">Data Engineering Lead</span>
+          <span class="hero-dot" aria-hidden="true"></span>
+          <a class="hero-stat hero-stat-link" href="#sources" onclick="event.preventDefault(); navigateTo('sources')">14 sources connected</a>
+          <span class="hero-dot" aria-hidden="true"></span>
+          <a class="hero-stat hero-stat-link" href="#catalog" onclick="event.preventDefault(); navigateTo('catalog')">3,240 assets cataloged</a>
+        </div>
       </div>
 
       <!-- Home Content -->
@@ -1940,77 +2031,48 @@
         <div class="skeleton-placeholder" aria-hidden="true">
           <div class="skeleton-insight-row">
             <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:40%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:70%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:100%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:50%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:100px;height:28px;border-radius:6px"></div>
-                <div class="skeleton" style="width:80px;height:28px;border-radius:6px"></div>
+              <div class="skeleton skeleton-text skeleton--w40 skeleton--h10"></div>
+              <div class="skeleton skeleton-text skeleton--w70 skeleton--h16"></div>
+              <div class="skeleton skeleton-text skeleton--w100 skeleton--h12"></div>
+              <div class="skeleton skeleton-text skeleton--w50 skeleton--h12"></div>
+              <div class="skeleton-row">
+                <div class="skeleton skeleton-chip skeleton-chip--lg"></div>
+                <div class="skeleton skeleton-chip skeleton-chip--sm"></div>
               </div>
             </div>
             <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:35%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:65%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:90%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:55%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:90px;height:28px;border-radius:6px"></div>
+              <div class="skeleton skeleton-text skeleton--w35 skeleton--h10"></div>
+              <div class="skeleton skeleton-text skeleton--w65 skeleton--h16"></div>
+              <div class="skeleton skeleton-text skeleton--w90 skeleton--h12"></div>
+              <div class="skeleton skeleton-text skeleton--w55 skeleton--h12"></div>
+              <div class="skeleton-row">
+                <div class="skeleton skeleton-chip skeleton-chip--md"></div>
               </div>
             </div>
             <div class="skeleton-insight-card">
-              <div class="skeleton skeleton-text short" style="width:45%;height:10px;margin-bottom:12px"></div>
-              <div class="skeleton skeleton-text medium" style="width:60%;height:16px;margin-bottom:8px"></div>
-              <div class="skeleton skeleton-text full" style="width:85%;height:12px;margin-bottom:6px"></div>
-              <div class="skeleton skeleton-text short" style="width:40%;height:12px;margin-bottom:20px"></div>
-              <div style="display:flex;gap:8px">
-                <div class="skeleton" style="width:110px;height:28px;border-radius:6px"></div>
+              <div class="skeleton skeleton-text skeleton--w45 skeleton--h10"></div>
+              <div class="skeleton skeleton-text skeleton--w60 skeleton--h16"></div>
+              <div class="skeleton skeleton-text skeleton--w85 skeleton--h12"></div>
+              <div class="skeleton skeleton-text skeleton--w40 skeleton--h12"></div>
+              <div class="skeleton-row">
+                <div class="skeleton skeleton-chip skeleton-chip--xl"></div>
               </div>
             </div>
           </div>
-          <div class="skeleton-grid">
-            <div style="display:flex;flex-direction:column;gap:24px">
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:50%;height:14px;margin-bottom:16px"></div>
-                <div style="display:flex;gap:24px;align-items:center">
-                  <div class="skeleton skeleton-ring"></div>
-                  <div style="flex:1">
-                    <div class="skeleton skeleton-bar" style="width:100%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:80%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:90%;margin-bottom:10px"></div>
-                    <div class="skeleton skeleton-bar" style="width:70%"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:40%;height:14px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-bar" style="width:100%;height:8px;margin-bottom:12px"></div>
-                <div class="skeleton skeleton-text medium" style="width:60%;height:12px;margin-bottom:8px"></div>
-                <div class="skeleton skeleton-text full" style="width:90%;height:12px"></div>
+          <!-- Skeleton for Data Health card -->
+          <div class="skeleton-widget">
+            <div class="skeleton skeleton-text skeleton--w40 skeleton--h14"></div>
+            <div class="skeleton-health-layout">
+              <div class="skeleton skeleton-score-block"></div>
+              <div class="skeleton-health-bars">
+                <div class="skeleton skeleton-bar skeleton--w87 skeleton--h8"></div>
+                <div class="skeleton skeleton-bar skeleton--w83 skeleton--h8"></div>
+                <div class="skeleton skeleton-bar skeleton--w67 skeleton--h8"></div>
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:24px">
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:45%;height:14px;margin-bottom:16px"></div>
-                <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px">
-                  <div class="skeleton" style="width:50px;height:32px;border-radius:6px"></div>
-                  <div class="skeleton skeleton-bar" style="flex:1;height:8px"></div>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                  <div class="skeleton" style="height:60px;border-radius:8px"></div>
-                </div>
-              </div>
-              <div class="skeleton-widget">
-                <div class="skeleton skeleton-text short" style="width:55%;height:14px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-bar" style="width:100%;height:8px;margin-bottom:16px"></div>
-                <div class="skeleton skeleton-text medium" style="width:70%;height:12px;margin-bottom:12px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:40px;border-radius:8px;width:100%"></div>
-              </div>
-            </div>
+            <div class="skeleton skeleton-action-row skeleton--h48"></div>
+            <div class="skeleton skeleton-action-row skeleton--h40"></div>
+            <div class="skeleton skeleton-action-row skeleton--h40"></div>
           </div>
         </div>
 
@@ -2090,417 +2152,111 @@
         </div>
 
         <div class="insights-footer">
-          <button>+5 more insights today</button>
+          <button aria-label="View 5 more insights from today">+5 more insights today</button>
           <span aria-hidden="true">&middot;</span>
           <span>89% resolved automatically</span>
         </div>
         </section>
 
-        <!-- Two-Column Grid -->
-        <div class="home-grid">
-          <!-- Left Column -->
-          <div class="home-grid-col">
-
-            <!-- AI-Readiness Score -->
-            <div class="home-card">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">psychology</span>
-                  AI-Readiness Score
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
-                  <span class="material-symbols-outlined">auto_awesome</span>
-                </div>
-              </div>
-              <div class="home-card-body">
-                <div class="ai-readiness-score">
-                  <div class="readiness-ring">
-                    <svg viewBox="0 0 88 88" role="img" aria-label="AI-Readiness score: 72 out of 100">
-                      <circle class="readiness-ring-bg" cx="44" cy="44" r="38"/>
-                      <circle class="readiness-ring-fill" cx="44" cy="44" r="38" stroke-dasharray="238.76" stroke-dashoffset="66.85"/>
-                    </svg>
-                    <div class="readiness-ring-label">
-                      <div class="readiness-ring-value">72</div>
-                      <div class="readiness-ring-caption">/ 100</div>
-                    </div>
-                  </div>
-                  <div class="readiness-right">
-                    <div class="readiness-dimensions">
-                      <div class="readiness-dim" role="meter" aria-label="Classification" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Classification</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:87%"></div></div>
-                        <span class="readiness-dim-value">87%</span>
-                      </div>
-                      <div class="readiness-dim highlight" role="meter" aria-label="Documentation" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Documentation</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill mid" style="width:62%"></div></div>
-                        <span class="readiness-dim-value">62%</span>
-                      </div>
-                      <div class="readiness-dim" role="meter" aria-label="Freshness" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Freshness</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:84%"></div></div>
-                        <span class="readiness-dim-value">84%</span>
-                      </div>
-                      <div class="readiness-dim" role="meter" aria-label="Lineage" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Lineage</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill mid" style="width:71%"></div></div>
-                        <span class="readiness-dim-value">71%</span>
-                      </div>
-                      <div class="readiness-dim" role="meter" aria-label="Quality" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Quality</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:91%"></div></div>
-                        <span class="readiness-dim-value">91%</span>
-                      </div>
-                      <div class="readiness-dim" role="meter" aria-label="Schema Stability" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100">
-                        <span class="readiness-dim-name">Schema Stability</span>
-                        <div class="readiness-dim-bar" aria-hidden="true"><div class="readiness-dim-fill high" style="width:82%"></div></div>
-                        <span class="readiness-dim-value">82%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="readiness-ai-note">
-                  <strong>Documentation is your biggest gap</strong> &mdash; 340 tables have no descriptions. AI can generate docs for the top 50 most-queried tables in ~5 minutes.
-                </div>
-                <div class="readiness-card-actions">
-                  <button class="btn-primary-sm" onclick="askAI('Generate documentation for the top 50 most-queried undocumented tables')">Generate docs for top 50</button>
-                  <button class="btn-secondary-sm">View full report</button>
-                </div>
-              </div>
+        <!-- Data Health Card (unified, using .sds-card pattern) -->
+        <div class="sds-card sds-card--health sds-card--spaced">
+          <div class="sds-card-header">
+            <h2 class="sds-card-title">
+              <span class="material-symbols-outlined">monitoring</span>
+              Data Health
+            </h2>
+            <div class="sds-card-actions">
+              <span class="home-card-badge"><span class="material-symbols-outlined">auto_awesome</span></span>
             </div>
-
-            <!-- Source Health — collapsed by default (progressive disclosure) -->
-            <div class="home-card" data-collapsible="true">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">database</span>
-                  Source Health
-                </h2>
-                <button class="home-card-toggle" aria-expanded="true" onclick="toggleCardCollapse(this)">
-                  <span class="material-symbols-outlined">expand_more</span>
-                </button>
-              </div>
-              <div class="home-card-body collapsible">
-                <div class="source-health-summary">
-                  14 sources &middot; Last full sync: 45 min ago
-                </div>
-                <div class="source-health-status">
-                  <div class="source-status-item">
-                    <span class="source-status-dot green"></span>
-                    <span class="source-status-text-success">11 on-time</span>
-                  </div>
-                  <div class="source-status-item">
-                    <span class="source-status-dot yellow"></span>
-                    <span class="source-status-text-warning">1 at-risk</span>
-                  </div>
-                  <div class="source-status-item">
-                    <span class="source-status-dot red"></span>
-                    <span class="source-status-text-error">2 breached</span>
-                  </div>
-                </div>
-                <div class="source-breach-list">
-                  <div class="source-breach-item">
-                    <span class="material-symbols-outlined">warning</span>
-                    <div class="source-breach-info">
-                      <div class="breach-name">s3://strata-lake/raw-events</div>
-                      <div class="breach-meta">Last sync: 6h ago &middot; SLA: 4h &middot; <strong class="breach-status">Breached</strong></div>
-                      <div class="source-breach-actions">
-                        <button class="btn-secondary-sm btn-xs">View source</button>
-                        <button class="insight-action-btn ai-action btn-xs" onclick="askAI('What is the downstream impact of s3://strata-lake/raw-events being 6 hours behind SLA?')">
-                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="source-breach-item">
-                    <span class="material-symbols-outlined">warning</span>
-                    <div class="source-breach-info">
-                      <div class="breach-name">databricks.ml-features</div>
-                      <div class="breach-meta">Last sync: 3h ago &middot; SLA: 2h &middot; <strong class="breach-status">Breached</strong></div>
-                      <div class="source-breach-actions">
-                        <button class="btn-secondary-sm btn-xs">View source</button>
-                        <button class="insight-action-btn ai-action btn-xs" onclick="askAI('What is the downstream impact of databricks.ml-features being behind SLA?')">
-                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Recent Activity — expanded by default (time-sensitive info) -->
-            <div class="home-card" data-collapsible="true">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">history</span>
-                  Recent Activity
-                </h2>
-                <button class="home-card-toggle" aria-expanded="true" onclick="toggleCardCollapse(this)">
-                  <span class="material-symbols-outlined">expand_more</span>
-                </button>
-              </div>
-              <div class="home-card-body collapsible">
-                <div class="activity-timeline">
-
-                  <!-- Classification scan -->
-                  <div class="activity-item">
-                    <div class="activity-item-icon success">
-                      <span class="material-symbols-outlined">check_circle</span>
-                    </div>
-                    <div class="activity-item-body">
-                      <p><strong>Classification scan completed</strong></p>
-                      <div class="ai-annotation">
-                        <span class="material-symbols-outlined">auto_awesome</span>
-                        AI found 38 new PII columns across 12 tables in <code>analytics_warehouse</code>. 33 auto-classified, 5 need review.
-                      </div>
-                      <div class="trust-tags">
-                        <span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII<span class="trust-tag-tooltip">Contains personally identifiable information</span></span>
-                        <span class="trust-tag quality"><span class="material-symbols-outlined">verified</span> Q:94<span class="trust-tag-tooltip">Data quality score: 94 out of 100</span></span>
-                        <span class="trust-tag fresh"><span class="material-symbols-outlined">schedule</span> 12m<span class="trust-tag-tooltip">Data refreshed 12 minutes ago</span></span>
-                      </div>
-                      <div class="activity-item-actions">
-                        <button class="activity-item-ask" onclick="navigateTo('catalog')">Review</button>
-                        <button class="activity-item-ask" onclick="askAI('Tell me about the classification scan results')">Ask AI</button>
-                      </div>
-                    </div>
-                    <span class="activity-item-time">12m ago</span>
-                  </div>
-
-                  <!-- Schema change -->
-                  <div class="activity-item">
-                    <div class="activity-item-icon warning">
-                      <span class="material-symbols-outlined">schema</span>
-                    </div>
-                    <div class="activity-item-body">
-                      <p><strong>Schema change detected</strong></p>
-                      <div class="ai-annotation">
-                        <span class="material-symbols-outlined">auto_awesome</span>
-                        3 tables in <code>prod_snowflake.analytics</code> had column renames. AI mapped blast radius: 4 models, 2 dashboards, ~340 queries/day
-                      </div>
-                      <div class="trust-tags">
-                        <span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified<span class="trust-tag-tooltip">Approved by data steward as trusted</span></span>
-                        <span class="trust-tag owner"><span class="material-symbols-outlined">person</span> Priya M.<span class="trust-tag-tooltip">Data owner: Priya M.</span></span>
-                        <span class="trust-tag ai-ready"><span class="material-symbols-outlined">psychology</span> AI:68<span class="trust-tag-tooltip">AI-readiness score: 68 out of 100</span></span>
-                      </div>
-                      <div class="activity-item-actions">
-                        <button class="activity-item-ask" onclick="askAI('Show me the blast radius for schema changes in prod_snowflake.analytics')">View blast radius</button>
-                        <button class="activity-item-ask" onclick="askAI('What is the impact of the schema change in prod_snowflake.analytics?')">Ask AI</button>
-                      </div>
-                    </div>
-                    <span class="activity-item-time">1h ago</span>
-                  </div>
-
-                  <!-- Access review -->
-                  <div class="activity-item">
-                    <div class="activity-item-icon info">
-                      <span class="material-symbols-outlined">admin_panel_settings</span>
-                    </div>
-                    <div class="activity-item-body">
-                      <p><strong>Access review completed</strong></p>
-                      <div class="ai-annotation">
-                        <span class="material-symbols-outlined">auto_awesome</span>
-                        Jordan R. approved access revocation for SERVICE_ETL on 4 tables. Risk score improved: 78 &rarr; 83 (+5 points)
-                      </div>
-                      <div class="trust-tags">
-                        <span class="trust-tag protected"><span class="material-symbols-outlined">shield</span> Protected<span class="trust-tag-tooltip">Access-controlled asset with active policy</span></span>
-                        <span class="trust-tag quality"><span class="material-symbols-outlined">verified</span> Q:91<span class="trust-tag-tooltip">Data quality score: 91 out of 100</span></span>
-                      </div>
-                    </div>
-                    <span class="activity-item-time">3h ago</span>
-                  </div>
-
-                  <!-- New source -->
-                  <div class="activity-item">
-                    <div class="activity-item-icon purple">
-                      <span class="material-symbols-outlined">add_circle</span>
-                    </div>
-                    <div class="activity-item-body">
-                      <p><strong>New source connected</strong></p>
-                      <div class="ai-annotation">
-                        <span class="material-symbols-outlined">auto_awesome</span>
-                        Databricks workspace "ml-features" connected. 248 tables, 1,204 columns cataloged. AI docs generating...
-                      </div>
-                      <div class="trust-tags">
-                        <span class="trust-tag fresh"><span class="material-symbols-outlined">schedule</span> New<span class="trust-tag-tooltip">Recently added to the catalog</span></span>
-                        <span class="trust-tag ai-ready"><span class="material-symbols-outlined">psychology</span> AI:45<span class="trust-tag-tooltip">AI-readiness score: 45 out of 100</span></span>
-                      </div>
-                      <div class="activity-item-actions">
-                        <button class="activity-item-ask" onclick="navigateTo('catalog')">View in catalog</button>
-                      </div>
-                    </div>
-                    <span class="activity-item-time">Yesterday</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
           </div>
-
-          <!-- Right Column -->
-          <div class="home-grid-col">
-
-            <!-- Security Posture -->
-            <div class="home-card">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">security</span>
-                  Security Posture
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
-                  <span class="material-symbols-outlined">auto_awesome</span>
-                </div>
+          <div class="sds-card-body">
+            <!-- Score + 3 dimension bars side by side -->
+            <div class="health-score-layout">
+              <!-- Overall score -->
+              <div class="health-score">
+                <div class="health-score__value">74</div>
+                <div class="health-score__max">/ 100</div>
+                <div class="health-score__trend">&uarr; 3 this week</div>
               </div>
-              <div class="home-card-body">
-                <div class="security-score-row" role="meter" aria-label="Security score" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
-                  <div>
-                    <div class="security-score-value">83 <span class="security-score-unit">/ 100</span></div>
-                    <div class="security-score-meta">&uarr; +5 this week</div>
+              <!-- 3 dimension bars -->
+              <div class="health-dimensions">
+                <!-- Classification -->
+                <div>
+                  <div class="health-dimension__header">
+                    <span class="health-dimension__name">Classification</span>
+                    <span class="health-dimension__pct">87%</span>
                   </div>
-                  <div class="security-score-bar-wrap">
-                    <div class="security-score-bar"><div class="security-score-fill" style="width: 83%;"></div></div>
+                  <div class="health-bar">
+                    <div class="health-bar__fill health-bar__fill--green" style="width: 87%;"></div>
                   </div>
                 </div>
-                <div class="security-grid" role="group" aria-label="Security metrics">
-                  <button class="security-card alert" onclick="askAI('Show me the 47 unclassified assets')" aria-label="47 unclassified assets — click for details">
-                    <div class="security-card-value">47</div>
-                    <div class="security-card-label">Unclassified assets</div>
-                    <div class="security-card-trend down-good">&darr; 15 from last week</div>
-                    <div class="security-card-context">of 3,240 total</div>
-                  </button>
-                  <button class="security-card" onclick="askAI('Where is customer PII stored?')" aria-label="128 PII columns tracked — click for details">
-                    <div class="security-card-value">128</div>
-                    <div class="security-card-label">PII cols tracked</div>
-                    <div class="security-card-trend up-good">&uarr; 38 new this week</div>
-                    <div class="security-card-context">across 14 sources</div>
-                  </button>
-                  <button class="security-card warn" onclick="askAI('Show over-permissioned access grants')" aria-label="7 over-permissioned grants — click for details">
-                    <div class="security-card-value">7</div>
-                    <div class="security-card-label">Over-permissioned</div>
-                    <div class="security-card-trend down-good">&darr; 4 revoked this week</div>
-                    <div class="security-card-context">need access review</div>
-                  </button>
-                  <button class="security-card" onclick="askAI('Show compliance gaps by regulation')" aria-label="3 compliance gaps — click for details">
-                    <div class="security-card-value">3</div>
-                    <div class="security-card-label">Compliance gaps</div>
-                    <div class="security-card-trend down-good">&darr; 1 resolved</div>
-                    <div class="security-card-context">HIPAA, SOC2, GDPR</div>
-                  </button>
-                  <button class="security-card warn" onclick="askAI('Show the 12 highest risk data assets')" aria-label="12 high risk assets — click for details">
-                    <div class="security-card-value">12</div>
-                    <div class="security-card-label">High risk assets</div>
-                    <div class="security-card-trend up-bad">&uarr; 2 new this week</div>
-                    <div class="security-card-context">PII without protection</div>
-                  </button>
-                  <button class="security-card" onclick="askAI('What changed in the last 7 days?')" aria-label="8 changes this week — click for details">
-                    <div class="security-card-value">8</div>
-                    <div class="security-card-label">Changed this week</div>
-                    <div class="security-card-trend neutral">same as last week</div>
-                    <div class="security-card-context">schemas + policies</div>
-                  </button>
-                </div>
-                <button class="security-view-link" onclick="navigateTo('security')">
-                  View security posture <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Governance Progress -->
-            <div class="home-card">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">emoji_events</span>
-                  Governance Progress
-                </h2>
-                <div class="home-card-badge" aria-hidden="true">
-                  <span class="material-symbols-outlined">auto_awesome</span>
-                </div>
-              </div>
-              <div class="home-card-body">
-                <div class="governance-score-row" role="meter" aria-label="Governance progress" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100">
-                  <div class="governance-score-value">
-                    67%
+                <!-- Security -->
+                <div>
+                  <div class="health-dimension__header">
+                    <span class="health-dimension__name">Security</span>
+                    <span class="health-dimension__pct">83%</span>
                   </div>
-                  <div class="governance-bar" aria-hidden="true"><div class="governance-fill" style="width: 67%;"></div></div>
+                  <div class="health-bar">
+                    <div class="health-bar__fill health-bar__fill--green" style="width: 83%;"></div>
+                  </div>
                 </div>
-                <div class="governance-stage">
-                  Stage: <strong>Classification</strong> (Month 2)
-                </div>
-                <div class="governance-ai-note">
-                  Great progress! You've improved 12 points this month. Keep it up &mdash; you're on track to reach 80% by end of quarter.
-                </div>
-                <div class="governance-next-label">Next actions:</div>
-                <div class="governance-actions-list">
-                  <button class="governance-action-item" onclick="askAI('Help me classify the 12 unclassified columns')">
-                    <div class="gov-action-icon">
-                      <span class="material-symbols-outlined">label</span>
-                    </div>
-                    <span class="gov-action-text">Classify 12 columns</span>
-                    <span class="gov-action-pts">+8 pts</span>
-                  </button>
-                  <button class="governance-action-item" onclick="askAI('Which 5 tables need owners assigned?')">
-                    <div class="gov-action-icon">
-                      <span class="material-symbols-outlined">person_add</span>
-                    </div>
-                    <span class="gov-action-text">Assign owners to 5 tables</span>
-                    <span class="gov-action-pts">+5 pts</span>
-                  </button>
-                  <button class="governance-action-item" onclick="askAI('Generate descriptions for the 3 undocumented views')">
-                    <div class="gov-action-icon">
-                      <span class="material-symbols-outlined">description</span>
-                    </div>
-                    <span class="gov-action-text">Add descriptions to 3 views</span>
-                    <span class="gov-action-pts">+3 pts</span>
-                  </button>
-                </div>
-                <div class="governance-start-btn">
-                  <button class="btn-primary-sm" onclick="askAI('Help me classify the 12 unclassified columns')">Start next task</button>
+                <!-- Governance -->
+                <div>
+                  <div class="health-dimension__header">
+                    <span class="health-dimension__name">Governance</span>
+                    <span class="health-dimension__pct">67%</span>
+                  </div>
+                  <div class="health-bar">
+                    <div class="health-bar__fill health-bar__fill--yellow" style="width: 67%;"></div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Popular on Your Team — collapsed by default -->
-            <div class="home-card" data-collapsible="true">
-              <div class="home-card-header">
-                <h2 class="home-card-title">
-                  <span class="material-symbols-outlined">trending_up</span>
-                  Popular on Your Team
-                </h2>
-                <button class="home-card-toggle" aria-expanded="false" onclick="toggleCardCollapse(this)">
-                  <span class="material-symbols-outlined">expand_more</span>
-                </button>
-              </div>
-              <div class="home-card-body collapsible collapsed">
-                <div class="popular-queries">
-                  <button class="popular-query-item" onclick="askAI('Show all PII tables in production')">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>Show all PII tables in production</span>
-                  </button>
-                  <button class="popular-query-item" onclick="askAI('What changed in the last 24 hours?')">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>What changed in the last 24 hours?</span>
-                  </button>
-                  <button class="popular-query-item" onclick="askAI('Show HIPAA compliance status')">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>HIPAA compliance status</span>
-                  </button>
-                  <button class="popular-query-item" onclick="askAI('Show unused service account access')">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>Unused service account access</span>
-                  </button>
-                  <button class="popular-query-item" onclick="askAI('Which tables are undocumented?')">
-                    <span class="material-symbols-outlined">search</span>
-                    <span>Which tables are undocumented?</span>
-                  </button>
-                </div>
-                <div class="popular-queries-attribution">
-                  <span class="material-symbols-outlined">group</span>
-                  Based on 47 queries this week
-                </div>
+            <!-- AI note -->
+            <div class="health-ai-note">
+              <div class="health-ai-note__inner">
+                <span class="material-symbols-outlined">auto_awesome</span>
+                <p><strong>Documentation is your biggest gap</strong> — 340 tables have no descriptions. AI can generate docs for the top 50 most-queried tables in ~5 minutes.</p>
               </div>
             </div>
 
+            <!-- Next actions -->
+            <div class="health-actions-label">Next actions</div>
+            <div class="health-actions-column">
+              <button class="health-action-item" onclick="askAI('Classify the 12 unclassified columns in analytics_warehouse')">
+                <span class="material-symbols-outlined">label</span>
+                <span class="health-action-item__label">Classify 12 columns</span>
+                <span class="health-action-item__points">+8 pts</span>
+              </button>
+              <button class="health-action-item" onclick="askAI('Assign owners to the 5 unowned tables in production')">
+                <span class="material-symbols-outlined">person_add</span>
+                <span class="health-action-item__label">Assign owners to 5 tables</span>
+                <span class="health-action-item__points">+5 pts</span>
+              </button>
+              <button class="health-action-item" onclick="askAI('Generate descriptions for the 3 undocumented views')">
+                <span class="material-symbols-outlined">description</span>
+                <span class="health-action-item__label">Add descriptions to 3 views</span>
+                <span class="health-action-item__points">+3 pts</span>
+              </button>
+            </div>
+          </div>
+          <div class="sds-card-footer">
+            <button class="health-card-footer__link" onclick="askAI('Show me a full data health report')">View full report <span class="material-symbols-outlined">arrow_forward</span></button>
+            <span class="health-card-footer__meta">Updated 15 minutes ago</span>
+          </div>
+        </div>
+
+        <!-- Popular Queries (inline row) -->
+        <div class="popular-queries-row">
+          <span class="popular-queries-label">
+            <span class="material-symbols-outlined">group</span>
+            Popular with your team
+          </span>
+          <div class="popular-queries-chips">
+            <button class="popular-chip" onclick="askAI('Show all PII tables in production')">Show all PII tables in production</button>
+            <button class="popular-chip" onclick="askAI('Tables with stale documentation')">Tables with stale documentation</button>
+            <button class="popular-chip" onclick="askAI('Schema changes this week')">Schema changes this week</button>
           </div>
         </div>
       </div>
@@ -2510,9 +2266,9 @@
          #home-conversation — Inline AI Conversation
          ====================================================== -->
     <section class="screen" id="screen-home-conversation">
-      <div class="conversation-container" style="padding-top: var(--sds-space-600);">
+      <div class="conversation-container conversation-container--padded">
         <div class="conversation-actions-bar">
-          <button class="conversation-back" onclick="navigateTo('home')" style="margin-bottom:0">
+          <button class="conversation-back conversation-back--inline" onclick="navigateTo('home')">
             <span class="material-symbols-outlined">arrow_back</span>
             Back to dashboard
           </button>
@@ -2550,9 +2306,9 @@
               <div class="ai-error-state-body">
                 <h4>Something went wrong</h4>
                 <p>The AI assistant could not generate a response. This may be a temporary issue with the analysis service. Your query has been saved.</p>
-                <div style="display: flex; gap: var(--sds-space-200);">
+                <div class="error-actions">
                   <button class="btn-primary-sm" id="retryBtn" onclick="retryQuery()">
-                    <span class="material-symbols-outlined" style="font-size:14px">refresh</span>
+                    <span class="material-symbols-outlined">refresh</span>
                     Try again
                   </button>
                   <button class="btn-secondary-sm" onclick="navigateTo('home')">Back to dashboard</button>
@@ -2749,7 +2505,7 @@
         <!-- Follow-up input -->
         <div class="conv-follow-input" role="search" aria-label="Follow-up question">
           <input type="text" id="followUpInput" placeholder="Ask a follow-up question...  ⌘K" aria-label="Ask a follow-up question" autocomplete="off">
-          <button class="conv-follow-send" id="followUpSendBtn" aria-label="Send follow-up" style="opacity:0;pointer-events:none;transition:opacity 0.15s ease;">
+          <button class="conv-follow-send conv-follow-send--hidden" id="followUpSendBtn" aria-label="Send follow-up">
             <span class="material-symbols-outlined">arrow_upward</span>
           </button>
         </div>
@@ -2945,11 +2701,13 @@
         <div class="catalog-header">
           <h1>Security Posture</h1>
         </div>
-        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
-          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">security</span>
-          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Security Posture Detail View</h2>
-          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Full security posture dashboard with compliance tracking, access audit logs, and risk assessment. Coming in the next sprint.</p>
-          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        <div class="sds-card">
+          <div class="sds-card-body placeholder-page">
+            <span class="material-symbols-outlined placeholder-page__icon">security</span>
+            <h2 class="placeholder-page__title">Security Posture Detail View</h2>
+            <p class="placeholder-page__desc">Full security posture dashboard with compliance tracking, access audit logs, and risk assessment. Coming in the next sprint.</p>
+            <button class="btn-secondary-sm placeholder-page__action" onclick="navigateTo('home')">Back to Home</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2960,11 +2718,13 @@
     <section class="screen" id="screen-sources">
       <div class="catalog-content">
         <div class="catalog-header"><h1>Sources</h1></div>
-        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
-          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">database</span>
-          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Source Connections &amp; Health</h2>
-          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">14 sources connected. Manage connectors, sync schedules, and health monitoring. Coming in the next sprint.</p>
-          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        <div class="sds-card">
+          <div class="sds-card-body placeholder-page">
+            <span class="material-symbols-outlined placeholder-page__icon">database</span>
+            <h2 class="placeholder-page__title">Source Connections &amp; Health</h2>
+            <p class="placeholder-page__desc">14 sources connected. Manage connectors, sync schedules, and health monitoring. Coming in the next sprint.</p>
+            <button class="btn-secondary-sm placeholder-page__action" onclick="navigateTo('home')">Back to Home</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2975,11 +2735,13 @@
     <section class="screen" id="screen-lineage">
       <div class="catalog-content">
         <div class="catalog-header"><h1>Lineage</h1></div>
-        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
-          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">account_tree</span>
-          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Data Lineage Explorer</h2>
-          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Visual lineage graph showing upstream and downstream dependencies across 3,240 assets. Coming in the next sprint.</p>
-          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        <div class="sds-card">
+          <div class="sds-card-body placeholder-page">
+            <span class="material-symbols-outlined placeholder-page__icon">account_tree</span>
+            <h2 class="placeholder-page__title">Data Lineage Explorer</h2>
+            <p class="placeholder-page__desc">Visual lineage graph showing upstream and downstream dependencies across 3,240 assets. Coming in the next sprint.</p>
+            <button class="btn-secondary-sm placeholder-page__action" onclick="navigateTo('home')">Back to Home</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2990,11 +2752,13 @@
     <section class="screen" id="screen-governance">
       <div class="catalog-content">
         <div class="catalog-header"><h1>Governance</h1></div>
-        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
-          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">gavel</span>
-          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Governance Dashboard</h2>
-          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Full governance dashboard with classification workflows, ownership tracking, and policy enforcement. Coming in the next sprint.</p>
-          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        <div class="sds-card">
+          <div class="sds-card-body placeholder-page">
+            <span class="material-symbols-outlined placeholder-page__icon">gavel</span>
+            <h2 class="placeholder-page__title">Governance Dashboard</h2>
+            <p class="placeholder-page__desc">Full governance dashboard with classification workflows, ownership tracking, and policy enforcement. Coming in the next sprint.</p>
+            <button class="btn-secondary-sm placeholder-page__action" onclick="navigateTo('home')">Back to Home</button>
+          </div>
         </div>
       </div>
     </section>
@@ -3105,23 +2869,23 @@
   if (followUpInput) {
     followUpInput.addEventListener('input', () => {
       const hasText = followUpInput.value.trim().length > 0;
-      followUpSendBtn.style.opacity = hasText ? '1' : '0';
-      followUpSendBtn.style.pointerEvents = hasText ? 'auto' : 'none';
+      followUpSendBtn.classList.toggle('conv-follow-send--visible', hasText);
+      followUpSendBtn.classList.toggle('conv-follow-send--hidden', !hasText);
     });
     followUpInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && followUpInput.value.trim()) {
         askAI(followUpInput.value.trim());
         followUpInput.value = '';
-        followUpSendBtn.style.opacity = '0';
-        followUpSendBtn.style.pointerEvents = 'none';
+        followUpSendBtn.classList.remove('conv-follow-send--visible');
+        followUpSendBtn.classList.add('conv-follow-send--hidden');
       }
     });
     followUpSendBtn.addEventListener('click', () => {
       if (followUpInput.value.trim()) {
         askAI(followUpInput.value.trim());
         followUpInput.value = '';
-        followUpSendBtn.style.opacity = '0';
-        followUpSendBtn.style.pointerEvents = 'none';
+        followUpSendBtn.classList.remove('conv-follow-send--visible');
+        followUpSendBtn.classList.add('conv-follow-send--hidden');
       }
     });
   }
@@ -3227,11 +2991,11 @@
     },
     risk: {
       body: '<p>Here is your <strong>risk summary</strong> across all 14 connected sources. Overall risk score: <strong>83/100</strong> (&uarr;5 this week).</p>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">' +
-        '<div style="background:var(--sds-status-error-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-error-text);">12</div><div style="font-size:12px;color:var(--sds-text-secondary);">High Risk Assets</div><div style="font-size:10px;color:var(--sds-status-error-text);">&uarr; 2 new this week</div></div>' +
-        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-warning-text);">7</div><div style="font-size:12px;color:var(--sds-text-secondary);">Over-Permissioned</div><div style="font-size:10px;color:var(--sds-status-success-text);">&darr; 4 revoked this week</div></div>' +
-        '<div style="background:var(--sds-status-info-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-info-text);">3</div><div style="font-size:12px;color:var(--sds-text-secondary);">Compliance Gaps</div><div style="font-size:10px;color:var(--sds-text-tertiary);">HIPAA, SOC2, GDPR</div></div>' +
-        '<div style="background:var(--sds-status-success-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-success-text);">128</div><div style="font-size:12px;color:var(--sds-text-secondary);">PII Cols Tracked</div><div style="font-size:10px;color:var(--sds-status-success-text);">&uarr; 38 classified this week</div></div>' +
+        '<div class="risk-summary-grid">' +
+        '<div class="risk-summary-cell risk-summary-cell--error"><div class="risk-summary-cell__value">12</div><div class="risk-summary-cell__label">High Risk Assets</div><div class="risk-summary-cell__trend">&uarr; 2 new this week</div></div>' +
+        '<div class="risk-summary-cell risk-summary-cell--warning"><div class="risk-summary-cell__value">7</div><div class="risk-summary-cell__label">Over-Permissioned</div><div class="risk-summary-cell__trend">&darr; 4 revoked this week</div></div>' +
+        '<div class="risk-summary-cell risk-summary-cell--info"><div class="risk-summary-cell__value">3</div><div class="risk-summary-cell__label">Compliance Gaps</div><div class="risk-summary-cell__trend">HIPAA, SOC2, GDPR</div></div>' +
+        '<div class="risk-summary-cell risk-summary-cell--success"><div class="risk-summary-cell__value">128</div><div class="risk-summary-cell__label">PII Cols Tracked</div><div class="risk-summary-cell__trend">&uarr; 38 classified this week</div></div>' +
         '</div>' +
         '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">warning</span></div><div><span class="result-item-name">Highest Risk: raw.clickstream_events</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">Unprotected PII</span></div></button></div>' +
         '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">warning</span></div><div><span class="result-item-name">ml_features.user_embeddings</span><div class="inline-trust-tags"><span class="trust-tag owner"><span class="material-symbols-outlined">person</span> Suki L.</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">Unclassified + No Policy</span></div></button></div>' +
@@ -3260,10 +3024,10 @@
     },
     compliance: {
       body: '<p>Here is your <strong>compliance status</strong> across applicable regulations:</p>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;">' +
-        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-warning-text);">HIPAA</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: PHI audit logging</div></div>' +
-        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-warning-text);">SOC2</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: access reviews</div></div>' +
-        '<div style="background:var(--sds-status-error-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-error-text);">GDPR</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: data deletion</div></div>' +
+        '<div class="risk-summary-grid risk-summary-grid--3col">' +
+        '<div class="risk-summary-cell risk-summary-cell--warning"><div class="risk-summary-cell__value">HIPAA</div><div class="risk-summary-cell__label">1 gap: PHI audit logging</div></div>' +
+        '<div class="risk-summary-cell risk-summary-cell--warning"><div class="risk-summary-cell__value">SOC2</div><div class="risk-summary-cell__label">1 gap: access reviews</div></div>' +
+        '<div class="risk-summary-cell risk-summary-cell--error"><div class="risk-summary-cell__value">GDPR</div><div class="risk-summary-cell__label">1 gap: data deletion</div></div>' +
         '</div>' +
         '<p><strong>GDPR is your highest priority:</strong> 3 tables containing EU personal data lack automated deletion policies. The HIPAA PHI audit logging gap can be resolved by enabling query logging on the 4 PHI-tagged tables.</p>',
       attribution: 'Based on regulatory requirements mapped against current data protection policies and access controls',
@@ -3680,34 +3444,7 @@
     }
   });
 
-  // ============================================================
-  // Progressive Disclosure: Collapsible card sections
-  // ============================================================
-  function toggleCardCollapse(toggleBtn) {
-    const card = toggleBtn.closest('.home-card');
-    const body = card.querySelector('.home-card-body.collapsible');
-    if (!body) return;
-
-    const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-
-    if (isExpanded) {
-      body.style.maxHeight = body.scrollHeight + 'px';
-      body.offsetHeight;
-      body.classList.add('collapsed');
-      toggleBtn.setAttribute('aria-expanded', 'false');
-    } else {
-      body.classList.remove('collapsed');
-      body.style.maxHeight = body.scrollHeight + 'px';
-      toggleBtn.setAttribute('aria-expanded', 'true');
-      setTimeout(() => { body.style.maxHeight = ''; }, 300);
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.home-card-body.collapsible:not(.collapsed)').forEach(body => {
-      body.style.maxHeight = '';
-    });
-  });
+  // (Collapsible card sections removed — no more collapsible cards on homepage)
 
   // ============================================================
   // Keyboard shortcuts for insight card actions (d = dismiss)
@@ -3761,8 +3498,7 @@
   const onboardingSteps = [
     { target: '.ai-prompt-bar', title: 'Ask anything about your data', desc: 'The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more. Press \u2318K from anywhere.', position: 'below' },
     { target: '.role-selector-btn', title: 'Personalize your view', desc: 'Switch roles to see insights tailored for engineers, analysts, stewards, security leads, or executives.', position: 'below' },
-    { target: '.insight-cards-row', title: 'AI-generated insights', desc: 'Prioritized alerts about schema drift, stale access, and auto-classified data. Dismiss or act on each with one click. Press D to dismiss.', position: 'below' },
-    { target: '.governance-actions-list', title: 'Track governance progress', desc: 'Complete guided actions to improve your governance score. Each task shows its point value to help you prioritize.', position: 'above' }
+    { target: '.insight-cards-row', title: 'AI-generated insights', desc: 'Prioritized alerts about schema drift, stale access, and auto-classified data. Dismiss or act on each with one click. Press D to dismiss.', position: 'below' }
   ];
 
   let onboardingIndex = 0;
@@ -3833,29 +3569,109 @@
 
   document.getElementById('onboardingSkip').addEventListener('click', endOnboarding);
 
-  // ============================================================
-  // Save collapsed state preferences (localStorage)
-  // ============================================================
-  (function initCollapsePrefs() {
-    document.querySelectorAll('.home-card[data-collapsible]').forEach((card, i) => {
-      const key = 'strata_collapse_' + i;
-      const saved = localStorage.getItem(key);
-      const toggle = card.querySelector('.home-card-toggle');
-      const body = card.querySelector('.home-card-body.collapsible');
-      if (!toggle || !body) return;
-      if (saved === 'expanded') { body.classList.remove('collapsed'); toggle.setAttribute('aria-expanded', 'true'); }
-      else if (saved === 'collapsed') { body.classList.add('collapsed'); toggle.setAttribute('aria-expanded', 'false'); }
-    });
-  })();
+  // (Collapsed state preferences removed — no more collapsible cards)
 
-  const origToggle = window.toggleCardCollapse;
-  window.toggleCardCollapse = function(toggleBtn) {
-    origToggle(toggleBtn);
-    document.querySelectorAll('.home-card[data-collapsible]').forEach((card, i) => {
-      const t = card.querySelector('.home-card-toggle');
-      if (t) localStorage.setItem('strata_collapse_' + i, t.getAttribute('aria-expanded') === 'true' ? 'expanded' : 'collapsed');
+  // ============================================================
+  // R2-5: Autocomplete Keyboard Navigation (Arrow Keys)
+  // ============================================================
+  let autocompleteActiveIndex = -1;
+
+  promptInput.addEventListener('keydown', (e) => {
+    const dropdown = document.getElementById('autocompleteDropdown');
+    const recentDropdown = document.getElementById('recentQueriesDropdown');
+    const activeDropdown = dropdown.classList.contains('visible') ? dropdown : (recentDropdown.classList.contains('visible') ? recentDropdown : null);
+    if (!activeDropdown) return;
+
+    const items = activeDropdown.querySelectorAll('.autocomplete-item');
+    if (items.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      autocompleteActiveIndex = Math.min(autocompleteActiveIndex + 1, items.length - 1);
+      updateAutocompleteActive(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      autocompleteActiveIndex = Math.max(autocompleteActiveIndex - 1, -1);
+      updateAutocompleteActive(items);
+    } else if (e.key === 'Enter' && autocompleteActiveIndex >= 0) {
+      e.preventDefault();
+      items[autocompleteActiveIndex].click();
+      autocompleteActiveIndex = -1;
+    }
+  });
+
+  function updateAutocompleteActive(items) {
+    items.forEach((item, i) => {
+      item.setAttribute('aria-selected', i === autocompleteActiveIndex ? 'true' : 'false');
+      item.classList.toggle('active', i === autocompleteActiveIndex);
+    });
+    if (autocompleteActiveIndex >= 0 && items[autocompleteActiveIndex]) {
+      items[autocompleteActiveIndex].scrollIntoView({ block: 'nearest' });
+      promptInput.setAttribute('aria-activedescendant', 'autocomplete-item-' + autocompleteActiveIndex);
+    } else {
+      promptInput.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  // Reset active index when autocomplete content changes
+  const origShowAutocomplete = showAutocomplete;
+  showAutocomplete = function(text) {
+    autocompleteActiveIndex = -1;
+    origShowAutocomplete(text);
+    // Add IDs to items for aria-activedescendant
+    document.querySelectorAll('#autocompleteDropdown .autocomplete-item').forEach((item, i) => {
+      item.id = 'autocomplete-item-' + i;
+      item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', 'false');
     });
   };
+
+  const origShowRecent = showRecentQueries;
+  showRecentQueries = function() {
+    autocompleteActiveIndex = -1;
+    origShowRecent();
+    document.querySelectorAll('#recentQueriesDropdown .autocomplete-item').forEach((item, i) => {
+      item.id = 'autocomplete-item-' + i;
+      item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', 'false');
+    });
+  };
+
+  // ============================================================
+  // R2-7: Trust Tag Tooltip Keyboard Accessibility
+  // ============================================================
+  function addTooltipAccessibility() {
+    document.querySelectorAll('.trust-tag').forEach(tag => {
+      if (!tag.hasAttribute('tabindex')) {
+        tag.setAttribute('tabindex', '0');
+        tag.setAttribute('role', 'img');
+        const tooltip = tag.querySelector('.trust-tag-tooltip');
+        if (tooltip) {
+          const tooltipId = 'tooltip-' + Math.random().toString(36).substr(2, 6);
+          tooltip.id = tooltipId;
+          tooltip.setAttribute('role', 'tooltip');
+          tag.setAttribute('aria-describedby', tooltipId);
+        }
+      }
+    });
+  }
+  addTooltipAccessibility();
+
+  // Re-apply after role content switches
+  const origApplyRoleContent = applyRoleContent;
+  applyRoleContent = function(role) {
+    origApplyRoleContent(role);
+    setTimeout(addTooltipAccessibility, 200);
+  };
+
+  // ============================================================
+  // R2-10: Respect prefers-reduced-motion in JS animations
+  // ============================================================
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function getAnimationDuration(ms) {
+    return prefersReducedMotion.matches ? 0 : ms;
+  }
 </script>
 </body>
 </html>
