@@ -757,10 +757,10 @@
   .trust-tags { display: flex; flex-wrap: wrap; gap: var(--sds-space-100); margin-top: var(--sds-space-150); }
   .trust-tag {
     display: inline-flex; align-items: center; gap: 3px;
-    padding: 2px var(--sds-space-150); border-radius: 3px;
+    padding: 4px var(--sds-space-200); border-radius: 4px;
     font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
     text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.6;
-    position: relative; cursor: help;
+    position: relative; cursor: help; min-height: 24px;
   }
   .trust-tag.certified { background: var(--sds-status-success-bg); color: var(--sds-status-success-text); }
   .trust-tag.quality { background: var(--sds-status-info-bg); color: var(--sds-status-info-text); }
@@ -1514,6 +1514,125 @@
     .catalog-table { min-width: 700px; }
   }
 
+  /* Help Menu Dropdown */
+  .help-dropdown {
+    display: none; position: absolute; top: 100%; right: 0; margin-top: var(--sds-space-100);
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    min-width: 200px; z-index: 200; padding: var(--sds-space-100) 0;
+  }
+  .help-dropdown.visible { display: block; animation: fadeIn 0.12s ease; }
+  .help-dropdown-item {
+    display: flex; align-items: center; gap: var(--sds-space-200);
+    padding: var(--sds-space-200) var(--sds-space-400); cursor: pointer;
+    transition: background 0.1s; border: none; background: transparent;
+    font-family: var(--sds-font-sans); font-size: var(--sds-type-label);
+    color: var(--sds-text-primary); text-align: left; width: 100%;
+  }
+  .help-dropdown-item:hover { background: var(--sds-bg-subtle); }
+  .help-dropdown-item .material-symbols-outlined {
+    font-size: 16px; color: var(--sds-text-tertiary);
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+  }
+  .sds-header-help { position: relative; }
+
+  /* Autocomplete / Type-Ahead Dropdown */
+  .autocomplete-dropdown {
+    display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    z-index: 200; padding: var(--sds-space-100) 0; max-height: 280px; overflow-y: auto;
+  }
+  .autocomplete-dropdown.visible { display: block; animation: fadeIn 0.1s ease; }
+  .autocomplete-section-label {
+    font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
+    color: var(--sds-text-tertiary); text-transform: uppercase; letter-spacing: var(--sds-tracking-wide);
+    padding: var(--sds-space-200) var(--sds-space-400) var(--sds-space-100);
+  }
+  .autocomplete-item {
+    display: flex; align-items: center; gap: var(--sds-space-200);
+    padding: var(--sds-space-200) var(--sds-space-400); cursor: pointer;
+    transition: background 0.1s; border: none; background: transparent;
+    font-family: var(--sds-font-sans); font-size: var(--sds-type-label);
+    color: var(--sds-text-primary); text-align: left; width: 100%;
+  }
+  .autocomplete-item:hover, .autocomplete-item.active { background: var(--sds-bg-subtle); }
+  .autocomplete-item .material-symbols-outlined {
+    font-size: 14px; color: var(--sds-text-tertiary);
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+  }
+  .ai-prompt-container { position: relative; }
+
+  /* Recent Queries Dropdown (on focus) */
+  .recent-queries-dropdown {
+    display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--sds-bg-card); border: 1px solid var(--sds-border-default);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    z-index: 199; padding: var(--sds-space-100) 0;
+  }
+  .recent-queries-dropdown.visible { display: block; animation: fadeIn 0.1s ease; }
+
+  /* Confirmation Dialog */
+  .confirm-toast {
+    position: fixed; bottom: var(--sds-space-600); left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--sds-color-warm-gray-800); color: var(--sds-text-on-primary);
+    padding: var(--sds-space-300) var(--sds-space-500);
+    border-radius: 10px; display: flex; align-items: center;
+    gap: var(--sds-space-300); font-size: var(--sds-type-label);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 1001;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; opacity: 0;
+  }
+  .confirm-toast.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1; pointer-events: auto;
+  }
+  .confirm-toast-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.3);
+    color: var(--sds-color-blue-200); font-size: var(--sds-type-label);
+    font-weight: var(--sds-weight-semibold); font-family: var(--sds-font-sans);
+    padding: var(--sds-space-100) var(--sds-space-300); border-radius: 6px;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .confirm-toast-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+  .confirm-toast-cancel {
+    background: transparent; border: none;
+    color: var(--sds-color-warm-gray-300); font-size: var(--sds-type-label);
+    font-family: var(--sds-font-sans); padding: var(--sds-space-100) var(--sds-space-200);
+    cursor: pointer; transition: color 0.15s ease;
+  }
+  .confirm-toast-cancel:hover { color: var(--sds-text-on-primary); }
+
+  /* Clickable hero stats */
+  .hero-stat-link {
+    color: var(--sds-text-link); cursor: pointer; text-decoration: none;
+    transition: color 0.12s ease;
+  }
+  .hero-stat-link:hover { text-decoration: underline; }
+
+  /* Security card context (trend indicators) */
+  .security-card-trend {
+    font-size: 10px; font-weight: var(--sds-weight-semibold);
+    margin-top: var(--sds-space-050);
+  }
+  .security-card-trend.up-good { color: var(--sds-status-success-text); }
+  .security-card-trend.down-good { color: var(--sds-status-success-text); }
+  .security-card-trend.up-bad { color: var(--sds-status-error-text); }
+  .security-card-trend.down-bad { color: var(--sds-status-error-text); }
+  .security-card-trend.neutral { color: var(--sds-text-tertiary); }
+  .security-card-context {
+    font-size: 9px; color: var(--sds-text-tertiary); margin-top: 1px;
+  }
+
+  /* Role transition fade */
+  .home-content.role-transitioning {
+    opacity: 0.4; transition: opacity 0.15s ease;
+  }
+  .home-content.role-visible {
+    opacity: 1; transition: opacity 0.3s ease;
+  }
+
   @media (max-width: 600px) {
     .sds-header { padding: 0 var(--sds-space-300); height: 48px; }
     .sds-header-username { display: none; }
@@ -1548,6 +1667,11 @@
   <span>Insight dismissed</span>
   <button class="undo-toast-btn" id="undoBtn">Undo</button>
 </div>
+<div class="confirm-toast" id="confirmClearToast" role="alert">
+  <span>Clear this conversation?</span>
+  <button class="confirm-toast-btn" id="confirmClearBtn">Clear</button>
+  <button class="confirm-toast-cancel" id="cancelClearBtn">Cancel</button>
+</div>
 
 <!-- Onboarding Overlay (first-run experience) -->
 <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Welcome walkthrough">
@@ -1581,10 +1705,10 @@
     <nav class="sds-header-nav" aria-label="Main navigation">
       <button class="sds-header-nav-link active" data-nav="home" onclick="navigateTo('home')">Home</button>
       <button class="sds-header-nav-link" data-nav="catalog" onclick="navigateTo('catalog')">Catalog</button>
-      <button class="sds-header-nav-link" data-nav="sources">Sources</button>
-      <button class="sds-header-nav-link" data-nav="lineage">Lineage</button>
+      <button class="sds-header-nav-link" data-nav="sources" onclick="navigateTo('sources')">Sources</button>
+      <button class="sds-header-nav-link" data-nav="lineage" onclick="navigateTo('lineage')">Lineage</button>
       <button class="sds-header-nav-link" data-nav="security" onclick="navigateTo('security')">Security</button>
-      <button class="sds-header-nav-link" data-nav="governance">Governance</button>
+      <button class="sds-header-nav-link" data-nav="governance" onclick="navigateTo('governance')">Governance</button>
     </nav>
   </div>
   <div class="sds-header-center"></div>
@@ -1593,7 +1717,16 @@
       <span class="material-symbols-outlined">notifications</span>
       <span class="notif-dot" aria-hidden="true"></span>
     </button>
-    <button class="sds-header-help" aria-label="Help">?</button>
+    <button class="sds-header-help" aria-label="Help" id="helpBtn" onclick="toggleHelpDropdown()" aria-haspopup="true" aria-expanded="false">?
+      <div class="help-dropdown" id="helpDropdown">
+        <button class="help-dropdown-item" onclick="event.stopPropagation(); restartTour()">
+          <span class="material-symbols-outlined">school</span> Restart tour
+        </button>
+        <button class="help-dropdown-item" onclick="event.stopPropagation(); showKeyboardShortcuts()">
+          <span class="material-symbols-outlined">keyboard</span> Keyboard shortcuts
+        </button>
+      </div>
+    </button>
     <div class="sds-header-divider" aria-hidden="true"></div>
     <button class="sds-header-profile" aria-label="User profile menu">
       <div class="sds-header-avatar">JR</div>
@@ -1682,12 +1815,12 @@
       <div class="home-hero">
         <div class="home-hero-greeting">
           <h1>Good morning, Jordan</h1>
-          <div class="hero-subtitle">
-            <span class="hero-stat">Data Engineering Lead</span>
+          <div class="hero-subtitle" id="heroSubtitle">
+            <span class="hero-stat" id="heroRoleTitle">Data Engineering Lead</span>
             <span class="hero-dot" aria-hidden="true"></span>
-            <span class="hero-stat">14 sources connected</span>
+            <a class="hero-stat hero-stat-link" onclick="navigateTo('sources')">14 sources connected</a>
             <span class="hero-dot" aria-hidden="true"></span>
-            <span class="hero-stat">3,240 assets cataloged</span>
+            <a class="hero-stat hero-stat-link" onclick="navigateTo('catalog')">3,240 assets cataloged</a>
           </div>
         </div>
 
@@ -1695,12 +1828,16 @@
         <div class="ai-prompt-container">
           <div class="ai-prompt-bar" role="search">
             <span class="prompt-icon"><span class="material-symbols-outlined">auto_awesome</span></span>
-            <input type="text" id="aiPromptInput" placeholder="Ask anything about your data..." aria-label="Ask the AI assistant about your data" autocomplete="off">
+            <input type="text" id="aiPromptInput" placeholder="Ask anything about your data...  ⌘K" aria-label="Ask the AI assistant about your data" autocomplete="off">
             <kbd aria-hidden="true">&#8984;K</kbd>
             <button class="prompt-send" id="promptSendBtn" aria-label="Submit query">
               <span class="material-symbols-outlined">arrow_upward</span>
             </button>
           </div>
+          <!-- Autocomplete Dropdown -->
+          <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+          <!-- Recent Queries Dropdown -->
+          <div class="recent-queries-dropdown" id="recentQueriesDropdown"></div>
         </div>
 
         <!-- Suggestion Chips -->
@@ -1972,7 +2109,7 @@
                       <div class="source-breach-actions">
                         <button class="btn-secondary-sm btn-xs">View source</button>
                         <button class="insight-action-btn ai-action btn-xs" onclick="askAI('What is the downstream impact of s3://strata-lake/raw-events being 6 hours behind SLA?')">
-                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI about impact
+                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI
                         </button>
                       </div>
                     </div>
@@ -1985,7 +2122,7 @@
                       <div class="source-breach-actions">
                         <button class="btn-secondary-sm btn-xs">View source</button>
                         <button class="insight-action-btn ai-action btn-xs" onclick="askAI('What is the downstream impact of databricks.ml-features being behind SLA?')">
-                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI about impact
+                          <span class="material-symbols-outlined">auto_awesome</span> Ask AI
                         </button>
                       </div>
                     </div>
@@ -1994,18 +2131,18 @@
               </div>
             </div>
 
-            <!-- Recent Activity — collapsed by default (progressive disclosure) -->
+            <!-- Recent Activity — expanded by default (time-sensitive info) -->
             <div class="home-card" data-collapsible="true">
               <div class="home-card-header">
                 <h2 class="home-card-title">
                   <span class="material-symbols-outlined">history</span>
                   Recent Activity
                 </h2>
-                <button class="home-card-toggle" aria-expanded="false" onclick="toggleCardCollapse(this)">
+                <button class="home-card-toggle" aria-expanded="true" onclick="toggleCardCollapse(this)">
                   <span class="material-symbols-outlined">expand_more</span>
                 </button>
               </div>
-              <div class="home-card-body collapsible collapsed">
+              <div class="home-card-body collapsible">
                 <div class="activity-timeline">
 
                   <!-- Classification scan -->
@@ -2026,7 +2163,7 @@
                       </div>
                       <div class="activity-item-actions">
                         <button class="activity-item-ask" onclick="navigateTo('catalog')">Review</button>
-                        <button class="activity-item-ask" onclick="askAI('Tell me about the classification scan results')">Ask about this</button>
+                        <button class="activity-item-ask" onclick="askAI('Tell me about the classification scan results')">Ask AI</button>
                       </div>
                     </div>
                     <span class="activity-item-time">12m ago</span>
@@ -2050,7 +2187,7 @@
                       </div>
                       <div class="activity-item-actions">
                         <button class="activity-item-ask" onclick="askAI('Show me the blast radius for schema changes in prod_snowflake.analytics')">View blast radius</button>
-                        <button class="activity-item-ask" onclick="askAI('What is the impact of the schema change in prod_snowflake.analytics?')">Ask about this</button>
+                        <button class="activity-item-ask" onclick="askAI('What is the impact of the schema change in prod_snowflake.analytics?')">Ask AI</button>
                       </div>
                     </div>
                     <span class="activity-item-time">1h ago</span>
@@ -2131,26 +2268,38 @@
                   <button class="security-card alert" onclick="askAI('Show me the 47 unclassified assets')" aria-label="47 unclassified assets — click for details">
                     <div class="security-card-value">47</div>
                     <div class="security-card-label">Unclassified assets</div>
+                    <div class="security-card-trend down-good">&darr; 15 from last week</div>
+                    <div class="security-card-context">of 3,240 total</div>
                   </button>
-                  <button class="security-card" onclick="askAI('Show PII inventory by column type')" aria-label="128 PII columns tracked — click for details">
+                  <button class="security-card" onclick="askAI('Where is customer PII stored?')" aria-label="128 PII columns tracked — click for details">
                     <div class="security-card-value">128</div>
                     <div class="security-card-label">PII cols tracked</div>
+                    <div class="security-card-trend up-good">&uarr; 38 new this week</div>
+                    <div class="security-card-context">across 14 sources</div>
                   </button>
                   <button class="security-card warn" onclick="askAI('Show over-permissioned access grants')" aria-label="7 over-permissioned grants — click for details">
                     <div class="security-card-value">7</div>
                     <div class="security-card-label">Over-permissioned</div>
+                    <div class="security-card-trend down-good">&darr; 4 revoked this week</div>
+                    <div class="security-card-context">need access review</div>
                   </button>
                   <button class="security-card" onclick="askAI('Show compliance gaps by regulation')" aria-label="3 compliance gaps — click for details">
                     <div class="security-card-value">3</div>
                     <div class="security-card-label">Compliance gaps</div>
+                    <div class="security-card-trend down-good">&darr; 1 resolved</div>
+                    <div class="security-card-context">HIPAA, SOC2, GDPR</div>
                   </button>
                   <button class="security-card warn" onclick="askAI('Show the 12 highest risk data assets')" aria-label="12 high risk assets — click for details">
                     <div class="security-card-value">12</div>
                     <div class="security-card-label">High risk assets</div>
+                    <div class="security-card-trend up-bad">&uarr; 2 new this week</div>
+                    <div class="security-card-context">PII without protection</div>
                   </button>
                   <button class="security-card" onclick="askAI('What changed in the last 7 days?')" aria-label="8 changes this week — click for details">
                     <div class="security-card-value">8</div>
                     <div class="security-card-label">Changed this week</div>
+                    <div class="security-card-trend neutral">same as last week</div>
+                    <div class="security-card-context">schemas + policies</div>
                   </button>
                 </div>
                 <button class="security-view-link" onclick="navigateTo('security')">
@@ -2263,19 +2412,7 @@
          #home-conversation — Inline AI Conversation
          ====================================================== -->
     <section class="screen" id="screen-home-conversation">
-      <div class="home-hero home-hero--compact">
-        <div class="ai-prompt-container">
-          <div class="ai-prompt-bar" role="search">
-            <span class="prompt-icon"><span class="material-symbols-outlined">auto_awesome</span></span>
-            <input type="text" id="aiPromptInputConv" placeholder="Ask a follow-up..." aria-label="Ask a follow-up question" autocomplete="off">
-            <button class="prompt-send visible" id="promptSendBtnConv" aria-label="Submit query">
-              <span class="material-symbols-outlined">arrow_upward</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="conversation-container">
+      <div class="conversation-container" style="padding-top: var(--sds-space-600);">
         <div class="conversation-actions-bar">
           <button class="conversation-back" onclick="navigateTo('home')" style="margin-bottom:0">
             <span class="material-symbols-outlined">arrow_back</span>
@@ -2513,8 +2650,8 @@
 
         <!-- Follow-up input -->
         <div class="conv-follow-input" role="search" aria-label="Follow-up question">
-          <input type="text" placeholder="Ask a follow-up question..." aria-label="Ask a follow-up question" autocomplete="off">
-          <button class="conv-follow-send" aria-label="Send follow-up">
+          <input type="text" id="followUpInput" placeholder="Ask a follow-up question...  ⌘K" aria-label="Ask a follow-up question" autocomplete="off">
+          <button class="conv-follow-send" id="followUpSendBtn" aria-label="Send follow-up" style="opacity:0;pointer-events:none;transition:opacity 0.15s ease;">
             <span class="material-symbols-outlined">arrow_upward</span>
           </button>
         </div>
@@ -2719,6 +2856,51 @@
       </div>
     </section>
 
+    <!-- ======================================================
+         #sources — Sources placeholder
+         ====================================================== -->
+    <section class="screen" id="screen-sources">
+      <div class="catalog-content">
+        <div class="catalog-header"><h1>Sources</h1></div>
+        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
+          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">database</span>
+          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Source Connections &amp; Health</h2>
+          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">14 sources connected. Manage connectors, sync schedules, and health monitoring. Coming in the next sprint.</p>
+          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         #lineage — Lineage placeholder
+         ====================================================== -->
+    <section class="screen" id="screen-lineage">
+      <div class="catalog-content">
+        <div class="catalog-header"><h1>Lineage</h1></div>
+        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
+          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">account_tree</span>
+          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Data Lineage Explorer</h2>
+          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Visual lineage graph showing upstream and downstream dependencies across 3,240 assets. Coming in the next sprint.</p>
+          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         #governance — Governance placeholder
+         ====================================================== -->
+    <section class="screen" id="screen-governance">
+      <div class="catalog-content">
+        <div class="catalog-header"><h1>Governance</h1></div>
+        <div class="home-card" style="padding: var(--sds-space-1200); text-align: center;">
+          <span class="material-symbols-outlined" style="font-size: 48px; color: var(--sds-text-disabled); font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;">gavel</span>
+          <h2 style="margin-top: var(--sds-space-400); color: var(--sds-text-secondary); font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);">Governance Dashboard</h2>
+          <p style="color: var(--sds-text-tertiary); margin-top: var(--sds-space-200);">Full governance dashboard with classification workflows, ownership tracking, and policy enforcement. Coming in the next sprint.</p>
+          <button class="btn-secondary-sm" style="margin-top: var(--sds-space-400);" onclick="navigateTo('home')">Back to Home</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -2730,7 +2912,10 @@
     'home': 'screen-home',
     'home-conversation': 'screen-home-conversation',
     'catalog': 'screen-catalog',
-    'security': 'screen-security'
+    'security': 'screen-security',
+    'sources': 'screen-sources',
+    'lineage': 'screen-lineage',
+    'governance': 'screen-governance'
   };
 
   const sidebarPages = ['catalog'];
@@ -2743,7 +2928,6 @@
     if (!route || !screens[route]) route = 'home';
 
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-
     const target = document.getElementById(screens[route]);
     if (target) target.classList.add('active');
 
@@ -2757,9 +2941,7 @@
     document.querySelectorAll('.sds-header-nav-link').forEach(link => {
       link.classList.remove('active');
       const nav = link.getAttribute('data-nav');
-      if (nav === route || (nav === 'home' && (route === 'home' || route === 'home-conversation')) ||
-          (nav === 'catalog' && route === 'catalog') ||
-          (nav === 'security' && route === 'security')) {
+      if (nav === route || (nav === 'home' && (route === 'home' || route === 'home-conversation'))) {
         link.classList.add('active');
       }
     });
@@ -2767,32 +2949,20 @@
     document.querySelectorAll('.sds-sidenav-item').forEach(item => {
       item.classList.remove('active');
       const nav = item.getAttribute('data-nav');
-      if (nav === route || (nav === 'catalog' && route === 'catalog')) {
-        item.classList.add('active');
-      }
+      if (nav === route) item.classList.add('active');
     });
 
     document.querySelector('.main-content').scrollTop = 0;
 
-    const screenId = screens[route];
-    const screen = document.getElementById(screenId);
+    const screen = document.getElementById(screens[route]);
     if (screen) {
       const heading = screen.querySelector('h1');
-      if (heading) {
-        document.getElementById('ai-status').textContent = 'Navigated to ' + heading.textContent;
-      }
+      if (heading) document.getElementById('ai-status').textContent = 'Navigated to ' + heading.textContent;
     }
   }
 
-  window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.replace('#', '');
-    activateScreen(hash);
-  });
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash.replace('#', '');
-    activateScreen(hash || 'home');
-  });
+  window.addEventListener('hashchange', () => activateScreen(window.location.hash.replace('#', '')));
+  window.addEventListener('DOMContentLoaded', () => activateScreen(window.location.hash.replace('#', '') || 'home'));
 
   // ============================================================
   // AI Prompt Bar interaction
@@ -2802,29 +2972,71 @@
 
   promptInput.addEventListener('input', () => {
     sendBtn.classList.toggle('visible', promptInput.value.trim().length > 0);
+    showAutocomplete(promptInput.value.trim());
   });
 
   promptInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && promptInput.value.trim()) {
+      hideAutocomplete();
+      hideRecentQueries();
       askAI(promptInput.value.trim());
     }
+    if (e.key === 'Escape') { hideAutocomplete(); hideRecentQueries(); }
   });
 
   sendBtn.addEventListener('click', () => {
     if (promptInput.value.trim()) {
+      hideAutocomplete();
+      hideRecentQueries();
       askAI(promptInput.value.trim());
     }
   });
+
+  // Show recent queries on focus (M2)
+  promptInput.addEventListener('focus', () => {
+    if (!promptInput.value.trim()) showRecentQueries();
+  });
+
+  promptInput.addEventListener('blur', () => {
+    setTimeout(() => { hideRecentQueries(); hideAutocomplete(); }, 200);
+  });
+
+  // Follow-up input (M1 fix: single input in conversation mode)
+  const followUpInput = document.getElementById('followUpInput');
+  const followUpSendBtn = document.getElementById('followUpSendBtn');
+  if (followUpInput) {
+    followUpInput.addEventListener('input', () => {
+      const hasText = followUpInput.value.trim().length > 0;
+      followUpSendBtn.style.opacity = hasText ? '1' : '0';
+      followUpSendBtn.style.pointerEvents = hasText ? 'auto' : 'none';
+    });
+    followUpInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && followUpInput.value.trim()) {
+        askAI(followUpInput.value.trim());
+        followUpInput.value = '';
+        followUpSendBtn.style.opacity = '0';
+        followUpSendBtn.style.pointerEvents = 'none';
+      }
+    });
+    followUpSendBtn.addEventListener('click', () => {
+      if (followUpInput.value.trim()) {
+        askAI(followUpInput.value.trim());
+        followUpInput.value = '';
+        followUpSendBtn.style.opacity = '0';
+        followUpSendBtn.style.pointerEvents = 'none';
+      }
+    });
+  }
 
   // Cmd+K shortcut
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       const currentHash = window.location.hash.replace('#', '');
-      if (currentHash === 'home' || currentHash === '') {
+      if (currentHash === 'home-conversation') {
+        followUpInput.focus();
+      } else if (currentHash === 'home' || currentHash === '') {
         promptInput.focus();
-      } else if (currentHash === 'home-conversation') {
-        document.getElementById('aiPromptInputConv').focus();
       } else {
         navigateTo('home');
         setTimeout(() => promptInput.focus(), 300);
@@ -2833,7 +3045,149 @@
   });
 
   // ============================================================
-  // AI Query with thinking animation + error timeout
+  // Autocomplete / Type-Ahead (M6)
+  // ============================================================
+  const allSuggestions = [
+    'Where is customer PII stored?',
+    'Show me schema changes in production today',
+    'Show me a risk summary across all sources',
+    'List unclassified tables in production',
+    'Show stale access grants that need review',
+    'Show all PII tables in production',
+    'What changed in the last 24 hours?',
+    'HIPAA compliance status',
+    'Unused service account access',
+    'Which tables are undocumented?',
+    'Show over-permissioned access grants',
+    'Show compliance gaps by regulation',
+    'Generate documentation for the top 50 tables',
+    'Show the blast radius for schema drift',
+    'Help me classify the 12 unclassified columns'
+  ];
+
+  function showAutocomplete(text) {
+    const dropdown = document.getElementById('autocompleteDropdown');
+    if (!text || text.length < 2) { dropdown.classList.remove('visible'); return; }
+    hideRecentQueries();
+    const matches = allSuggestions.filter(s => s.toLowerCase().includes(text.toLowerCase())).slice(0, 6);
+    if (matches.length === 0) { dropdown.classList.remove('visible'); return; }
+    dropdown.innerHTML = '<div class="autocomplete-section-label">Suggestions</div>' +
+      matches.map(m => '<button class="autocomplete-item" onmousedown="askAI(\'' + m.replace(/'/g, "\\'") + '\')"><span class="material-symbols-outlined">search</span>' + m + '</button>').join('');
+    dropdown.classList.add('visible');
+  }
+
+  function hideAutocomplete() {
+    document.getElementById('autocompleteDropdown').classList.remove('visible');
+  }
+
+  // ============================================================
+  // Recent Queries (M2)
+  // ============================================================
+  let queryHistory = [];
+
+  function addToHistory(query) {
+    queryHistory = queryHistory.filter(q => q !== query);
+    queryHistory.unshift(query);
+    if (queryHistory.length > 5) queryHistory.pop();
+  }
+
+  function showRecentQueries() {
+    const dropdown = document.getElementById('recentQueriesDropdown');
+    if (queryHistory.length === 0) { dropdown.classList.remove('visible'); return; }
+    dropdown.innerHTML = '<div class="autocomplete-section-label">Recent queries</div>' +
+      queryHistory.map(q => '<button class="autocomplete-item" onmousedown="askAI(\'' + q.replace(/'/g, "\\'") + '\')"><span class="material-symbols-outlined">history</span>' + q + '</button>').join('');
+    dropdown.classList.add('visible');
+  }
+
+  function hideRecentQueries() {
+    document.getElementById('recentQueriesDropdown').classList.remove('visible');
+  }
+
+  // ============================================================
+  // C1: Multiple AI Response Templates
+  // ============================================================
+  const responseTemplates = {
+    schema: {
+      body: '<p>I found <strong>3 schema changes</strong> in production today affecting <strong>4 downstream models</strong> and <strong>2 public dashboards</strong>. Here\'s the breakdown:</p>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">crm_prod.contacts</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span><span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified</span><span class="trust-tag quality"><span class="material-symbols-outlined">verified</span> Q:72</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">3 Columns Renamed</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">analytics.events</span><div class="inline-trust-tags"><span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified</span><span class="trust-tag fresh"><span class="material-symbols-outlined">schedule</span> 1h</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">2 Cols Added</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">warehouse.orders</span><div class="inline-trust-tags"><span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified</span><span class="trust-tag protected"><span class="material-symbols-outlined">shield</span> Protected</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">1 Col Removed</span></div></button></div>' +
+        '<div class="blast-radius-visual"><div class="br-overline"><span class="material-symbols-outlined">auto_awesome</span> Blast Radius Analysis</div><div class="blast-flow"><div class="blast-node source">crm_prod.contacts<span class="blast-node-sub">3 cols renamed</span></div><div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div><div class="blast-node impacted">4 dbt models<span class="blast-node-sub">stg_contacts, dim_customer, fct_engagement, int_crm_unified</span></div><div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div><div class="blast-node impacted">2 dashboards<span class="blast-node-sub">Customer 360, Marketing KPIs</span></div><div class="blast-arrow" aria-hidden="true"><span class="material-symbols-outlined">arrow_forward</span></div><div class="blast-node">~340 queries/day<span class="blast-node-sub">12 users affected</span></div></div></div>' +
+        '<p>The column renames in <code>crm_prod.contacts</code> are the highest-priority fix &mdash; they break the <strong>stg_contacts</strong> model which cascades to 2 public dashboards.</p>',
+      attribution: 'Based on catalog metadata, lineage graph, and query logs &mdash; analyzed 1,204 downstream dependencies',
+      followUps: ['Who will be affected if the dashboards break?', 'Show me the dbt model code that needs updating', 'Notify the data owners about this change']
+    },
+    pii: {
+      body: '<p>I found <strong>128 PII columns</strong> across <strong>14 sources</strong>. Here are the highest-risk assets with PII exposure:</p>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">prod_dw.customers</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span><span class="trust-tag protected"><span class="material-symbols-outlined">shield</span> Protected</span><span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">23 PII Columns</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">crm_prod.contacts</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span><span class="trust-tag quality"><span class="material-symbols-outlined">verified</span> Q:72</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">18 PII Columns</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">user_profiles</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span><span class="trust-tag certified"><span class="material-symbols-outlined">verified</span> Certified</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">12 PII Columns</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">analytics.user_events</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span><span class="trust-tag owner"><span class="material-symbols-outlined">person</span> Priya M.</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">8 PII Columns</span></div></button></div>' +
+        '<p><strong>12 PII columns lack protection policies.</strong> These are in <code>raw.clickstream_events</code> and <code>ml_features.user_embeddings</code>. I recommend adding column-level masking for email, phone, and SSN fields immediately.</p>',
+      attribution: 'Based on classification scan results and data protection policies across 14 sources',
+      followUps: ['Show PII columns without protection policies', 'Which teams have access to PII data?', 'Generate a PII protection plan']
+    },
+    risk: {
+      body: '<p>Here is your <strong>risk summary</strong> across all 14 connected sources. Overall risk score: <strong>83/100</strong> (&uarr;5 this week).</p>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">' +
+        '<div style="background:var(--sds-status-error-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-error-text);">12</div><div style="font-size:12px;color:var(--sds-text-secondary);">High Risk Assets</div><div style="font-size:10px;color:var(--sds-status-error-text);">&uarr; 2 new this week</div></div>' +
+        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-warning-text);">7</div><div style="font-size:12px;color:var(--sds-text-secondary);">Over-Permissioned</div><div style="font-size:10px;color:var(--sds-status-success-text);">&darr; 4 revoked this week</div></div>' +
+        '<div style="background:var(--sds-status-info-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-info-text);">3</div><div style="font-size:12px;color:var(--sds-text-secondary);">Compliance Gaps</div><div style="font-size:10px;color:var(--sds-text-tertiary);">HIPAA, SOC2, GDPR</div></div>' +
+        '<div style="background:var(--sds-status-success-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--sds-status-success-text);">128</div><div style="font-size:12px;color:var(--sds-text-secondary);">PII Cols Tracked</div><div style="font-size:10px;color:var(--sds-status-success-text);">&uarr; 38 classified this week</div></div>' +
+        '</div>' +
+        '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">warning</span></div><div><span class="result-item-name">Highest Risk: raw.clickstream_events</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">Unprotected PII</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">warning</span></div><div><span class="result-item-name">ml_features.user_embeddings</span><div class="inline-trust-tags"><span class="trust-tag owner"><span class="material-symbols-outlined">person</span> Suki L.</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">Unclassified + No Policy</span></div></button></div>' +
+        '<p><strong>Top recommendation:</strong> The 12 unprotected PII columns in <code>raw.clickstream_events</code> should be your immediate priority. Adding column-level masking would improve your risk score by ~8 points.</p>',
+      attribution: 'Based on security policies, classification coverage, access patterns, and compliance requirements',
+      followUps: ['Show the 12 unprotected PII columns', 'What would improve our risk score the most?', 'Generate a risk remediation plan']
+    },
+    unclassified: {
+      body: '<p>I found <strong>47 unclassified tables</strong> in production across 3 sources. Here are the highest-priority ones to classify:</p>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">ml_features.user_embeddings</span><div class="inline-trust-tags"><span class="trust-tag owner"><span class="material-symbols-outlined">person</span> Suki L.</span><span class="trust-tag ai-ready"><span class="material-symbols-outlined">psychology</span> AI:45</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">Likely PII</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">staging.raw_customer_events</span><div class="inline-trust-tags"><span class="trust-tag fresh"><span class="material-symbols-outlined">schedule</span> 2h</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">Possible PII</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">raw.partner_data_feed</span><div class="inline-trust-tags"><span class="trust-tag fresh"><span class="material-symbols-outlined">schedule</span> 6h</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">Unknown</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" onclick="navigateTo(\'catalog\')" aria-label="View in catalog"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">table_chart</span></div><div><span class="result-item-name">analytics.session_logs</span><div class="inline-trust-tags"><span class="trust-tag quality"><span class="material-symbols-outlined">verified</span> Q:78</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">Unknown</span></div></button></div>' +
+        '<p>AI pattern matching suggests <strong>8 of the 47 tables likely contain PII</strong> based on column names (email, phone, ssn, address patterns). I can auto-classify these with 94% confidence &mdash; would you like to proceed?</p>',
+      attribution: 'Based on column name pattern analysis, data sampling, and comparison with classified tables',
+      followUps: ['Auto-classify the 8 likely-PII tables', 'Show the column patterns that suggest PII', 'Who should own these unclassified tables?']
+    },
+    access: {
+      body: '<p>I found <strong>7 over-permissioned access grants</strong> and <strong>4 stale service accounts</strong> that need review. Here are the highest-risk ones:</p>' +
+        '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">admin_panel_settings</span></div><div><span class="result-item-name">svc-etl-legacy</span><div class="inline-trust-tags"><span class="trust-tag pii"><span class="material-symbols-outlined">lock</span> PII Access</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">90+ Days Idle</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">admin_panel_settings</span></div><div><span class="result-item-name">svc-reporting-v1</span><div class="inline-trust-tags"><span class="trust-tag protected"><span class="material-symbols-outlined">shield</span> Write Access</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-error">120+ Days Idle</span></div></button></div>' +
+        '<div class="result-item"><button class="result-item-header" aria-label="View details"><div class="result-item-left"><div class="result-item-icon"><span class="material-symbols-outlined">admin_panel_settings</span></div><div><span class="result-item-name">analyst-team-shared</span><div class="inline-trust-tags"><span class="trust-tag owner"><span class="material-symbols-outlined">person</span> 12 users</span></div></div></div><div class="result-item-meta"><span class="result-item-tag result-tag-warning">Over-Permissioned</span></div></button></div>' +
+        '<p><strong>Recommendation:</strong> Revoke write access for <code>svc-etl-legacy</code> and <code>svc-reporting-v1</code> immediately &mdash; both have been idle for 90+ days and still have write access to production PII tables. This would improve your risk score by 4 points.</p>',
+      attribution: 'Based on access logs, last-query timestamps, and permission policies over the last 90 days',
+      followUps: ['Revoke access for the idle service accounts', 'Show all users with PII access', 'Generate an access review report']
+    },
+    compliance: {
+      body: '<p>Here is your <strong>compliance status</strong> across applicable regulations:</p>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0;">' +
+        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-warning-text);">HIPAA</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: PHI audit logging</div></div>' +
+        '<div style="background:var(--sds-status-warning-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-warning-text);">SOC2</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: access reviews</div></div>' +
+        '<div style="background:var(--sds-status-error-bg);border-radius:8px;padding:16px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--sds-status-error-text);">GDPR</div><div style="font-size:12px;color:var(--sds-text-secondary);margin-top:4px;">1 gap: data deletion</div></div>' +
+        '</div>' +
+        '<p><strong>GDPR is your highest priority:</strong> 3 tables containing EU personal data lack automated deletion policies. The HIPAA PHI audit logging gap can be resolved by enabling query logging on the 4 PHI-tagged tables.</p>',
+      attribution: 'Based on regulatory requirements mapped against current data protection policies and access controls',
+      followUps: ['Show GDPR-affected tables', 'Generate a compliance remediation plan', 'Which tables need audit logging?']
+    }
+  };
+
+  function getResponseTemplate(query) {
+    const q = query.toLowerCase();
+    if (q.includes('pii') || q.includes('personal') || q.includes('sensitive')) return 'pii';
+    if (q.includes('schema') || q.includes('drift') || q.includes('blast') || q.includes('column') || q.includes('changed') || q.includes('changes')) return 'schema';
+    if (q.includes('risk') || q.includes('security') || q.includes('posture') || q.includes('summary')) return 'risk';
+    if (q.includes('unclassified') || q.includes('classify') || q.includes('classification')) return 'unclassified';
+    if (q.includes('access') || q.includes('stale') || q.includes('permission') || q.includes('service account') || q.includes('over-permission')) return 'access';
+    if (q.includes('compliance') || q.includes('hipaa') || q.includes('gdpr') || q.includes('soc2') || q.includes('regulation')) return 'compliance';
+    if (q.includes('doc') || q.includes('description') || q.includes('undocumented')) return 'unclassified';
+    if (q.includes('owner') || q.includes('assign')) return 'unclassified';
+    return 'risk'; // default fallback
+  }
+
+  // ============================================================
+  // AI Query with thinking animation + error timeout (C1 fix)
   // ============================================================
   let currentQuery = '';
   let aiResponseTimeout = null;
@@ -2841,10 +3195,13 @@
 
   function askAI(query) {
     currentQuery = query;
+    addToHistory(query);
+    hideAutocomplete();
+    hideRecentQueries();
+
     document.getElementById('convUserQuery').textContent = query;
     document.getElementById('ai-status').textContent = 'Searching for: ' + query;
 
-    // Show thinking state, hide response and error
     const thinkingMsg = document.getElementById('aiThinkingMsg');
     const responseMsg = document.getElementById('aiResponseMsg');
     const errorMsg = document.getElementById('aiErrorMsg');
@@ -2854,21 +3211,18 @@
     responseMsg.style.display = 'none';
     errorMsg.style.display = 'none';
 
-    // Clear any existing timeouts
     clearTimeout(aiResponseTimeout);
     clearTimeout(aiErrorTimeout);
 
-    // Set contextual thinking label
+    // Contextual thinking label
     const q = query.toLowerCase();
-    if (q.includes('schema')) thinkingLabel.textContent = 'Analyzing schema changes across 14 sources...';
-    else if (q.includes('pii')) thinkingLabel.textContent = 'Scanning catalog for PII columns...';
-    else if (q.includes('blast')) thinkingLabel.textContent = 'Tracing downstream dependencies...';
-    else if (q.includes('access') || q.includes('stale')) thinkingLabel.textContent = 'Reviewing access logs and permissions...';
-    else if (q.includes('risk') || q.includes('security')) thinkingLabel.textContent = 'Assessing risk posture across sources...';
-    else if (q.includes('classify')) thinkingLabel.textContent = 'Running classification patterns...';
+    if (q.includes('schema') || q.includes('drift') || q.includes('blast')) thinkingLabel.textContent = 'Analyzing schema changes across 14 sources...';
+    else if (q.includes('pii') || q.includes('personal')) thinkingLabel.textContent = 'Scanning catalog for PII columns across 14 sources...';
+    else if (q.includes('access') || q.includes('stale') || q.includes('permission')) thinkingLabel.textContent = 'Reviewing access logs and permissions...';
+    else if (q.includes('risk') || q.includes('security') || q.includes('summary')) thinkingLabel.textContent = 'Assessing risk posture across all sources...';
+    else if (q.includes('classify') || q.includes('unclassified')) thinkingLabel.textContent = 'Running classification patterns against unclassified assets...';
+    else if (q.includes('compliance') || q.includes('hipaa') || q.includes('gdpr')) thinkingLabel.textContent = 'Checking compliance status against regulatory requirements...';
     else if (q.includes('doc')) thinkingLabel.textContent = 'Generating documentation from schema metadata...';
-    else if (q.includes('impact') || q.includes('downstream')) thinkingLabel.textContent = 'Mapping downstream impact across the lineage graph...';
-    else if (q.includes('compliance') || q.includes('hipaa')) thinkingLabel.textContent = 'Checking compliance status against regulatory requirements...';
     else if (q.includes('owner') || q.includes('assign')) thinkingLabel.textContent = 'Looking up ownership assignments and gaps...';
     else thinkingLabel.textContent = 'Analyzing your data environment...';
 
@@ -2876,17 +3230,34 @@
     promptInput.value = '';
     sendBtn.classList.remove('visible');
 
-    // Simulate AI processing delay, then reveal response
+    // Build dynamic response from templates (C1)
+    const templateKey = getResponseTemplate(query);
+    const template = responseTemplates[templateKey];
+
     aiResponseTimeout = setTimeout(() => {
+      // Build response HTML dynamically
+      const responseBody = document.querySelector('#aiResponseMsg .response-card-body');
+      const responseAttribution = document.querySelector('#aiResponseMsg .response-attribution');
+
+      if (responseBody && template) {
+        responseBody.innerHTML = template.body;
+      }
+      if (responseAttribution && template) {
+        responseAttribution.innerHTML = '<span class="material-symbols-outlined">info</span> ' + template.attribution;
+      }
+
+      // Update follow-up suggestions in conversation
+      const existingFollowUps = document.querySelectorAll('#conversationMessages .conv-msg.user.conv-msg-delay-1, #conversationMessages .conv-msg.assistant.conv-msg-delay-2');
+      existingFollowUps.forEach(el => el.style.display = 'none');
+
       thinkingMsg.style.display = 'none';
       responseMsg.style.display = '';
       responseMsg.style.animation = 'none';
-      responseMsg.offsetHeight; // trigger reflow
+      responseMsg.offsetHeight;
       responseMsg.style.animation = 'msgSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both';
       document.getElementById('ai-status').textContent = 'AI response ready for: ' + query;
     }, 2200);
 
-    // Error timeout: if response not shown in 15s, show error state
     aiErrorTimeout = setTimeout(() => {
       if (responseMsg.style.display === 'none' && thinkingMsg.style.display !== 'none') {
         thinkingMsg.style.display = 'none';
@@ -2896,7 +3267,6 @@
       }
     }, 15000);
 
-    // Focus management
     setTimeout(() => {
       const backBtn = document.querySelector('.conversation-back');
       if (backBtn) backBtn.focus();
@@ -2907,18 +3277,111 @@
     if (currentQuery) askAI(currentQuery);
   }
 
+  // ============================================================
+  // Clear Conversation with Confirmation (M7)
+  // ============================================================
   function clearConversation() {
+    const confirmToast = document.getElementById('confirmClearToast');
+    confirmToast.classList.add('visible');
+  }
+
+  document.getElementById('confirmClearBtn').addEventListener('click', () => {
+    document.getElementById('confirmClearToast').classList.remove('visible');
     clearTimeout(aiResponseTimeout);
     clearTimeout(aiErrorTimeout);
     currentQuery = '';
     document.getElementById('ai-status').textContent = 'Conversation cleared.';
     navigateTo('home');
     setTimeout(() => promptInput.focus(), 300);
-  }
+  });
+
+  document.getElementById('cancelClearBtn').addEventListener('click', () => {
+    document.getElementById('confirmClearToast').classList.remove('visible');
+  });
 
   // ============================================================
-  // Role Selector
+  // C2: Role-Based Content Switching
   // ============================================================
+  const roleContent = {
+    engineer: {
+      title: 'Data Engineering Lead',
+      chips: [
+        { label: 'Schema changes today', query: 'Show me schema changes in production today' },
+        { label: 'Source sync failures', query: 'Show sources that are behind SLA' },
+        { label: 'Connector health', query: 'Show me a risk summary across all sources' },
+        { label: 'Pipeline impact analysis', query: 'Show me the blast radius for the schema drift in crm_prod.contacts' },
+        { label: 'Stale access to review', query: 'Show stale access grants that need review' }
+      ],
+      insights: [
+        { priority: 'critical', icon: 'error', label: 'Critical', title: 'Schema drift detected in 3 tables', desc: '<code>crm_prod.contacts</code>, <code>analytics.events</code>, and <code>warehouse.orders</code> have column changes. Impact: 4 models, 2 dashboards, ~340 daily queries.', actions: ['Show blast radius', 'Ask AI'] },
+        { priority: 'warning', icon: 'warning', label: 'Attention', title: '4 service accounts with stale write access', desc: '<code>svc-etl-legacy</code>, <code>svc-reporting-v1</code>, and 2 others still have read/write access. Last query: 90+ days ago.', actions: ['Review access', 'Ask AI'] },
+        { priority: 'success', icon: 'check_circle', label: 'Auto-resolved', title: '38 PII columns auto-classified', desc: 'Classification scan completed across 12 tables in <code>analytics_warehouse</code>. Confidence: 94% avg. 5 need your review.', actions: ['Review 5 columns'] }
+      ]
+    },
+    analyst: {
+      title: 'Data Analyst',
+      chips: [
+        { label: 'Popular datasets this week', query: 'Show me the most queried datasets this week' },
+        { label: 'Trust alerts on my bookmarks', query: 'Show trust alerts on my bookmarked assets' },
+        { label: 'Recent searches', query: 'What changed in the last 24 hours?' },
+        { label: 'Trending queries', query: 'Show trending queries on my team' },
+        { label: 'Data freshness issues', query: 'Show me stale datasets that I use' }
+      ],
+      insights: [
+        { priority: 'warning', icon: 'warning', label: 'Attention', title: 'Quality drop on 2 bookmarked datasets', desc: 'Quality score for <code>analytics.events</code> dropped from 94 to 88 after schema changes. <code>prod_dw.customers</code> has 3 new null columns.', actions: ['View details', 'Ask AI'] },
+        { priority: 'critical', icon: 'error', label: 'Critical', title: 'Trusted dataset certification expiring', desc: '<code>warehouse.orders</code> certification expires in 3 days. Data steward review required to maintain "Certified" status.', actions: ['Notify steward', 'Ask AI'] },
+        { priority: 'success', icon: 'check_circle', label: 'Good news', title: 'New dataset available: ml_features', desc: '248 tables from the new Databricks "ml-features" workspace are now cataloged and queryable. AI docs are being generated.', actions: ['Explore in catalog'] }
+      ]
+    },
+    steward: {
+      title: 'Data Steward',
+      chips: [
+        { label: 'Classification coverage', query: 'Show classification coverage across all sources' },
+        { label: 'Pending reviews', query: 'Show pending classification reviews' },
+        { label: 'Ownership gaps', query: 'Which tables are undocumented?' },
+        { label: 'PII without protection', query: 'Where is customer PII stored?' },
+        { label: 'Governance score breakdown', query: 'Show me a risk summary across all sources' }
+      ],
+      insights: [
+        { priority: 'critical', icon: 'error', label: 'Critical', title: '47 assets still unclassified', desc: 'Classification coverage is at 98.5% (47/3,240 remaining). 8 likely contain PII based on AI pattern matching. Down from 62 last week.', actions: ['Auto-classify 8 PII', 'Ask AI'] },
+        { priority: 'warning', icon: 'warning', label: 'Attention', title: '5 PII columns need manual review', desc: 'AI auto-classified 33 columns with 94% confidence, but 5 columns in <code>analytics_warehouse</code> need your review due to ambiguous patterns.', actions: ['Review now', 'Ask AI'] },
+        { priority: 'success', icon: 'check_circle', label: 'Auto-resolved', title: 'Ownership assigned to 12 tables', desc: 'AI suggested owners for 12 previously unowned tables based on query patterns and team structure. All accepted by team leads.', actions: ['View assignments'] }
+      ]
+    },
+    security: {
+      title: 'Security Lead',
+      chips: [
+        { label: 'Risk score breakdown', query: 'Show me a risk summary across all sources' },
+        { label: 'Compliance gaps', query: 'Show compliance gaps by regulation' },
+        { label: 'Over-permissioned access', query: 'Show over-permissioned access grants' },
+        { label: 'Unprotected sensitive data', query: 'Where is customer PII stored?' },
+        { label: 'Access anomalies', query: 'Show stale access grants that need review' }
+      ],
+      insights: [
+        { priority: 'critical', icon: 'error', label: 'Critical', title: '12 PII columns lack protection policies', desc: 'Found in <code>raw.clickstream_events</code> and <code>ml_features.user_embeddings</code>. Email, phone, and IP address columns are exposed without masking.', actions: ['Add protection', 'Ask AI'] },
+        { priority: 'warning', icon: 'warning', label: 'Attention', title: 'GDPR compliance gap: missing deletion policy', desc: '3 tables with EU personal data lack automated deletion workflows. Deadline for remediation: end of quarter.', actions: ['View tables', 'Ask AI'] },
+        { priority: 'success', icon: 'check_circle', label: 'Resolved', title: 'Access review completed: 4 accounts revoked', desc: 'Risk score improved from 78 to 83 after revoking stale service account access. All revocations logged and auditable.', actions: ['View audit log'] }
+      ]
+    },
+    executive: {
+      title: 'VP, Data Office',
+      chips: [
+        { label: 'AI-readiness scorecard', query: 'Show me a risk summary across all sources' },
+        { label: 'Risk trend this quarter', query: 'Show me a risk summary across all sources' },
+        { label: 'Domain maturity', query: 'Show classification coverage across all sources' },
+        { label: 'Adoption metrics', query: 'Show trending queries on my team' },
+        { label: 'Compliance posture', query: 'Show compliance gaps by regulation' }
+      ],
+      insights: [
+        { priority: 'success', icon: 'check_circle', label: 'On track', title: 'AI-Readiness score: 72/100 (+8 this month)', desc: 'Documentation is the biggest gap at 62%. Classification (87%) and Quality (91%) are strong. On track to reach 80 by end of quarter.', actions: ['View full report', 'Ask AI'] },
+        { priority: 'warning', icon: 'warning', label: 'Attention', title: '3 compliance gaps need remediation', desc: 'HIPAA (PHI audit logging), SOC2 (access reviews), and GDPR (data deletion) have open gaps. GDPR is highest priority with Q1 deadline.', actions: ['View compliance', 'Ask AI'] },
+        { priority: 'success', icon: 'check_circle', label: 'Growth', title: 'Platform adoption up 34% this month', desc: '47 unique queries this week across 18 users. Data engineers are the most active role (62% of queries). AI-assisted actions saved ~12 hours.', actions: ['View metrics'] }
+      ]
+    }
+  };
+
+  let currentRole = 'engineer';
+
   function toggleRoleDropdown() {
     const dropdown = document.getElementById('roleDropdown');
     const btn = document.getElementById('roleBtn');
@@ -2927,20 +3390,10 @@
   }
 
   function selectRole(role) {
-    const roleNames = {
-      engineer: 'Engineer',
-      analyst: 'Analyst',
-      steward: 'Steward',
-      security: 'Security',
-      executive: 'Executive'
-    };
-    const roleIcons = {
-      engineer: 'engineering',
-      analyst: 'query_stats',
-      steward: 'policy',
-      security: 'shield',
-      executive: 'monitoring'
-    };
+    const roleNames = { engineer: 'Engineer', analyst: 'Analyst', steward: 'Steward', security: 'Security', executive: 'Executive' };
+    const roleIcons = { engineer: 'engineering', analyst: 'query_stats', steward: 'policy', security: 'shield', executive: 'monitoring' };
+
+    currentRole = role;
 
     document.querySelectorAll('.role-dropdown-item').forEach(item => {
       item.classList.remove('active');
@@ -2956,7 +3409,64 @@
       roleNames[role] + '<span class="material-symbols-outlined">expand_more</span>';
 
     document.getElementById('roleDropdown').classList.remove('visible');
-    document.getElementById('roleBtn').setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-expanded', 'false');
+
+    // C2: Apply role-based content
+    applyRoleContent(role);
+  }
+
+  function applyRoleContent(role) {
+    const content = roleContent[role];
+    if (!content) return;
+
+    const homeContent = document.getElementById('homeContent');
+    homeContent.classList.add('role-transitioning');
+
+    setTimeout(() => {
+      // Update hero subtitle
+      document.getElementById('heroRoleTitle').textContent = content.title;
+
+      // Update suggestion chips
+      const chipsContainer = document.getElementById('suggestionChips');
+      chipsContainer.innerHTML = content.chips.map(c =>
+        '<button class="suggestion-chip" onclick="askAI(\'' + c.query.replace(/'/g, "\\'") + '\')">' + c.label + '</button>'
+      ).join('');
+
+      // Update insight cards
+      const insightRow = document.querySelector('.insight-cards-row');
+      insightRow.innerHTML = content.insights.map(ins => {
+        const actionBtns = ins.actions.map(a => {
+          if (a === 'Ask AI') {
+            return '<button class="insight-action-btn ai-action" onclick="askAI(\'' + ins.title.replace(/'/g, "\\'") + '\')"><span class="material-symbols-outlined">auto_awesome</span> Ask AI</button>';
+          }
+          return '<button class="insight-action-btn">' + a + '</button>';
+        }).join('');
+        return '<div class="insight-card priority-' + ins.priority + '">' +
+          '<button class="insight-card-dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>' +
+          '<div class="insight-card-priority ' + ins.priority + '"><span class="material-symbols-outlined">' + ins.icon + '</span><span>' + ins.label + '</span></div>' +
+          '<h3>' + ins.title + '</h3><p>' + ins.desc + '</p>' +
+          '<div class="insight-card-actions">' + actionBtns + '</div></div>';
+      }).join('');
+
+      // Re-wire dismiss buttons for new insight cards
+      document.querySelectorAll('.insight-card-dismiss').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.insight-card');
+          if (dismissedCard) { dismissedCard.style.display = ''; dismissedCard.style.opacity = '1'; dismissedCard.style.transform = ''; }
+          dismissedCard = card;
+          card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+          card.style.opacity = '0'; card.style.transform = 'scale(0.95)';
+          setTimeout(() => card.style.display = 'none', 200);
+          undoToast.classList.add('visible');
+          clearTimeout(undoTimeout);
+          undoTimeout = setTimeout(() => { undoToast.classList.remove('visible'); dismissedCard = null; }, 6000);
+        });
+      });
+
+      homeContent.classList.remove('role-transitioning');
+      homeContent.classList.add('role-visible');
+      setTimeout(() => homeContent.classList.remove('role-visible'), 300);
+    }, 150);
   }
 
   // Close role dropdown on outside click
@@ -2965,7 +3475,38 @@
       document.getElementById('roleDropdown').classList.remove('visible');
       document.getElementById('roleBtn').setAttribute('aria-expanded', 'false');
     }
+    // Close help dropdown
+    if (!e.target.closest('.sds-header-help')) {
+      const helpDd = document.getElementById('helpDropdown');
+      if (helpDd) helpDd.classList.remove('visible');
+    }
   });
+
+  // ============================================================
+  // Help Menu (M5)
+  // ============================================================
+  function toggleHelpDropdown() {
+    const dropdown = document.getElementById('helpDropdown');
+    dropdown.classList.toggle('visible');
+  }
+
+  function restartTour() {
+    document.getElementById('helpDropdown').classList.remove('visible');
+    localStorage.removeItem('strata_onboarding_complete');
+    // Navigate to home first if not there
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash !== 'home' && currentHash !== '') {
+      navigateTo('home');
+      setTimeout(() => startOnboarding(), 500);
+    } else {
+      startOnboarding();
+    }
+  }
+
+  function showKeyboardShortcuts() {
+    document.getElementById('helpDropdown').classList.remove('visible');
+    alert('Keyboard Shortcuts:\n\n\u2318K  \u2014  Focus prompt bar\nD  \u2014  Dismiss focused insight card\nEsc  \u2014  Close overlays');
+  }
 
   // ============================================================
   // Dismiss insight cards with undo (User Control & Freedom)
@@ -2978,37 +3519,22 @@
   document.querySelectorAll('.insight-card-dismiss').forEach(btn => {
     btn.addEventListener('click', () => {
       const card = btn.closest('.insight-card');
-
-      if (dismissedCard) {
-        dismissedCard.style.display = '';
-        dismissedCard.style.opacity = '1';
-        dismissedCard.style.transform = '';
-      }
-
+      if (dismissedCard) { dismissedCard.style.display = ''; dismissedCard.style.opacity = '1'; dismissedCard.style.transform = ''; }
       dismissedCard = card;
       card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-      card.style.opacity = '0';
-      card.style.transform = 'scale(0.95)';
+      card.style.opacity = '0'; card.style.transform = 'scale(0.95)';
       setTimeout(() => card.style.display = 'none', 200);
-
       undoToast.classList.add('visible');
       document.getElementById('ai-status').textContent = 'Insight dismissed. Press undo to restore.';
-
       clearTimeout(undoTimeout);
-      undoTimeout = setTimeout(() => {
-        undoToast.classList.remove('visible');
-        dismissedCard = null;
-      }, 6000);
+      undoTimeout = setTimeout(() => { undoToast.classList.remove('visible'); dismissedCard = null; }, 6000);
     });
   });
 
   undoBtn.addEventListener('click', () => {
     if (dismissedCard) {
       dismissedCard.style.display = '';
-      requestAnimationFrame(() => {
-        dismissedCard.style.opacity = '1';
-        dismissedCard.style.transform = '';
-      });
+      requestAnimationFrame(() => { dismissedCard.style.opacity = '1'; dismissedCard.style.transform = ''; });
       document.getElementById('ai-status').textContent = 'Insight restored.';
       dismissedCard = null;
     }
@@ -3017,7 +3543,7 @@
   });
 
   // ============================================================
-  // Escape key closes role dropdown
+  // Escape key handler
   // ============================================================
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -3026,7 +3552,24 @@
         dropdown.classList.remove('visible');
         document.getElementById('roleBtn').setAttribute('aria-expanded', 'false');
         document.getElementById('roleBtn').focus();
+        return;
       }
+      const helpDd = document.getElementById('helpDropdown');
+      if (helpDd && helpDd.classList.contains('visible')) {
+        helpDd.classList.remove('visible');
+        return;
+      }
+      if (document.getElementById('onboardingOverlay').classList.contains('visible')) {
+        endOnboarding();
+        return;
+      }
+      const confirmToast = document.getElementById('confirmClearToast');
+      if (confirmToast.classList.contains('visible')) {
+        confirmToast.classList.remove('visible');
+        return;
+      }
+      hideAutocomplete();
+      hideRecentQueries();
     }
   });
 
@@ -3041,13 +3584,11 @@
     const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
 
     if (isExpanded) {
-      // Collapse
       body.style.maxHeight = body.scrollHeight + 'px';
-      body.offsetHeight; // force reflow
+      body.offsetHeight;
       body.classList.add('collapsed');
       toggleBtn.setAttribute('aria-expanded', 'false');
     } else {
-      // Expand
       body.classList.remove('collapsed');
       body.style.maxHeight = body.scrollHeight + 'px';
       toggleBtn.setAttribute('aria-expanded', 'true');
@@ -3055,7 +3596,6 @@
     }
   }
 
-  // Initialize collapsed sections max-height on load
   window.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.home-card-body.collapsible:not(.collapsed)').forEach(body => {
       body.style.maxHeight = '';
@@ -3077,7 +3617,7 @@
   });
 
   // ============================================================
-  // Skeleton Loading State — simulated initial load
+  // Skeleton Loading State
   // ============================================================
   (function initSkeletonLoading() {
     const homeContent = document.getElementById('homeContent');
@@ -3086,7 +3626,6 @@
 
     setTimeout(() => {
       homeContent.classList.remove('skeleton-loading');
-      // After skeleton resolves, check for first-run onboarding
       if (!localStorage.getItem('strata_onboarding_complete')) {
         setTimeout(() => startOnboarding(), 600);
       }
@@ -3100,58 +3639,30 @@
     tag.addEventListener('mouseenter', () => {
       const tooltip = tag.querySelector('.trust-tag-tooltip');
       if (!tooltip) return;
-      // Reset classes
       tooltip.classList.remove('edge-left', 'edge-right', 'pos-below');
-      // Check position
       const tagRect = tag.getBoundingClientRect();
-      const tooltipWidth = 200; // approximate
-      if (tagRect.left < tooltipWidth / 2) {
-        tooltip.classList.add('edge-left');
-      } else if (window.innerWidth - tagRect.right < tooltipWidth / 2) {
-        tooltip.classList.add('edge-right');
-      }
-      if (tagRect.top < 60) {
-        tooltip.classList.add('pos-below');
-      }
+      const tooltipWidth = 200;
+      if (tagRect.left < tooltipWidth / 2) tooltip.classList.add('edge-left');
+      else if (window.innerWidth - tagRect.right < tooltipWidth / 2) tooltip.classList.add('edge-right');
+      if (tagRect.top < 60) tooltip.classList.add('pos-below');
     });
   });
 
   // ============================================================
-  // Onboarding Walkthrough (first-run experience)
+  // Onboarding Walkthrough
   // ============================================================
   const onboardingSteps = [
-    {
-      target: '.ai-prompt-bar',
-      title: 'Ask anything about your data',
-      desc: 'The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more.',
-      position: 'below'
-    },
-    {
-      target: '.role-selector-btn',
-      title: 'Personalize your view',
-      desc: 'Switch roles to see insights tailored for engineers, analysts, stewards, security leads, or executives.',
-      position: 'below'
-    },
-    {
-      target: '.insight-cards-row',
-      title: 'AI-generated insights',
-      desc: 'Prioritized alerts about schema drift, stale access, and auto-classified data. Dismiss or act on each with one click.',
-      position: 'below'
-    },
-    {
-      target: '.governance-actions-list',
-      title: 'Track governance progress',
-      desc: 'Complete guided actions to improve your governance score. Each task shows its point value to help you prioritize.',
-      position: 'above'
-    }
+    { target: '.ai-prompt-bar', title: 'Ask anything about your data', desc: 'The AI prompt bar is your primary interface. Ask natural language questions about schemas, PII, access, lineage, and more. Press \u2318K from anywhere.', position: 'below' },
+    { target: '.role-selector-btn', title: 'Personalize your view', desc: 'Switch roles to see insights tailored for engineers, analysts, stewards, security leads, or executives.', position: 'below' },
+    { target: '.insight-cards-row', title: 'AI-generated insights', desc: 'Prioritized alerts about schema drift, stale access, and auto-classified data. Dismiss or act on each with one click. Press D to dismiss.', position: 'below' },
+    { target: '.governance-actions-list', title: 'Track governance progress', desc: 'Complete guided actions to improve your governance score. Each task shows its point value to help you prioritize.', position: 'above' }
   ];
 
   let onboardingIndex = 0;
 
   function startOnboarding() {
     onboardingIndex = 0;
-    const overlay = document.getElementById('onboardingOverlay');
-    overlay.classList.add('visible');
+    document.getElementById('onboardingOverlay').classList.add('visible');
     showOnboardingStep();
   }
 
@@ -3160,32 +3671,20 @@
     const targetEl = document.querySelector(step.target);
     if (!targetEl) { endOnboarding(); return; }
 
-    const overlay = document.getElementById('onboardingOverlay');
     const spotlight = document.getElementById('onboardingSpotlight');
     const tooltip = document.getElementById('onboardingTooltip');
-    const stepLabel = document.getElementById('onboardingStep');
-    const title = document.getElementById('onboardingTitle');
-    const desc = document.getElementById('onboardingDesc');
-    const dots = document.getElementById('onboardingDots');
     const nextBtn = document.getElementById('onboardingNext');
 
-    // Scroll target into view
     targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     setTimeout(() => {
       const rect = targetEl.getBoundingClientRect();
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const mainContent = document.querySelector('.main-content');
-      const mainScrollTop = mainContent ? mainContent.scrollTop : 0;
-
-      // Position spotlight
       const pad = 8;
       spotlight.style.top = (rect.top - pad) + 'px';
       spotlight.style.left = (rect.left - pad) + 'px';
       spotlight.style.width = (rect.width + pad * 2) + 'px';
       spotlight.style.height = (rect.height + pad * 2) + 'px';
 
-      // Position tooltip
       if (step.position === 'below') {
         tooltip.style.top = (rect.bottom + 16) + 'px';
         tooltip.style.left = Math.max(20, rect.left) + 'px';
@@ -3196,18 +3695,15 @@
         tooltip.style.top = 'auto';
       }
 
-      // Content
-      stepLabel.textContent = 'Step ' + (onboardingIndex + 1) + ' of ' + onboardingSteps.length;
-      title.textContent = step.title;
-      desc.textContent = step.desc;
+      document.getElementById('onboardingStep').textContent = 'Step ' + (onboardingIndex + 1) + ' of ' + onboardingSteps.length;
+      document.getElementById('onboardingTitle').textContent = step.title;
+      document.getElementById('onboardingDesc').textContent = step.desc;
       nextBtn.textContent = onboardingIndex === onboardingSteps.length - 1 ? 'Get started' : 'Next';
 
-      // Dots
-      dots.innerHTML = onboardingSteps.map((_, i) =>
+      document.getElementById('onboardingDots').innerHTML = onboardingSteps.map((_, i) =>
         '<span class="onboarding-dot' + (i === onboardingIndex ? ' active' : '') + '"></span>'
       ).join('');
 
-      // Re-animate tooltip
       tooltip.style.animation = 'none';
       tooltip.offsetHeight;
       tooltip.style.animation = 'msgSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both';
@@ -3216,8 +3712,7 @@
   }
 
   function endOnboarding() {
-    const overlay = document.getElementById('onboardingOverlay');
-    overlay.classList.remove('visible');
+    document.getElementById('onboardingOverlay').classList.remove('visible');
     localStorage.setItem('strata_onboarding_complete', 'true');
     document.getElementById('ai-status').textContent = 'Welcome tour complete.';
     setTimeout(() => document.getElementById('aiPromptInput').focus(), 300);
@@ -3225,21 +3720,11 @@
 
   document.getElementById('onboardingNext').addEventListener('click', () => {
     onboardingIndex++;
-    if (onboardingIndex >= onboardingSteps.length) {
-      endOnboarding();
-    } else {
-      showOnboardingStep();
-    }
+    if (onboardingIndex >= onboardingSteps.length) endOnboarding();
+    else showOnboardingStep();
   });
 
   document.getElementById('onboardingSkip').addEventListener('click', endOnboarding);
-
-  // Escape closes onboarding
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('onboardingOverlay').classList.contains('visible')) {
-      endOnboarding();
-    }
-  });
 
   // ============================================================
   // Save collapsed state preferences (localStorage)
@@ -3251,22 +3736,15 @@
       const toggle = card.querySelector('.home-card-toggle');
       const body = card.querySelector('.home-card-body.collapsible');
       if (!toggle || !body) return;
-      if (saved === 'expanded') {
-        body.classList.remove('collapsed');
-        toggle.setAttribute('aria-expanded', 'true');
-      } else if (saved === 'collapsed') {
-        body.classList.add('collapsed');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
+      if (saved === 'expanded') { body.classList.remove('collapsed'); toggle.setAttribute('aria-expanded', 'true'); }
+      else if (saved === 'collapsed') { body.classList.add('collapsed'); toggle.setAttribute('aria-expanded', 'false'); }
     });
   })();
 
-  // Persist collapse state on toggle
   const origToggle = window.toggleCardCollapse;
   window.toggleCardCollapse = function(toggleBtn) {
     origToggle(toggleBtn);
-    const cards = document.querySelectorAll('.home-card[data-collapsible]');
-    cards.forEach((card, i) => {
+    document.querySelectorAll('.home-card[data-collapsible]').forEach((card, i) => {
       const t = card.querySelector('.home-card-toggle');
       if (t) localStorage.setItem('strata_collapse_' + i, t.getAttribute('aria-expanded') === 'true' ? 'expanded' : 'collapsed');
     });
