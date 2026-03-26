@@ -96,8 +96,10 @@
     --sds-color-green-700: #374A1E;
     --sds-color-yellow-025: #FCF9D9;
     --sds-color-yellow-200: #EBCE2D;
+    --sds-color-yellow-400: #A48E1F;
     --sds-color-yellow-500: #8A7515;
     --sds-color-yellow-550: #7A6710;
+    --sds-color-yellow-650: #615109;
     --sds-color-purple-550: #805AA1;
     --sds-color-white: #FFFFFF;
     --sds-color-brand-pacific: #A6CBD6;
@@ -163,7 +165,7 @@
   /* Active/pressed states */
   button:active:not(:disabled), .sds-sidenav-item:active,
   .suggestion-chip:active, .quick-action-item:active,
-  .popular-query-item:active, .insight-action-btn:active {
+  .popular-query-item:active, .sds-insight__action:active {
     transform: scale(0.97);
     transition: transform 0.06s ease;
   }
@@ -475,79 +477,160 @@
 
   /* Insight Cards Row */
   .insight-cards-row {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-400);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-500);
     margin-bottom: var(--sds-space-300);
   }
-  .insight-card {
-    background: var(--sds-bg-card); border: 1px solid var(--sds-border-subtle);
-    border-radius: 12px; padding: var(--sds-space-500);
-    position: relative; transition: box-shadow 0.15s ease;
-    display: flex; flex-direction: column;
+
+  /* ============================================================
+     DS Insight Card (.sds-insight)
+     ============================================================ */
+  .sds-insight {
+    background: var(--sds-color-white);
+    border: 1px solid var(--sds-color-warm-gray-100);
+    border-radius: 10px;
+    padding: var(--sds-space-500);
+    display: flex;
+    gap: var(--sds-space-400);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
+    position: relative;
   }
-  .insight-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-  .insight-card.priority-critical { border-left: 3px solid var(--sds-color-red-500); }
-  .insight-card.priority-warning { border-left: 3px solid var(--sds-color-yellow-200); }
-  .insight-card.priority-success { border-left: 3px solid var(--sds-color-green-400); }
-  .insight-card-dismiss {
+
+  .sds-insight__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .sds-insight__icon .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .sds-insight__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sds-space-100);
+  }
+
+  .sds-insight__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sds-space-300);
+  }
+
+  .sds-insight__title {
+    font-size: var(--sds-type-body);
+    font-weight: var(--sds-weight-semibold);
+    color: var(--sds-text-primary);
+    margin: 0;
+    line-height: var(--sds-leading-snug);
+  }
+
+  .sds-insight__description {
+    font-size: var(--sds-type-label);
+    color: var(--sds-text-secondary);
+    line-height: var(--sds-leading-normal);
+    margin: 0;
+  }
+
+  .sds-insight__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--sds-space-300);
+    margin-top: var(--sds-space-100);
+    font-size: var(--sds-type-caption);
+    color: var(--sds-color-warm-gray-450);
+  }
+  .sds-insight__meta-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--sds-color-warm-gray-200);
+  }
+
+  /* Severity badge */
+  .sds-insight__severity {
+    font-size: var(--sds-type-overline);
+    font-weight: var(--sds-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--sds-tracking-wide);
+    padding: var(--sds-space-050) var(--sds-space-200);
+    border-radius: 4px;
+    line-height: 1.4;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .sds-insight__severity--critical {
+    background: var(--sds-status-error-bg);
+    color: var(--sds-color-red-550);
+  }
+  .sds-insight__severity--warning {
+    background: var(--sds-status-warning-bg);
+    color: var(--sds-color-yellow-650);
+  }
+  .sds-insight__severity--info {
+    background: var(--sds-status-info-bg);
+    color: var(--sds-color-blue-700);
+  }
+  .sds-insight__severity--success {
+    background: var(--sds-status-success-bg);
+    color: var(--sds-color-green-500);
+  }
+
+  /* Action link */
+  .sds-insight__action {
+    font-size: var(--sds-type-label);
+    color: var(--sds-color-blue-750);
+    text-decoration: none;
+    font-weight: var(--sds-weight-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sds-space-100);
+    margin-top: var(--sds-space-100);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--sds-font-sans);
+  }
+  .sds-insight__action:hover { text-decoration: underline; text-underline-offset: 2px; }
+  .sds-insight__action .material-symbols-outlined { font-size: 16px; text-decoration: none; display: inline-block; }
+  .sds-insight__action:hover .material-symbols-outlined { text-decoration: none; }
+
+  /* Hoverable modifier */
+  .sds-card--hoverable {
+    transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+  }
+  @media (hover: hover) {
+    .sds-card--hoverable:hover {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.04);
+      transform: translateY(-1px);
+    }
+    .sds-card--hoverable:active {
+      transform: scale(0.98);
+      transition-duration: 80ms;
+    }
+  }
+
+  /* Dismiss button on DS insight cards */
+  .sds-insight__dismiss {
     position: absolute; top: var(--sds-space-300); right: var(--sds-space-300);
     width: 24px; height: 24px; border-radius: 4px; border: none;
     background: transparent; cursor: pointer; display: flex;
     align-items: center; justify-content: center; opacity: 0;
     transition: opacity 0.12s ease, background 0.12s ease;
+    padding: 0;
   }
-  .insight-card:hover .insight-card-dismiss,
-  .insight-card-dismiss:focus-visible { opacity: 1; }
-  .insight-card-dismiss:hover { background: var(--sds-bg-subtle); }
-  .insight-card-dismiss .material-symbols-outlined {
+  .sds-insight:hover .sds-insight__dismiss,
+  .sds-insight__dismiss:focus-visible { opacity: 1; }
+  .sds-insight__dismiss:hover { background: var(--sds-bg-subtle); }
+  .sds-insight__dismiss .material-symbols-outlined {
     font-size: 16px; color: var(--sds-text-tertiary);
     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-  }
-  .insight-card-priority {
-    display: flex; align-items: center; gap: var(--sds-space-150);
-    margin-bottom: var(--sds-space-300);
-  }
-  .insight-card-priority .material-symbols-outlined {
-    font-size: 18px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-  }
-  .insight-card-priority.critical .material-symbols-outlined { color: var(--sds-status-error-text); }
-  .insight-card-priority.warning .material-symbols-outlined { color: var(--sds-status-warning-text); }
-  .insight-card-priority.success .material-symbols-outlined { color: var(--sds-status-success-text); }
-  .insight-card-priority span {
-    font-size: var(--sds-type-overline); font-weight: var(--sds-weight-semibold);
-    text-transform: uppercase; letter-spacing: var(--sds-tracking-wide);
-  }
-  .insight-card-priority.critical span { color: var(--sds-status-error-text); }
-  .insight-card-priority.warning span { color: var(--sds-status-warning-text); }
-  .insight-card-priority.success span { color: var(--sds-status-success-text); }
-  .insight-card h3 {
-    font-size: var(--sds-type-title); font-weight: var(--sds-weight-semibold);
-    color: var(--sds-text-primary); margin-bottom: var(--sds-space-200);
-    line-height: var(--sds-leading-snug);
-  }
-  .insight-card p {
-    font-size: var(--sds-type-label); color: var(--sds-text-secondary);
-    line-height: var(--sds-leading-normal); margin-bottom: var(--sds-space-400);
-    flex: 1;
-  }
-  .insight-card-actions {
-    display: flex; gap: var(--sds-space-200); flex-wrap: wrap;
-  }
-  .insight-action-btn {
-    display: inline-flex; align-items: center; gap: var(--sds-space-100);
-    padding: var(--sds-space-150) var(--sds-space-300); border-radius: 6px;
-    font-size: var(--sds-type-caption); font-weight: var(--sds-weight-semibold);
-    font-family: var(--sds-font-sans); cursor: pointer; transition: all 0.15s ease;
-    border: 1px solid var(--sds-border-default); background: var(--sds-bg-card);
-    color: var(--sds-text-primary);
-  }
-  .insight-action-btn:hover { background: var(--sds-bg-subtle); border-color: var(--sds-border-strong); }
-  .insight-action-btn.ai-action {
-    border-color: var(--sds-color-blue-200); color: var(--sds-interactive-primary);
-    background: var(--sds-color-blue-025);
-  }
-  .insight-action-btn.ai-action:hover { background: var(--sds-color-blue-050); border-color: var(--sds-color-blue-450); }
-  .insight-action-btn .material-symbols-outlined {
-    font-size: 14px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
 
   .insights-footer {
@@ -1466,8 +1549,7 @@
     pointer-events: none;
   }
   .governance-action-item:hover::after { transform: translateX(100%); }
-  .insight-card { transition: box-shadow 0.15s ease, transform 0.15s ease; }
-  .insight-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  /* (insight card hover now handled by .sds-card--hoverable) */
   .home-card { transition: box-shadow 0.2s ease; }
   .home-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .response-footer-btn { position: relative; }
@@ -1491,6 +1573,7 @@
     .skeleton-insight-row { grid-template-columns: repeat(3, 1fr); gap: var(--sds-space-300); }
     .home-hero { padding: var(--sds-space-1000) var(--sds-space-600) var(--sds-space-600); }
     .insight-cards-row { gap: var(--sds-space-300); }
+    .sds-insight { padding: var(--sds-space-400); }
     .home-grid { gap: var(--sds-space-400); }
     .sds-header-nav-link { padding: var(--sds-space-150) var(--sds-space-200); font-size: var(--sds-type-caption); }
   }
@@ -1646,7 +1729,7 @@
     .ai-prompt-bar kbd { display: none; }
     .suggestion-chips { gap: var(--sds-space-150); }
     .suggestion-chip { font-size: var(--sds-type-overline); padding: var(--sds-space-100) var(--sds-space-200); }
-    .insight-card { padding: var(--sds-space-400); }
+    .sds-insight { padding: var(--sds-space-400); gap: var(--sds-space-300); }
     .home-card-header { padding: var(--sds-space-400) var(--sds-space-400) var(--sds-space-200); }
     .home-card-body { padding: 0 var(--sds-space-400) var(--sds-space-400); }
     .security-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sds-space-150); }
@@ -1943,50 +2026,65 @@
 
         <div class="insight-cards-row">
           <!-- Critical: Schema Drift -->
-          <div class="insight-card priority-critical">
-            <button class="insight-card-dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
-            <div class="insight-card-priority critical">
-              <span class="material-symbols-outlined">error</span>
-              <span>Critical</span>
-            </div>
-            <h3>Schema drift detected in 3 tables</h3>
-            <p><code>crm_prod.contacts</code>, <code>analytics.events</code>, and <code>warehouse.orders</code> have column changes. Impact: 4 models, 2 dashboards, ~340 daily queries.</p>
-            <div class="insight-card-actions">
-              <button class="insight-action-btn" onclick="askAI('Show me the blast radius for the schema drift in crm_prod.contacts')">Show blast radius</button>
-              <button class="insight-action-btn ai-action" onclick="askAI('Tell me about the schema drift affecting crm_prod')">
-                <span class="material-symbols-outlined">auto_awesome</span> Ask AI
-              </button>
+          <div class="sds-insight sds-card--hoverable">
+            <button class="sds-insight__dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
+            <span class="sds-insight__icon" style="background: var(--sds-status-error-bg); color: var(--sds-color-red-550);">
+              <span class="material-symbols-outlined">warning</span>
+            </span>
+            <div class="sds-insight__content">
+              <div class="sds-insight__header">
+                <h3 class="sds-insight__title">Schema drift detected in 3 tables</h3>
+                <span class="sds-insight__severity sds-insight__severity--critical">Critical</span>
+              </div>
+              <p class="sds-insight__description"><code>crm_prod.contacts</code>, <code>analytics.events</code>, and <code>warehouse.orders</code> have column changes. Impact: 4 models, 2 dashboards, ~340 daily queries.</p>
+              <div class="sds-insight__meta">
+                <span>2 hours ago</span>
+                <span class="sds-insight__meta-divider"></span>
+                <span>Schema Change</span>
+              </div>
+              <button class="sds-insight__action" onclick="askAI('Show me the blast radius for the schema drift in crm_prod.contacts')">Show blast radius <span class="material-symbols-outlined">arrow_forward</span></button>
             </div>
           </div>
 
           <!-- Warning: Stale Access -->
-          <div class="insight-card priority-warning">
-            <button class="insight-card-dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
-            <div class="insight-card-priority warning">
-              <span class="material-symbols-outlined">warning</span>
-              <span>Attention</span>
-            </div>
-            <h3>4 service accounts with stale write access</h3>
-            <p><code>svc-etl-legacy</code>, <code>svc-reporting-v1</code>, and 2 others still have read/write access. Last query: 90+ days ago.</p>
-            <div class="insight-card-actions">
-              <button class="insight-action-btn">Review access</button>
-              <button class="insight-action-btn ai-action" onclick="askAI('Show me details on the 4 stale service accounts with production access')">
-                <span class="material-symbols-outlined">auto_awesome</span> Ask AI
-              </button>
+          <div class="sds-insight sds-card--hoverable">
+            <button class="sds-insight__dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
+            <span class="sds-insight__icon" style="background: var(--sds-status-warning-bg); color: var(--sds-color-yellow-650);">
+              <span class="material-symbols-outlined">schedule</span>
+            </span>
+            <div class="sds-insight__content">
+              <div class="sds-insight__header">
+                <h3 class="sds-insight__title">4 service accounts with stale write access</h3>
+                <span class="sds-insight__severity sds-insight__severity--warning">Attention</span>
+              </div>
+              <p class="sds-insight__description"><code>svc-etl-legacy</code>, <code>svc-reporting-v1</code>, and 2 others still have read/write access. Last query: 90+ days ago.</p>
+              <div class="sds-insight__meta">
+                <span>6 hours ago</span>
+                <span class="sds-insight__meta-divider"></span>
+                <span>Access Review</span>
+              </div>
+              <button class="sds-insight__action" onclick="askAI('Show me details on the 4 stale service accounts with production access')">Review access <span class="material-symbols-outlined">arrow_forward</span></button>
             </div>
           </div>
 
           <!-- Success: Auto-classified -->
-          <div class="insight-card priority-success">
-            <button class="insight-card-dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
-            <div class="insight-card-priority success">
+          <div class="sds-insight sds-card--hoverable">
+            <button class="sds-insight__dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>
+            <span class="sds-insight__icon" style="background: var(--sds-status-success-bg); color: var(--sds-color-green-500);">
               <span class="material-symbols-outlined">check_circle</span>
-              <span>Auto-resolved</span>
-            </div>
-            <h3>38 PII columns auto-classified</h3>
-            <p>Classification scan completed across 12 tables in <code>analytics_warehouse</code>. Confidence: 94% avg. 5 need your review.</p>
-            <div class="insight-card-actions">
-              <button class="insight-action-btn" onclick="navigateTo('catalog')">Review 5 columns</button>
+            </span>
+            <div class="sds-insight__content">
+              <div class="sds-insight__header">
+                <h3 class="sds-insight__title">38 PII columns auto-classified</h3>
+                <span class="sds-insight__severity sds-insight__severity--success">Auto-resolved</span>
+              </div>
+              <p class="sds-insight__description">Classification scan completed across 12 tables in <code>analytics_warehouse</code>. Confidence: 94% avg. 5 need your review.</p>
+              <div class="sds-insight__meta">
+                <span>Today</span>
+                <span class="sds-insight__meta-divider"></span>
+                <span>Classification</span>
+              </div>
+              <button class="sds-insight__action" onclick="navigateTo('catalog')">Review 5 columns <span class="material-symbols-outlined">arrow_forward</span></button>
             </div>
           </div>
         </div>
@@ -3313,9 +3411,9 @@
         { label: 'Stale access to review', query: 'Show stale access grants that need review' }
       ],
       insights: [
-        { priority: 'critical', icon: 'error', label: 'Critical', title: 'Schema drift detected in 3 tables', desc: '<code>crm_prod.contacts</code>, <code>analytics.events</code>, and <code>warehouse.orders</code> have column changes. Impact: 4 models, 2 dashboards, ~340 daily queries.', actions: ['Show blast radius', 'Ask AI'] },
-        { priority: 'warning', icon: 'warning', label: 'Attention', title: '4 service accounts with stale write access', desc: '<code>svc-etl-legacy</code>, <code>svc-reporting-v1</code>, and 2 others still have read/write access. Last query: 90+ days ago.', actions: ['Review access', 'Ask AI'] },
-        { priority: 'success', icon: 'check_circle', label: 'Auto-resolved', title: '38 PII columns auto-classified', desc: 'Classification scan completed across 12 tables in <code>analytics_warehouse</code>. Confidence: 94% avg. 5 need your review.', actions: ['Review 5 columns'] }
+        { severity: 'critical', icon: 'warning', iconBg: 'var(--sds-status-error-bg)', iconColor: 'var(--sds-color-red-550)', label: 'Critical', title: 'Schema drift detected in 3 tables', desc: '<code>crm_prod.contacts</code>, <code>analytics.events</code>, and <code>warehouse.orders</code> have column changes. Impact: 4 models, 2 dashboards, ~340 daily queries.', meta: '2 hours ago', category: 'Schema Change', action: 'Show blast radius', actionQuery: 'Show me the blast radius for the schema drift in crm_prod.contacts' },
+        { severity: 'warning', icon: 'schedule', iconBg: 'var(--sds-status-warning-bg)', iconColor: 'var(--sds-color-yellow-650)', label: 'Attention', title: '4 service accounts with stale write access', desc: '<code>svc-etl-legacy</code>, <code>svc-reporting-v1</code>, and 2 others still have read/write access. Last query: 90+ days ago.', meta: '6 hours ago', category: 'Access Review', action: 'Review access', actionQuery: 'Show me details on the 4 stale service accounts with production access' },
+        { severity: 'success', icon: 'check_circle', iconBg: 'var(--sds-status-success-bg)', iconColor: 'var(--sds-color-green-500)', label: 'Auto-resolved', title: '38 PII columns auto-classified', desc: 'Classification scan completed across 12 tables in <code>analytics_warehouse</code>. Confidence: 94% avg. 5 need your review.', meta: 'Today', category: 'Classification', action: 'Review 5 columns', actionQuery: '' }
       ]
     },
     analyst: {
@@ -3328,9 +3426,9 @@
         { label: 'Data freshness issues', query: 'Show me stale datasets that I use' }
       ],
       insights: [
-        { priority: 'warning', icon: 'warning', label: 'Attention', title: 'Quality drop on 2 bookmarked datasets', desc: 'Quality score for <code>analytics.events</code> dropped from 94 to 88 after schema changes. <code>prod_dw.customers</code> has 3 new null columns.', actions: ['View details', 'Ask AI'] },
-        { priority: 'critical', icon: 'error', label: 'Critical', title: 'Trusted dataset certification expiring', desc: '<code>warehouse.orders</code> certification expires in 3 days. Data steward review required to maintain "Certified" status.', actions: ['Notify steward', 'Ask AI'] },
-        { priority: 'success', icon: 'check_circle', label: 'Good news', title: 'New dataset available: ml_features', desc: '248 tables from the new Databricks "ml-features" workspace are now cataloged and queryable. AI docs are being generated.', actions: ['Explore in catalog'] }
+        { severity: 'warning', icon: 'trending_down', iconBg: 'var(--sds-status-warning-bg)', iconColor: 'var(--sds-color-yellow-650)', label: 'Attention', title: 'Quality drop on 2 bookmarked datasets', desc: 'Quality score for <code>analytics.events</code> dropped from 94 to 88 after schema changes. <code>prod_dw.customers</code> has 3 new null columns.', meta: '1 hour ago', category: 'Data Quality', action: 'View details', actionQuery: 'Show me quality details for analytics.events and prod_dw.customers' },
+        { severity: 'info', icon: 'verified', iconBg: 'var(--sds-status-info-bg)', iconColor: 'var(--sds-color-blue-700)', label: 'Info', title: 'New certified dataset available: ml_features', desc: '248 tables from the new Databricks "ml-features" workspace are now cataloged and queryable. AI docs are being generated.', meta: 'Today', category: 'Data Catalog', action: 'Explore in catalog', actionQuery: '' },
+        { severity: 'success', icon: 'speed', iconBg: 'var(--sds-status-success-bg)', iconColor: 'var(--sds-color-green-500)', label: 'Improved', title: 'Query performance improved 40% on analytics.events', desc: 'After index optimization, average query time dropped from 4.2s to 2.5s. 340 daily queries now running faster.', meta: 'Today', category: 'Performance', action: 'View metrics', actionQuery: '' }
       ]
     },
     steward: {
@@ -3343,9 +3441,9 @@
         { label: 'Governance score breakdown', query: 'Show me a risk summary across all sources' }
       ],
       insights: [
-        { priority: 'critical', icon: 'error', label: 'Critical', title: '47 assets still unclassified', desc: 'Classification coverage is at 98.5% (47/3,240 remaining). 8 likely contain PII based on AI pattern matching. Down from 62 last week.', actions: ['Auto-classify 8 PII', 'Ask AI'] },
-        { priority: 'warning', icon: 'warning', label: 'Attention', title: '5 PII columns need manual review', desc: 'AI auto-classified 33 columns with 94% confidence, but 5 columns in <code>analytics_warehouse</code> need your review due to ambiguous patterns.', actions: ['Review now', 'Ask AI'] },
-        { priority: 'success', icon: 'check_circle', label: 'Auto-resolved', title: 'Ownership assigned to 12 tables', desc: 'AI suggested owners for 12 previously unowned tables based on query patterns and team structure. All accepted by team leads.', actions: ['View assignments'] }
+        { severity: 'critical', icon: 'shield', iconBg: 'var(--sds-status-error-bg)', iconColor: 'var(--sds-color-red-550)', label: 'Critical', title: '47 assets still unclassified', desc: 'Classification coverage is at 98.5% (47/3,240 remaining). 8 likely contain PII based on AI pattern matching. Down from 62 last week.', meta: '3 hours ago', category: 'Classification', action: 'Auto-classify 8 PII', actionQuery: 'Auto-classify the 8 likely PII assets' },
+        { severity: 'warning', icon: 'policy', iconBg: 'var(--sds-status-warning-bg)', iconColor: 'var(--sds-color-yellow-650)', label: 'Attention', title: '5 PII columns need manual review', desc: 'AI auto-classified 33 columns with 94% confidence, but 5 columns in <code>analytics_warehouse</code> need your review due to ambiguous patterns.', meta: '5 hours ago', category: 'Review Queue', action: 'Review now', actionQuery: 'Show the 5 PII columns that need manual review' },
+        { severity: 'success', icon: 'check_circle', iconBg: 'var(--sds-status-success-bg)', iconColor: 'var(--sds-color-green-500)', label: 'Auto-resolved', title: 'Ownership assigned to 12 tables', desc: 'AI suggested owners for 12 previously unowned tables based on query patterns and team structure. All accepted by team leads.', meta: 'Today', category: 'Ownership', action: 'View assignments', actionQuery: '' }
       ]
     },
     security: {
@@ -3358,9 +3456,9 @@
         { label: 'Access anomalies', query: 'Show stale access grants that need review' }
       ],
       insights: [
-        { priority: 'critical', icon: 'error', label: 'Critical', title: '12 PII columns lack protection policies', desc: 'Found in <code>raw.clickstream_events</code> and <code>ml_features.user_embeddings</code>. Email, phone, and IP address columns are exposed without masking.', actions: ['Add protection', 'Ask AI'] },
-        { priority: 'warning', icon: 'warning', label: 'Attention', title: 'GDPR compliance gap: missing deletion policy', desc: '3 tables with EU personal data lack automated deletion workflows. Deadline for remediation: end of quarter.', actions: ['View tables', 'Ask AI'] },
-        { priority: 'success', icon: 'check_circle', label: 'Resolved', title: 'Access review completed: 4 accounts revoked', desc: 'Risk score improved from 78 to 83 after revoking stale service account access. All revocations logged and auditable.', actions: ['View audit log'] }
+        { severity: 'critical', icon: 'gpp_bad', iconBg: 'var(--sds-status-error-bg)', iconColor: 'var(--sds-color-red-550)', label: 'Critical', title: '3 compliance gaps need immediate attention', desc: 'HIPAA (PHI audit logging), SOC2 (access reviews), and GDPR (data deletion) have open gaps. GDPR is highest priority with Q1 deadline.', meta: '1 hour ago', category: 'Compliance', action: 'View compliance gaps', actionQuery: 'Show compliance gaps by regulation' },
+        { severity: 'warning', icon: 'admin_panel_settings', iconBg: 'var(--sds-status-warning-bg)', iconColor: 'var(--sds-color-yellow-650)', label: 'Attention', title: 'Over-permissioned access on 4 service accounts', desc: 'Found in <code>raw.clickstream_events</code> and <code>ml_features.user_embeddings</code>. Email, phone, and IP address columns are exposed without masking.', meta: '4 hours ago', category: 'Access Control', action: 'Review accounts', actionQuery: 'Show over-permissioned access grants' },
+        { severity: 'info', icon: 'radar', iconBg: 'var(--sds-status-info-bg)', iconColor: 'var(--sds-color-blue-700)', label: 'Info', title: 'Weekly security scan completed', desc: 'Risk score improved from 78 to 83 after revoking stale service account access. All revocations logged and auditable.', meta: 'Today', category: 'Security Scan', action: 'View audit log', actionQuery: '' }
       ]
     },
     executive: {
@@ -3373,9 +3471,9 @@
         { label: 'Compliance posture', query: 'Show compliance gaps by regulation' }
       ],
       insights: [
-        { priority: 'success', icon: 'check_circle', label: 'On track', title: 'AI-Readiness score: 72/100 (+8 this month)', desc: 'Documentation is the biggest gap at 62%. Classification (87%) and Quality (91%) are strong. On track to reach 80 by end of quarter.', actions: ['View full report', 'Ask AI'] },
-        { priority: 'warning', icon: 'warning', label: 'Attention', title: '3 compliance gaps need remediation', desc: 'HIPAA (PHI audit logging), SOC2 (access reviews), and GDPR (data deletion) have open gaps. GDPR is highest priority with Q1 deadline.', actions: ['View compliance', 'Ask AI'] },
-        { priority: 'success', icon: 'check_circle', label: 'Growth', title: 'Platform adoption up 34% this month', desc: '47 unique queries this week across 18 users. Data engineers are the most active role (62% of queries). AI-assisted actions saved ~12 hours.', actions: ['View metrics'] }
+        { severity: 'info', icon: 'trending_up', iconBg: 'var(--sds-status-info-bg)', iconColor: 'var(--sds-color-blue-700)', label: 'Info', title: 'AI-Readiness score: 72/100 (+8 this month)', desc: 'Documentation is the biggest gap at 62%. Classification (87%) and Quality (91%) are strong. On track to reach 80 by end of quarter.', meta: 'Updated today', category: 'AI Readiness', action: 'View full report', actionQuery: 'Show me a risk summary across all sources' },
+        { severity: 'warning', icon: 'analytics', iconBg: 'var(--sds-status-warning-bg)', iconColor: 'var(--sds-color-yellow-650)', label: 'Attention', title: 'Data quality dip across 3 domains', desc: 'HIPAA (PHI audit logging), SOC2 (access reviews), and GDPR (data deletion) have open gaps. GDPR is highest priority with Q1 deadline.', meta: '2 days ago', category: 'Data Quality', action: 'View compliance', actionQuery: 'Show compliance gaps by regulation' },
+        { severity: 'success', icon: 'military_tech', iconBg: 'var(--sds-status-success-bg)', iconColor: 'var(--sds-color-green-500)', label: 'Improved', title: 'Governance score improved to 83/100', desc: '47 unique queries this week across 18 users. Data engineers are the most active role (62% of queries). AI-assisted actions saved ~12 hours.', meta: 'This week', category: 'Governance', action: 'View metrics', actionQuery: '' }
       ]
     }
   };
@@ -3435,23 +3533,32 @@
       // Update insight cards
       const insightRow = document.querySelector('.insight-cards-row');
       insightRow.innerHTML = content.insights.map(ins => {
-        const actionBtns = ins.actions.map(a => {
-          if (a === 'Ask AI') {
-            return '<button class="insight-action-btn ai-action" onclick="askAI(\'' + ins.title.replace(/'/g, "\\'") + '\')"><span class="material-symbols-outlined">auto_awesome</span> Ask AI</button>';
-          }
-          return '<button class="insight-action-btn">' + a + '</button>';
-        }).join('');
-        return '<div class="insight-card priority-' + ins.priority + '">' +
-          '<button class="insight-card-dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>' +
-          '<div class="insight-card-priority ' + ins.priority + '"><span class="material-symbols-outlined">' + ins.icon + '</span><span>' + ins.label + '</span></div>' +
-          '<h3>' + ins.title + '</h3><p>' + ins.desc + '</p>' +
-          '<div class="insight-card-actions">' + actionBtns + '</div></div>';
+        const actionOnclick = ins.actionQuery ? ' onclick="askAI(\'' + ins.actionQuery.replace(/'/g, "\\'") + '\')"' : '';
+        return '<div class="sds-insight sds-card--hoverable">' +
+          '<button class="sds-insight__dismiss" aria-label="Dismiss insight"><span class="material-symbols-outlined">close</span></button>' +
+          '<span class="sds-insight__icon" style="background: ' + ins.iconBg + '; color: ' + ins.iconColor + ';">' +
+            '<span class="material-symbols-outlined">' + ins.icon + '</span>' +
+          '</span>' +
+          '<div class="sds-insight__content">' +
+            '<div class="sds-insight__header">' +
+              '<h3 class="sds-insight__title">' + ins.title + '</h3>' +
+              '<span class="sds-insight__severity sds-insight__severity--' + ins.severity + '">' + ins.label + '</span>' +
+            '</div>' +
+            '<p class="sds-insight__description">' + ins.desc + '</p>' +
+            '<div class="sds-insight__meta">' +
+              '<span>' + ins.meta + '</span>' +
+              '<span class="sds-insight__meta-divider"></span>' +
+              '<span>' + ins.category + '</span>' +
+            '</div>' +
+            '<button class="sds-insight__action"' + actionOnclick + '>' + ins.action + ' <span class="material-symbols-outlined">arrow_forward</span></button>' +
+          '</div>' +
+        '</div>';
       }).join('');
 
       // Re-wire dismiss buttons for new insight cards
-      document.querySelectorAll('.insight-card-dismiss').forEach(btn => {
+      document.querySelectorAll('.sds-insight__dismiss').forEach(btn => {
         btn.addEventListener('click', () => {
-          const card = btn.closest('.insight-card');
+          const card = btn.closest('.sds-insight');
           if (dismissedCard) { dismissedCard.style.display = ''; dismissedCard.style.opacity = '1'; dismissedCard.style.transform = ''; }
           dismissedCard = card;
           card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
@@ -3516,9 +3623,9 @@
   const undoToast = document.getElementById('undoToast');
   const undoBtn = document.getElementById('undoBtn');
 
-  document.querySelectorAll('.insight-card-dismiss').forEach(btn => {
+  document.querySelectorAll('.sds-insight__dismiss').forEach(btn => {
     btn.addEventListener('click', () => {
-      const card = btn.closest('.insight-card');
+      const card = btn.closest('.sds-insight');
       if (dismissedCard) { dismissedCard.style.display = ''; dismissedCard.style.opacity = '1'; dismissedCard.style.transform = ''; }
       dismissedCard = card;
       card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
@@ -3609,8 +3716,8 @@
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'd' || e.key === 'D') {
       const focused = document.activeElement;
-      if (focused && focused.closest('.insight-card')) {
-        const dismissBtn = focused.closest('.insight-card').querySelector('.insight-card-dismiss');
+      if (focused && focused.closest('.sds-insight')) {
+        const dismissBtn = focused.closest('.sds-insight').querySelector('.sds-insight__dismiss');
         if (dismissBtn) dismissBtn.click();
       }
     }
